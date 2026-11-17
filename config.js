@@ -1,5 +1,5 @@
 // اطلاعات پروژه Supabase خودتان را اینجا بگذارید
 window.SITE_CONFIG = {
-  url: "https://PASTE-PROJECT-ID.supabase.co",
-  key: "PASTE_ANON_PUBLIC_KEY"
+  url: "https://emenmpikextswdnsoobi.supabase.co",
+  key: "sb_publishable_8lYzT5jS0EffFLd1qORtCg_BN-rqDUY"
 };
