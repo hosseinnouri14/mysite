@@ -251,7 +251,7 @@ f.addEventListener('submit',async function(e){
   if(live&&!d.get('website')){
     btn.disabled=true;
     try{
-      var r=await fetch(C.url+'/rest/v1/bookings',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+C.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:d.get('name'),contact:d.get('contact'),topic:d.get('topic'),mode:d.get('mode'),msg:d.get('msg')||'',times:times})});
+      var r=await fetch(C.url+'/rest/v1/bookings',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:d.get('name'),contact:d.get('contact'),topic:d.get('topic'),mode:d.get('mode'),msg:d.get('msg')||'',times:times})});
       if(!r.ok)throw new Error('fail');
       $('saved').textContent='درخواست شما ثبت شد و به‌زودی با شما تماس می‌گیرم.';f.reset();sel.clear();draw();
     }catch(err){$('saved').textContent='ثبت در سایت ممکن نشد. لطفاً پیام را با ایمیل یا تلگرام بفرستید.'}
@@ -262,7 +262,7 @@ f.addEventListener('submit',async function(e){
 $('copy').addEventListener('click',function(){var b=this;try{navigator.clipboard.writeText(txt.textContent).then(function(){b.textContent='کپی شد'},function(){})}catch(e){}});
 draw();
 (function(){var C=window.SITE_CONFIG;if(!C||!C.key||C.key.indexOf('PASTE')===0)return;
-  fetch(C.url+'/rest/v1/slots?select=day,hour',{headers:{apikey:C.key,Authorization:'Bearer '+C.key}}).then(function(r){return r.json()}).then(function(a){free=new Set(a.map(function(x){return x.day+'-'+x.hour}));draw()}).catch(function(){});})();
+  fetch(C.url+'/rest/v1/slots?select=day,hour',{headers:{apikey:C.key}}).then(function(r){return r.json()}).then(function(a){free=new Set(a.map(function(x){return x.day+'-'+x.hour}));draw()}).catch(function(){});})();
 </script>
 </body>
 </html>
