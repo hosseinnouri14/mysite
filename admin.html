@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>پنل مدیریت</title>
+<script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f2ef;--surface:#fbfbf9;--ink:#2b211d;--muted:#6a6360;--line:#dcdad4;--accent:#0f6b63;--accent-ink:#fff;--soft:#e2ece9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b}}
+:root[data-theme="dark"]{--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:1.9;font-size:17px}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;text-decoration:none}
+nav{display:flex;gap:20px;align-items:center;font-size:15px}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+nav .cta{background:var(--accent);color:var(--accent-ink);padding:4px 16px;border-radius:99px;font-weight:500}
+nav .cta:hover{color:var(--accent-ink);opacity:.9}
+@media(max-width:640px){nav a:not(.cta){display:none}}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center;padding:64px 0 72px}
+.hero h1{font-size:clamp(34px,6vw,60px);line-height:1.25;margin:0 0 18px;font-weight:800}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:34em;margin:0 0 28px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 26px;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn:hover{transform:translateY(-1px)}
+.photo{position:relative}
+.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 12%;border-radius:200px 200px 24px 24px;background:var(--soft)}
+.photo::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:2px solid var(--accent);border-radius:200px 200px 24px 24px;z-index:-1}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:36px}.photo{max-width:320px;margin:0 auto;order:-1}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
+.stats div{padding:20px;text-align:center;border-inline-start:1px solid var(--line)}
+.stats div:first-child{border-inline-start:0}
+.stats b{display:block;font-size:26px}
+.stats span{color:var(--muted);font-size:14px}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.stats div:nth-child(3){border-inline-start:0}.stats div:nth-child(n+3){border-top:1px solid var(--line)}}
+section{padding:72px 0 0}
+h2{font-size:30px;margin:0 0 8px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 30px}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+@media(max-width:760px){.about{grid-template-columns:1fr}}
+.skills{display:flex;flex-wrap:wrap;gap:10px}
+.skills span{background:var(--soft);padding:3px 16px;border-radius:99px;font-size:15px}
+.tl{list-style:none;margin:0;padding:0;border-inline-start:2px solid var(--line)}
+.tl li{position:relative;padding:0 28px 28px 0;padding-inline:28px 0}
+.tl li::before{content:"";position:absolute;inset-inline-start:-8px;top:10px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
+.tl b{display:block;font-size:14px;color:var(--accent)}
+.tl h3{margin:0;font-size:19px}
+.tl p{margin:2px 0 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:800px){.grid,.grid[style]{grid-template-columns:1fr !important}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.card h3{margin:0 0 6px;font-size:19px}
+.card p{margin:0;color:var(--muted);font-size:15.5px}
+.book{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:36px;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}
+@media(max-width:800px){.book{grid-template-columns:1fr;padding:24px}}
+.book ul{padding-inline-start:20px;color:var(--muted)}
+form{display:grid;gap:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+label{display:grid;gap:4px;font-size:14.5px;font-weight:500}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%}
+textarea{min-height:90px;resize:vertical}
+#out{display:none;margin-top:6px;background:var(--soft);border-radius:14px;padding:16px}
+#out pre{white-space:pre-wrap;font:inherit;margin:0 0 12px}
+footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14.5px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover{transform:none}}
+
+.week{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--bg);margin-bottom:8px}
+.week table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;text-align:center}
+.week th,.week td{border:1px solid var(--line);padding:0}
+.week th{padding:4px;font-weight:500;color:var(--muted);background:var(--surface)}
+.week td button{display:block;width:100%;height:30px;border:0;background:transparent;color:var(--ink);cursor:default;font:inherit}
+.week td button.free{background:var(--soft);cursor:pointer}
+.week td button.sel,.week td button.on{background:var(--accent);color:var(--accent-ink)}
+.week td button.on,.week td button.free,.week td button.admin{cursor:pointer}
+.hint{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+#admin{display:none}
+.msg{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--surface)}
+.msg small{color:var(--muted)}
+.msg .btns{margin-top:8px}.msg .btn{padding:3px 14px;font-size:14px}
+.links{display:flex;gap:16px;flex-wrap:wrap}.courses{list-style:none;margin:8px 0 0;padding:0}.courses li{padding:8px 0;border-top:1px solid var(--line)}.courses li:first-child{border-top:0}.courses a{font-weight:500;text-decoration-color:var(--accent);text-underline-offset:4px}
+
+#login{max-width:360px;margin:80px auto;display:grid;gap:14px}
+#panel{display:none;padding:32px 0}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+</style></head><body>
+<div class="wrap">
+<form id="login"><h1 style="margin:0">ورود مدیر</h1>
+  <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
+  <label>رمز عبور<input type="password" id="pw" required autocomplete="current-password"></label>
+  <button class="btn" type="submit">ورود</button><p id="lerr" role="alert" style="margin:0;color:var(--accent)"></p></form>
+<div id="panel">
+  <div class="top"><h1 style="margin:0">پنل مدیریت</h1><span class="btns"><a class="btn ghost" href="/">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></span></div>
+  <div class="book" style="grid-template-columns:1fr">
+    <div><h2>برنامه هفتگی زمان‌های آزاد</h2>
+      <p class="hint">روی ساعت‌ها بزنید تا آزاد یا غیرآزاد شود، سپس ذخیره کنید.</p>
+      <div class="week" id="wkadmin"></div>
+      <div class="btns"><button class="btn" id="saveweek" type="button">ذخیره برنامه</button><button class="btn ghost" id="clearweek" type="button">پاک کردن همه</button><span id="weekmsg" role="status" style="align-self:center"></span></div></div>
+    <div><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
+  </div>
+</div></div>
+<script>
+var C=window.SITE_CONFIG,tok=sessionStorage.getItem('tok')||'';
+var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],H0=8,H1=20;
+var fa=function(n){return Number(n).toLocaleString('fa-IR')},$=function(i){return document.getElementById(i)};
+var adm=new Set();
+function show(on){$('login').style.display=on?'none':'grid';$('panel').style.display=on?'block':'none'}
+async function rest(path,o){
+  o=o||{};o.headers=Object.assign({apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},o.headers||{});
+  var r=await fetch(C.url+'/rest/v1/'+path,o);
+  if(r.status===401){tok='';sessionStorage.removeItem('tok');show(false);throw new Error('auth')}
+  if(!r.ok)throw new Error('fail');
+  var t=await r.text();return t?JSON.parse(t):null;
+}
+function grid(){
+  var h='<table><tr><th></th>'+DAYS.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr>';
+  for(var t=H0;t<=H1;t++){h+='<tr><th>'+fa(t)+'–'+fa(t+1)+'</th>';
+    for(var d=0;d<7;d++){var k=d+'-'+t,on=adm.has(k);h+='<td><button type="button" data-k="'+k+'" class="'+(on?'on':'admin')+'" aria-pressed="'+on+'" aria-label="'+DAYS[d]+' '+fa(t)+'">'+(on?'✓':'')+'</button></td>'}
+    h+='</tr>'}
+  $('wkadmin').innerHTML=h+'</table>';
+}
+$('wkadmin').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;var k=b.dataset.k;adm.has(k)?adm.delete(k):adm.add(k);grid()});
+$('clearweek').onclick=function(){adm=new Set();grid()};
+$('saveweek').onclick=async function(){
+  try{
+    await rest('slots?day=gte.0',{method:'DELETE'});
+    var rows=Array.from(adm).map(function(k){var p=k.split('-');return {day:+p[0],hour:+p[1]}});
+    if(rows.length)await rest('slots',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});
+    $('weekmsg').textContent='ذخیره شد.';
+  }catch(e){$('weekmsg').textContent='ذخیره نشد.'}
+};
+async function load(){
+  var s=await rest('slots?select=day,hour');adm=new Set(s.map(function(x){return x.day+'-'+x.hour}));grid();
+  var j=await rest('bookings?select=*&order=created_at.desc');
+  $('inboxhint').textContent=j.length?'':'هنوز درخواستی ثبت نشده است.';
+  var box=$('inbox');box.innerHTML='';
+  j.forEach(function(i){
+    var d=document.createElement('div');d.className='msg';
+    d.innerHTML='<b></b> <small></small><br><span></span><br><small></small>';
+    d.children[0].textContent=i.name+(i.status==='done'?' ✓':'');
+    d.children[1].textContent=new Date(i.created_at).toLocaleString('fa-IR');
+    d.children[3].textContent=[i.topic,i.mode,i.contact].join(' | ');
+    d.children[5].textContent=(i.times||[]).join('، ')+(i.msg?' — '+i.msg:'');
+    var bt=document.createElement('div');bt.className='btns';
+    var a=document.createElement('button');a.className='btn ghost';a.textContent=i.status==='done'?'بازگشت به جدید':'انجام شد';
+    a.onclick=async function(){await rest('bookings?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({status:i.status==='done'?'new':'done'})});load()};
+    var r=document.createElement('button');r.className='btn ghost';r.textContent='حذف';
+    r.onclick=async function(){if(confirm('این درخواست حذف شود؟')){await rest('bookings?id=eq.'+i.id,{method:'DELETE'});load()}};
+    bt.appendChild(a);bt.appendChild(r);d.appendChild(bt);box.appendChild(d);
+  });
+}
+$('login').addEventListener('submit',async function(e){e.preventDefault();$('lerr').textContent='';
+  try{
+    var r=await fetch(C.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json'},body:JSON.stringify({email:$('em').value,password:$('pw').value})});
+    if(!r.ok)throw new Error('bad');
+    var j=await r.json();tok=j.access_token;sessionStorage.setItem('tok',tok);$('pw').value='';show(true);load();
+  }catch(err){$('lerr').textContent='ایمیل یا رمز اشتباه است.'}});
+$('logout').onclick=function(){tok='';sessionStorage.removeItem('tok');show(false)};
+if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
+else if(tok){show(true);load().catch(function(){})}
+</script></body></html>

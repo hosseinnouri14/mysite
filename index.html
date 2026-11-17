@@ -179,6 +179,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       </div>
       <div>
         <form id="f">
+          <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
           <div class="row">
             <label>نام و نام خانوادگی<input name="name" required autocomplete="name"></label>
             <label>شماره تماس یا ایمیل<input name="contact" required dir="ltr" style="text-align:right"></label>
@@ -210,14 +211,12 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
 <footer><div class="wrap"><span>© حسین نوری کادیجانی</span><span class="links"><a href="mailto:hosseinnouri14@gmail.com">ایمیل</a><a href="https://t.me/hossein_nouri_k" target="_blank" rel="noopener">تلگرام</a><a href="https://faradars.org/instructors/hossein-nouri-kadijani" target="_blank" rel="noopener">فرادرس</a></span></div></footer>
 
+<script src="config.js"></script>
 <script>
 var CONFIG={email:"hosseinnouri14@gmail.com",telegram:"hossein_nouri_k"};
 var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],H0=8,H1=20;
 var fa=function(n){return Number(n).toLocaleString('fa-IR')};
-// زمان‌های آزاد: هر مورد «روز-ساعت شروع» است. روز: ۰=شنبه ۱=یکشنبه ۲=دوشنبه ۳=سه‌شنبه ۴=چهارشنبه ۵=پنجشنبه ۶=جمعه
-// مثال: "0-9" یعنی شنبه ساعت ۹ تا ۱۰ و "2-16" یعنی دوشنبه ساعت ۱۶ تا ۱۷
-var SLOTS=["0-9","0-10","2-16"];
-var free=new Set(SLOTS),sel=new Set();
+var free=new Set(),sel=new Set();
 var $=function(i){return document.getElementById(i)};
 var f=$('f'),out=$('out'),txt=$('txt');
 function grid(el){
@@ -248,12 +247,22 @@ f.addEventListener('submit',async function(e){
   txt.textContent=m;
   $('mail').href="mailto:"+CONFIG.email+"?subject="+encodeURIComponent("رزرو کلاس خصوصی")+"&body="+encodeURIComponent(m);
   var tg=$('tg');tg.hidden=false;tg.href="https://t.me/"+CONFIG.telegram+"?text="+encodeURIComponent(m);
-  $('saved').textContent='پیام شما آماده است. آن را با یکی از دکمه‌های زیر برای من بفرستید.';
+  var C=window.SITE_CONFIG,live=C&&C.key&&C.key.indexOf('PASTE')!==0;
+  if(live&&!d.get('website')){
+    btn.disabled=true;
+    try{
+      var r=await fetch(C.url+'/rest/v1/bookings',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+C.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:d.get('name'),contact:d.get('contact'),topic:d.get('topic'),mode:d.get('mode'),msg:d.get('msg')||'',times:times})});
+      if(!r.ok)throw new Error('fail');
+      $('saved').textContent='درخواست شما ثبت شد و به‌زودی با شما تماس می‌گیرم.';f.reset();sel.clear();draw();
+    }catch(err){$('saved').textContent='ثبت در سایت ممکن نشد. لطفاً پیام را با ایمیل یا تلگرام بفرستید.'}
+    btn.disabled=false;
+  }else{$('saved').textContent='پیام شما آماده است. آن را با یکی از دکمه‌های زیر برای من بفرستید.'}
   out.style.display='block';out.scrollIntoView({block:'nearest'});
 });
 $('copy').addEventListener('click',function(){var b=this;try{navigator.clipboard.writeText(txt.textContent).then(function(){b.textContent='کپی شد'},function(){})}catch(e){}});
 draw();
-
+(function(){var C=window.SITE_CONFIG;if(!C||!C.key||C.key.indexOf('PASTE')===0)return;
+  fetch(C.url+'/rest/v1/slots?select=day,hour',{headers:{apikey:C.key,Authorization:'Bearer '+C.key}}).then(function(r){return r.json()}).then(function(a){free=new Set(a.map(function(x){return x.day+'-'+x.hour}));draw()}).catch(function(){});})();
 </script>
 </body>
 </html>
