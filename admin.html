@@ -2,211 +2,333 @@
 <html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>پنل مدیریت</title>
-<script src="config.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <style>
-:root{--bg:#f1f2ef;--surface:#fbfbf9;--ink:#2b211d;--muted:#6a6360;--line:#dcdad4;--accent:#0f6b63;--accent-ink:#fff;--soft:#e2ece9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b}}
-:root[data-theme="dark"]{--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b}
-html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:1.9;font-size:17px}
-a{color:inherit}
-.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
-header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.logo{font-weight:800;text-decoration:none}
-nav{display:flex;gap:20px;align-items:center;font-size:15px}
-nav a{text-decoration:none;color:var(--muted)}
-nav a:hover{color:var(--ink)}
-nav .cta{background:var(--accent);color:var(--accent-ink);padding:4px 16px;border-radius:99px;font-weight:500}
-nav .cta:hover{color:var(--accent-ink);opacity:.9}
-@media(max-width:640px){nav a:not(.cta){display:none}}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
-.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center;padding:64px 0 72px}
-.hero h1{font-size:clamp(34px,6vw,60px);line-height:1.25;margin:0 0 18px;font-weight:800}
-.hero p.lead{font-size:19px;color:var(--muted);max-width:34em;margin:0 0 28px}
-.btns{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 26px;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);text-decoration:none;cursor:pointer}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
-.btn:hover{transform:translateY(-1px)}
-.photo{position:relative}
-.photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 12%;border-radius:200px 200px 24px 24px;background:var(--soft)}
-.photo::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:2px solid var(--accent);border-radius:200px 200px 24px 24px;z-index:-1}
-@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:36px}.photo{max-width:320px;margin:0 auto;order:-1}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
-.stats div{padding:20px;text-align:center;border-inline-start:1px solid var(--line)}
-.stats div:first-child{border-inline-start:0}
-.stats b{display:block;font-size:26px}
-.stats span{color:var(--muted);font-size:14px}
-@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.stats div:nth-child(3){border-inline-start:0}.stats div:nth-child(n+3){border-top:1px solid var(--line)}}
-section{padding:72px 0 0}
-h2{font-size:30px;margin:0 0 8px;font-weight:800}
-.sub{color:var(--muted);margin:0 0 30px}
-.about{display:grid;grid-template-columns:1fr 1fr;gap:36px}
-@media(max-width:760px){.about{grid-template-columns:1fr}}
-.skills{display:flex;flex-wrap:wrap;gap:10px}
-.skills span{background:var(--soft);padding:3px 16px;border-radius:99px;font-size:15px}
-.tl{list-style:none;margin:0;padding:0;border-inline-start:2px solid var(--line)}
-.tl li{position:relative;padding:0 28px 28px 0;padding-inline:28px 0}
-.tl li::before{content:"";position:absolute;inset-inline-start:-8px;top:10px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
-.tl b{display:block;font-size:14px;color:var(--accent)}
-.tl h3{margin:0;font-size:19px}
-.tl p{margin:2px 0 0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:800px){.grid,.grid[style]{grid-template-columns:1fr !important}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
-.card h3{margin:0 0 6px;font-size:19px}
-.card p{margin:0;color:var(--muted);font-size:15.5px}
-.book{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:36px;display:grid;grid-template-columns:1fr 1.3fr;gap:36px}
-@media(max-width:800px){.book{grid-template-columns:1fr;padding:24px}}
-.book ul{padding-inline-start:20px;color:var(--muted)}
-form{display:grid;gap:14px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:520px){.row{grid-template-columns:1fr}}
-label{display:grid;gap:4px;font-size:14.5px;font-weight:500}
-input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%}
-textarea{min-height:90px;resize:vertical}
-#out{display:none;margin-top:6px;background:var(--soft);border-radius:14px;padding:16px}
-#out pre{white-space:pre-wrap;font:inherit;margin:0 0 12px}
-footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14.5px}
-footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover{transform:none}}
-
-.hint{font-size:13.5px;color:var(--muted);margin:0 0 8px}
-#admin{display:none}
-.msg{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--surface)}
-.msg small{color:var(--muted)}
-.msg .btns{margin-top:8px}.msg .btn{padding:3px 14px;font-size:14px}
-.links{display:flex;gap:16px;flex-wrap:wrap}.courses{list-style:none;margin:8px 0 0;padding:0}.courses li{padding:8px 0;border-top:1px solid var(--line)}.courses li:first-child{border-top:0}.courses a{font-weight:500;text-decoration-color:var(--accent);text-underline-offset:4px}
-
-#login{max-width:360px;margin:80px auto;display:grid;gap:14px}
-#panel{display:none;padding:32px 0}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-
-:root{--okbg:#e1f4e6;--okink:#17692f;--badbg:#fde6e4;--badink:#a11d1d}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
-:root[data-theme="dark"]{--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}
-html,body{overflow-x:clip}
-img{max-width:100%}
-a{text-decoration:none}
-.courses a{color:var(--accent);text-decoration:none}
-.hero>*,.about>*,.grid>*,.book>*,.stats>*{min-width:0}
-input,select,textarea{font-size:16px;max-width:100%}
-.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
-.tabs button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:3px 14px;cursor:pointer}
-.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.tabs button.has::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--okink);margin-inline-start:6px}
-.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-@media(min-width:560px){.slots{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.chip{font:inherit;min-height:54px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;line-height:1.5;background:var(--bg);color:var(--muted);cursor:pointer}
-.chip span{font-size:14.5px;font-weight:500}.chip em{font-style:normal;font-size:12.5px}
-.chip.fr{background:var(--okbg);color:var(--okink);border-color:var(--okink)}
-.chip.fr.sel{background:var(--okink);color:var(--okbg)}
-.chip.bk{background:var(--badbg);color:var(--badink);border-color:var(--badink)}
-.chip.bk:disabled{cursor:not-allowed}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;margin:0 0 10px;color:var(--muted)}
-.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
-.empty{color:var(--muted);font-size:14.5px;margin:0}
-@media(max-width:600px){
-  body{font-size:16px}.wrap{padding:0 16px}
-  section{padding-top:48px}
-  .hero{padding:28px 0 40px;gap:28px}.hero h1{font-size:30px}.hero p.lead{font-size:17px}
-  h2{font-size:25px}.stats b{font-size:21px}.stats div{padding:14px 8px}
-  .book{padding:18px;border-radius:18px;gap:24px}
-  .btns .btn{flex:1 1 auto;text-align:center}
-  footer .wrap{flex-direction:column}
-}
+:root{--bg:#f1f2ef;--surface:#fbfbf9;--ink:#2b211d;--muted:#6a6360;--line:#dcdad4;--accent:#0f6b63;--accent-ink:#fff;--soft:#e2ece9;--okbg:#e1f4e6;--okink:#17692f;--badbg:#fde6e4;--badink:#a11d1d}
+@media (prefers-color-scheme:dark){:root{--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b;--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
+*{box-sizing:border-box}html,body{overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.8 'Vazirmatn',Tahoma,sans-serif}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.btn{border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:4px 18px;font-weight:700;cursor:pointer;display:inline-block}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}.btn.red{background:transparent;color:var(--badink);border-color:var(--badink)}
+.mini{border:0;background:var(--accent);color:var(--accent-ink);border-radius:7px;padding:0 12px;font-size:13.5px;cursor:pointer}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 10px;width:100%;max-width:100%}
+textarea{min-height:70px;resize:vertical}label{display:grid;gap:3px;font-size:14.5px;font-weight:500}
+.top{background:var(--surface);border-bottom:1px solid var(--line)}.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;height:58px}
+.top h1{font-size:19px;margin:0}.top .btns,.bar,.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:16px;background:var(--bg);position:sticky;top:0;z-index:5}
+.tabs button{border:0;border-bottom:3px solid transparent;background:none;padding:10px 16px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--accent);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:19px}.hint{color:var(--muted);font-size:14px;margin:0 0 10px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}.seg button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:1px 14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sc{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.sc table{border-collapse:separate;border-spacing:0;width:100%;min-width:980px}
+.sc th,.sc td{border-bottom:1px solid var(--line);border-inline-start:1px solid var(--line);padding:5px 6px;text-align:center;vertical-align:middle;font-size:13.5px}
+.sc thead th{position:sticky;top:0;background:var(--surface);z-index:2;font-weight:500;color:var(--muted)}.sc thead th.today{color:var(--accent);font-weight:700}
+.sc tbody th{position:sticky;right:0;background:var(--surface);z-index:1;white-space:nowrap;font-weight:400;color:var(--muted);min-width:120px}.sc thead th:first-child{right:0;z-index:3}
+.add{width:100%;background:var(--bg);border:0;border-radius:8px;padding:6px 8px;color:var(--muted);cursor:pointer;text-align:right}.add:hover{background:var(--soft)}
+.t-premium{--c:#7c4dcc}.t-economy{--c:#2b7de0}.t-gapino{--c:#e07b2b}.t-vip{--c:#c79a12}.t-mentors{--c:#6b7a80}
+.cls{border-inline-start:4px solid var(--c);background:color-mix(in srgb,var(--c) 16%,var(--surface));border-radius:8px;padding:5px 8px;text-align:right;display:grid;gap:1px;height:100%;line-height:1.6}
+.cls small{color:var(--muted)}.badge{font-size:12.5px;color:var(--c);font-weight:700}
+.dl .row{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;margin-bottom:8px}@media(max-width:560px){.dl .row{grid-template-columns:1fr}}
+.tbl{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tbl table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}.tbl th,.tbl td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}.tbl th{color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0}
+.num td,.num th{text-align:center}.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0}.kpi{background:var(--soft);border-radius:12px;padding:10px 14px}.kpi b{display:block;font-size:24px;line-height:1.3}.kpi span{color:var(--muted);font-size:13.5px}
+.mx input{width:62px;text-align:center;padding:4px}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);width:min(580px,94vw);padding:20px;max-height:92vh}dialog::backdrop{background:rgba(0,0,0,.5)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fg .w{grid-column:1/-1}@media(max-width:520px){.fg{grid-template-columns:1fr}}
+#login{max-width:360px;margin:80px auto;display:grid;gap:14px;padding:0 16px}
+#warn{background:var(--badbg);color:var(--badink);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+#toast{position:fixed;bottom:18px;inset-inline:0;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:var(--bg);padding:6px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}#toast.show{opacity:1}#toast.bad{background:var(--badink);color:#fff}
+.tabs2{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.tabs2 button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:1px 14px;cursor:pointer}.tabs2 button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.chip{min-height:52px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);color:var(--muted);cursor:pointer;line-height:1.5}.chip em{font-style:normal;font-size:12.5px}
+.chip.fr{background:var(--okbg);color:var(--okink);border-color:var(--okink)}.chip.bk{background:var(--badbg);color:var(--badink);border-color:var(--badink)}
+.msg{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--bg)}.msg small{color:var(--muted)}.msg .btns{margin-top:6px}
+.jsel{display:flex;gap:6px;flex-wrap:wrap}.jsel select{width:auto}
+@media(max-width:600px){.wrap{padding:0 12px}.card{padding:14px}.top h1{font-size:16px}}
 </style></head><body>
-<div class="wrap">
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
   <label>رمز عبور<input type="password" id="pw" required autocomplete="current-password"></label>
-  <button class="btn" type="submit">ورود</button><p id="lerr" role="alert" style="margin:0;color:var(--accent)"></p></form>
-<div id="panel">
-  <div class="top"><h1 style="margin:0">پنل مدیریت</h1><span class="btns"><a class="btn ghost" href="/">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></span></div>
-  <div class="book" style="grid-template-columns:1fr">
-    <div><h2>برنامه هفتگی زمان‌های آزاد</h2>
-      <p class="hint">هر نیم‌ساعت را بزنید تا بین «غیرفعال»، «قابل رزرو» و «رزرو شده» عوض شود. در پایان «ذخیره برنامه» را بزنید.</p>
-      <div id="wkadmin"><div class="tabs" id="atabs" role="tablist" aria-label="روز هفته"></div><p class="legend"><span><i style="background:var(--bg);border:1px solid var(--line)"></i>غیرفعال</span><span><i style="background:var(--okbg);border:1px solid var(--okink)"></i>قابل رزرو</span><span><i style="background:var(--badbg);border:1px solid var(--badink)"></i>رزرو شده</span></p><div class="slots" id="aslots"></div></div>
-      <div class="btns" style="margin-bottom:10px"><button class="btn ghost" id="dayfree" type="button">همه ساعت‌های این روز قابل رزرو</button><button class="btn ghost" id="dayclear" type="button">پاک کردن این روز</button><button class="btn ghost" id="dayall" type="button">کپی این روز برای همه روزها</button></div>
-      <div class="btns"><button class="btn" id="saveweek" type="button">ذخیره برنامه</button><span id="weekmsg" role="status" style="align-self:center"></span></div></div>
-    <div><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
-  </div>
+  <button class="btn" type="submit">ورود</button><p id="lerr" role="alert" style="margin:0;color:var(--badink)"></p></form>
+
+<div id="app" hidden>
+<header class="top"><div class="wrap"><h1>پنل مدیریت</h1><div class="btns"><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
+<div class="wrap" style="padding-top:12px">
+<div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
+<nav class="tabs" id="tabs" role="tablist">
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="stats" role="tab">آمار کلاس‌های برگزارشده</button><button data-t="site" role="tab">رزرو از سایت</button>
+</nav>
+
+<section id="t-week">
+  <div class="bar" style="justify-content:space-between;margin-bottom:10px"><div class="seg" id="views"></div><button class="btn" id="addClass">+ کلاس جدید</button></div>
+  <div class="sc" id="sc"><table id="wt"></table></div>
+  <div class="dl" id="daylist" hidden></div>
+</section>
+
+<section id="t-stu" hidden>
+  <div class="card"><h2>افزودن دانش‌آموز</h2><p class="hint">برای شروع فقط نام و ترم کافی است؛ بقیه اطلاعات را بعداً در «جزئیات» وارد کنید.</p>
+    <form id="fAdd" class="bar"><input id="aName" placeholder="نام دانش‌آموز" required style="flex:1 1 180px;width:auto"><select id="aTerm" style="flex:1 1 160px;width:auto"></select><button class="btn" type="submit">افزودن</button></form></div>
+  <div class="bar" style="margin-bottom:10px"><input id="sq" placeholder="جستجوی نام یا ترم" style="max-width:260px"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="sall" style="width:auto"> نمایش غیرفعال‌ها</label><span id="scount" class="hint" style="margin:0"></span></div>
+  <div class="tbl"><table><thead><tr><th>کد</th><th>نام</th><th>ترم</th><th>تماس</th><th>سن</th><th>پایه</th><th>زمان کلاس‌ها</th><th></th></tr></thead><tbody id="stb"></tbody></table></div>
+</section>
+
+<section id="t-stats" hidden>
+  <div class="card"><h2>ثبت کلاس‌های برگزارشده</h2><p class="hint">روز را انتخاب کنید و تعداد کلاس‌های هر ترم و نوع را بنویسید. جمع هر نوع خودکار حساب می‌شود.</p>
+    <div class="bar" style="margin-bottom:10px"><div class="jsel" id="eDate"></div><button class="btn ghost" id="ePrev" type="button">روز قبل</button><button class="btn ghost" id="eNext" type="button">روز بعد</button><button class="btn ghost" id="eToday" type="button">امروز</button><b id="entLabel"></b></div>
+    <div class="tbl mx num"><table id="mx"></table></div>
+    <div class="bar" style="margin-top:10px"><label style="display:flex;align-items:center;gap:8px">جلسه مربیان<input type="number" id="mentors" min="0" max="99" style="width:70px"></label><button class="btn" id="saveEntry">ذخیره این روز</button></div></div>
+  <div class="card"><h2>گزارش</h2>
+    <div class="bar"><div class="seg" id="per"><button data-p="day">روزانه</button><button data-p="week">هفتگی</button><button data-p="month" aria-pressed="true">ماهانه</button><button data-p="year">سالانه</button></div><div class="jsel" id="rDate"></div><button class="btn ghost" id="csv">دانلود CSV</button></div>
+    <p class="hint" id="rLabel" style="margin-top:8px"></p><div id="rOut"></div></div>
+</section>
+
+<section id="t-site" hidden>
+  <div class="card"><h2>زمان‌های قابل رزرو در سایت</h2><p class="hint">هر نیم‌ساعت را بزنید تا بین «غیرفعال»، «قابل رزرو» و «رزرو شده» عوض شود، سپس ذخیره کنید.</p>
+    <div class="tabs2" id="atabs" role="tablist"></div><div class="slots" id="aslots"></div>
+    <div class="btns" style="margin-top:10px"><button class="btn ghost" id="dayfree">همه ساعت‌های این روز قابل رزرو</button><button class="btn ghost" id="dayclear">پاک کردن این روز</button><button class="btn ghost" id="dayall">کپی این روز برای همه روزها</button></div>
+    <div class="btns" style="margin-top:10px"><button class="btn" id="saveweek">ذخیره زمان‌ها</button><span id="weekmsg" role="status"></span></div></div>
+  <div class="card"><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
+</section>
 </div></div>
+
+<dialog id="dlgClass"><form id="fClass"><h2 id="cTitle" style="margin-top:0">کلاس</h2><input type="hidden" id="cId">
+  <div class="fg"><label>روز<select id="cDay"></select></label><label>ساعت شروع<select id="cSlot"></select></label>
+  <label>نوع کلاس<select id="cType"></select></label><label>دانش‌آموز<select id="cStu"></select></label>
+  <label class="w">ترم / موضوع<select id="cTopic"></select></label><label class="w">یادداشت<textarea id="cNote"></textarea></label></div>
+  <p id="cErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="cDel">حذف کلاس</button><button class="btn ghost" type="button" data-close>انصراف</button></div></form></dialog>
+
+<dialog id="dlgStu"><form id="fStu"><h2 id="sTitle" style="margin-top:0">دانش‌آموز</h2><input type="hidden" id="sId">
+  <div class="fg"><label>نام<input id="sName" required></label><label>ترم<select id="sTerm"></select></label>
+  <label>شماره تماس<input id="sPhone" dir="ltr" inputmode="tel"></label><label>سن<input id="sAge" type="number" min="3" max="99"></label>
+  <label class="w">پایه تحصیلی<input id="sGrade"></label><label class="w">علایق<textarea id="sInt"></textarea></label>
+  <label>نقاط قوت<textarea id="sStr"></textarea></label><label>نقاط ضعف<textarea id="sWeak"></textarea></label>
+  <label class="w">دغدغه‌ها<textarea id="sCon"></textarea></label><label class="w">وضعیت جلسه قبلی<textarea id="sLast"></textarea></label>
+  <label class="w" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="sActive" style="width:auto"> دانش‌آموز فعال است</label>
+  <div class="w"><b>زمان کلاس‌ها</b><div id="sTimes" class="hint"></div></div></div>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn ghost" type="button" id="sSched">تعیین زمان کلاس</button><button class="btn red" type="button" id="sDel">حذف</button><button class="btn ghost" type="button" data-close>بستن</button></div></form></dialog>
+<div id="toast" role="status"></div>
+
 <script>
 var C=window.SITE_CONFIG,tok=sessionStorage.getItem('tok')||'';
+var $=function(i){return document.getElementById(i)};
 var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],S0=16,S1=43;
-var fa=function(n){return Number(n).toLocaleString('fa-IR')},$=function(i){return document.getElementById(i)};
-var st={},cur=0;
-function tm(s){var m=s*30;return fa(Math.floor(m/60))+':'+(m%60?'۳۰':'۰۰')}
-function show(on){$('login').style.display=on?'none':'grid';$('panel').style.display=on?'block':'none'}
-async function rest(path,o){
-  o=o||{};o.headers=Object.assign({apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},o.headers||{});
-  var r=await fetch(C.url+'/rest/v1/'+path,o);
-  if(r.status===401){tok='';sessionStorage.removeItem('tok');show(false);throw new Error('auth')}
-  if(!r.ok)throw new Error('fail');
-  var t=await r.text();return t?JSON.parse(t):null;
-}
-function draw(){
-  $('atabs').innerHTML=DAYS.map(function(d,i){return '<button type="button" role="tab" data-d="'+i+'" aria-selected="'+(i===cur)+'">'+d+'</button>'}).join('');
-  var h='';
-  for(var s=S0;s<=S1;s++){var k=cur+'-'+s,v=st[k]||'';
-    h+='<button type="button" class="chip '+(v==='free'?'fr':v==='booked'?'bk':'off')+'" data-k="'+k+'"><span>'+tm(s)+' تا '+tm(s+1)+'</span><em>'+(v==='free'?'قابل رزرو':v==='booked'?'رزرو شده':'غیرفعال')+'</em></button>';}
-  $('aslots').innerHTML=h;
-}
-$('atabs').addEventListener('click',function(e){var b=e.target.closest('button[data-d]');if(!b)return;cur=+b.dataset.d;draw()});
-$('aslots').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;var k=b.dataset.k,v=st[k];
-  if(!v)st[k]='free';else if(v==='free')st[k]='booked';else delete st[k];draw()});
-$('dayfree').onclick=function(){for(var s=S0;s<=S1;s++)st[cur+'-'+s]='free';draw()};
-$('dayclear').onclick=function(){for(var s=S0;s<=S1;s++)delete st[cur+'-'+s];draw()};
-$('dayall').onclick=function(){for(var d=0;d<7;d++)for(var s=S0;s<=S1;s++){var v=st[cur+'-'+s],k=d+'-'+s;if(v)st[k]=v;else delete st[k]}draw()};
-$('saveweek').onclick=async function(){
-  try{
-    await rest('slots?day=gte.0',{method:'DELETE'});
-    var rows=Object.keys(st).map(function(k){var p=k.split('-');return {day:+p[0],slot:+p[1],status:st[k]}});
-    if(rows.length)await rest('slots',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});
-    $('weekmsg').textContent='ذخیره شد.';
-  }catch(e){$('weekmsg').textContent='ذخیره نشد.'}
-};
-async function load(){
-  var s=await rest('slots?select=day,slot,status');st={};s.forEach(function(x){st[x.day+'-'+x.slot]=x.status});draw();
-  var j=await rest('bookings?select=*&order=created_at.desc');
-  $('inboxhint').textContent=j.length?'':'هنوز درخواستی ثبت نشده است.';
-  var box=$('inbox');box.innerHTML='';
-  j.forEach(function(i){
-    var d=document.createElement('div');d.className='msg';
-    d.innerHTML='<b></b> <small></small><br><span></span><br><small></small>';
-    d.children[0].textContent=i.name+(i.status==='done'?' ✓':'');
-    d.children[1].textContent=new Date(i.created_at).toLocaleString('fa-IR');
-    d.children[3].textContent=[i.topic,i.mode,i.contact,i.source?('آشنایی: '+i.source):''].filter(Boolean).join(' | ');
-    d.children[5].textContent=(i.times||[]).join('، ')+(i.msg?' — '+i.msg:'');
-    var bt=document.createElement('div');bt.className='btns';
-    var a=document.createElement('button');a.className='btn ghost';a.textContent=i.status==='done'?'بازگشت به جدید':'انجام شد';
-    a.onclick=async function(){await rest('bookings?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({status:i.status==='done'?'new':'done'})});load()};
-    bt.appendChild(a);
-    if(i.slot_keys&&i.slot_keys.length){
-      var rb=document.createElement('button');rb.className='btn ghost';rb.textContent='قرمز کردن زمان‌ها (رزرو شده)';
-      rb.onclick=async function(){
-        for(var q=0;q<i.slot_keys.length;q++){var p=i.slot_keys[q].split('-');await rest('slots?day=eq.'+p[0]+'&slot=eq.'+p[1],{method:'PATCH',body:JSON.stringify({status:'booked'})})}
-        await rest('bookings?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({status:'done'})});load();
-      };
-      bt.appendChild(rb);
-    }
-    var r=document.createElement('button');r.className='btn ghost';r.textContent='حذف';
-    r.onclick=async function(){if(confirm('این درخواست حذف شود؟')){await rest('bookings?id=eq.'+i.id,{method:'DELETE'});load()}};
-    bt.appendChild(r);d.appendChild(bt);box.appendChild(d);
-  });
-}
+var TYPES={premium:['پریمیوم',1],economy:['اکونومی',2],gapino:['گپینو',2],vip:['VIP',2],mentors:['جلسه مربیان',2]},ST=['premium','economy','gapino','vip'];
+var TOPICS=["پایتون ترم ۱","پایتون ترم ۲","پایتون ترم ۳","طراحی وب ترم ۱","طراحی وب ترم ۲","اینترنت اشیا","بازی‌سازی ترم ۱","بازی‌سازی ترم ۲","شبکه و امنیت","هوش مصنوعی"];
+var JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+var FD=function(s){return String(s).replace(/\d/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[d]})};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+function tm(s){var m=s*30;return FD(('0'+Math.floor(m/60)).slice(-2)+':'+(m%60?'30':'00'))}
+function rng(s,n){return '<span dir="ltr">'+tm(s)+' – '+tm(s+n)+'</span>'}
+var tt;function toast(m,bad){var t=$('toast');t.textContent=m;t.className=bad?'bad show':'show';clearTimeout(tt);tt=setTimeout(function(){t.className=''},3500)}
+function opts(a,sel){return a.map(function(x){return '<option value="'+esc(x[0])+'"'+(String(x[0])===String(sel)?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')}
+
+/* ---------- REST ---------- */
+async function rest(p,o){o=o||{};o.headers=Object.assign({apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},o.headers||{});
+  var r=await fetch(C.url+'/rest/v1/'+p,o);
+  if(r.status===401){logout();throw new Error('auth')}
+  if(!r.ok){throw new Error('http '+r.status)}
+  var t=await r.text();return t?JSON.parse(t):null}
+function post(t,b){return rest(t,{method:'POST',body:JSON.stringify(b),headers:{Prefer:'return=representation'}})}
+function patch(t,q,b){return rest(t+'?'+q,{method:'PATCH',body:JSON.stringify(b)})}
+function del(t,q){return rest(t+'?'+q,{method:'DELETE'})}
+
+/* ---------- ورود ---------- */
+function showApp(on){$('login').style.display=on?'none':'grid';$('app').hidden=!on}
+function logout(){tok='';sessionStorage.removeItem('tok');showApp(false)}
+$('logout').onclick=logout;
 $('login').addEventListener('submit',async function(e){e.preventDefault();$('lerr').textContent='';
-  try{
-    var r=await fetch(C.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json'},body:JSON.stringify({email:$('em').value,password:$('pw').value})});
-    if(!r.ok)throw new Error('bad');
-    var j=await r.json();tok=j.access_token;sessionStorage.setItem('tok',tok);$('pw').value='';show(true);load();
-  }catch(err){$('lerr').textContent='ایمیل یا رمز اشتباه است.'}});
-$('logout').onclick=function(){tok='';sessionStorage.removeItem('tok');show(false)};
+  try{var r=await fetch(C.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json'},body:JSON.stringify({email:$('em').value,password:$('pw').value})});
+    if(!r.ok)throw 0;var j=await r.json();tok=j.access_token;sessionStorage.setItem('tok',tok);$('pw').value='';enter()}
+  catch(x){$('lerr').textContent='ایمیل یا رمز اشتباه است.'}});
+
+/* ---------- تاریخ شمسی ---------- */
+var jf=new Intl.DateTimeFormat('en-u-ca-persian-nu-latn',{year:'numeric',month:'numeric',day:'numeric',timeZone:'UTC'}),DAY=864e5;
+function jp(d){var o={};jf.formatToParts(d).forEach(function(x){if(x.type==='year'||x.type==='month'||x.type==='day')o[x.type]=+x.value});return o}
+function addd(d,n){return new Date(d.getTime()+n*DAY)}
+function iso(d){return d.toISOString().slice(0,10)}
+function today(){var n=new Date();return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()))}
+function wd(d){return (d.getUTCDay()+1)%7}
+function j2g(y,m,d){var s=new Date(Date.UTC(y+621,2,17));for(var i=0;i<380;i++){var x=addd(s,i),p=jp(x);if(p.year===y&&p.month===m&&p.day===d)return x}return null}
+function jlabel(d){var p=jp(d);return FD(p.day)+' '+JM[p.month-1]+' '+FD(p.year)}
+function jsel(id,date){var p=jp(date),r=function(a,b,s){var h='';for(var i=a;i<=b;i++)h+='<option value="'+i+'"'+(i===s?' selected':'')+'>'+FD(i)+'</option>';return h};
+  $(id).innerHTML='<select id="'+id+'d" aria-label="روز">'+r(1,31,p.day)+'</select><select id="'+id+'m" aria-label="ماه">'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(i+1===p.month?' selected':'')+'>'+n+'</option>'}).join('')+'</select><select id="'+id+'y" aria-label="سال">'+r(p.year-4,p.year+1,p.year)+'</select>'}
+function jget(id){var y=+$(id+'y').value,m=+$(id+'m').value,d=+$(id+'d').value;return j2g(y,m,d)||j2g(y,m,d-1)||j2g(y,m,d-2)}
+function jset(id,date){var p=jp(date);$(id+'d').value=p.day;$(id+'m').value=p.month;$(id+'y').value=p.year}
+function range(date,per){
+  if(per==='day')return [date,date];
+  if(per==='week'){var s=addd(date,-wd(date));return [s,addd(s,6)]}
+  var p=jp(date);
+  if(per==='month'){var s=addd(date,-(p.day-1)),e=s;for(var i=1;i<32;i++){var x=addd(s,i);if(jp(x).month!==p.month)break;e=x}return [s,e]}
+  var doy=p.month<=6?(p.month-1)*31+p.day:186+(p.month-7)*30+p.day,s=addd(date,-(doy-1)),e=addd(s,363);
+  for(var i=364;i<368;i++){var x=addd(s,i);if(jp(x).year!==p.year)break;e=x}return [s,e]}
+
+/* ---------- داده‌ها ---------- */
+var students=[],sched=[],view='all';
+function stu(id){return students.filter(function(s){return s.id===id})[0]}
+async function loadCore(){
+  try{var r=await Promise.all([rest('students?select=*&order=id.asc'),rest('schedule?select=*&order=day.asc,slot.asc')]);students=r[0];sched=r[1];$('warn').hidden=true}
+  catch(e){if(e.message!=='auth')$('warn').hidden=false}
+  drawWeek();drawStu()}
+
+/* ---------- برنامه هفتگی ---------- */
+function cnt(d){return sched.filter(function(c){return c.day===d}).length}
+function card(c){var s=stu(c.student_id),T=TYPES[c.class_type];
+  return '<div class="cls t-'+c.class_type+'"><b>'+esc(s?s.name:T[0])+'</b><small>'+(s?'کد '+FD(s.id)+' · ':'')+esc(c.topic||(s&&s.term)||'')+'</small><span class="badge">'+T[0]+'</span><div><button class="mini" data-edit="'+c.id+'">ویرایش</button></div></div>'}
+function drawWeek(){
+  $('views').innerHTML='<button data-v="all" aria-pressed="'+(view==='all')+'">جدول هفته</button>'+DAYS.map(function(d,i){return '<button data-v="'+i+'" aria-pressed="'+(view===String(i))+'">'+d+(cnt(i)?' ('+FD(cnt(i))+')':'')+'</button>'}).join('');
+  var all=view==='all';$('sc').hidden=!all;$('daylist').hidden=all;
+  if(all){
+    var cover={};sched.forEach(function(c){var n=TYPES[c.class_type][1];for(var k=0;k<n;k++)cover[c.day+'-'+(c.slot+k)]=k?'skip':c});
+    var ti=wd(today()),h='<thead><tr><th>ساعت</th>'+DAYS.map(function(d,i){return '<th'+(i===ti?' class="today"':'')+'>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
+    for(var s=S0;s<=S1;s++){h+='<tr><th>'+rng(s,1)+'</th>';
+      for(var d=0;d<7;d++){var v=cover[d+'-'+s];if(v==='skip')continue;
+        h+=v?'<td rowspan="'+TYPES[v.class_type][1]+'">'+card(v)+'</td>':'<td><button class="add" data-add="'+d+'-'+s+'">+ اضافه کردن</button></td>'}
+      h+='</tr>'}
+    $('wt').innerHTML=h+'</tbody>'}
+  else{var d=+view,L=sched.filter(function(c){return c.day===d}),min=0;L.forEach(function(c){min+=TYPES[c.class_type][1]*30});
+    $('daylist').innerHTML='<div class="card"><b>'+DAYS[d]+'</b> — '+(L.length?FD(L.length)+' کلاس، '+FD(+(min/60).toFixed(1))+' ساعت':'کلاسی ثبت نشده')+'</div>'+L.map(function(c){return '<div class="row"><div>'+rng(c.slot,TYPES[c.class_type][1])+'</div>'+card(c)+'</div>'}).join('')+'<button class="btn ghost" data-adddayv="'+d+'">+ افزودن کلاس برای '+DAYS[d]+'</button>'}}
+$('views').addEventListener('click',function(e){var b=e.target.closest('button');if(b){view=b.dataset.v;drawWeek()}});
+$('wt').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.edit)openClass(sched.filter(function(c){return c.id==b.dataset.edit})[0]);
+  else if(b.dataset.add){var a=b.dataset.add.split('-');openClass(null,{day:+a[0],slot:+a[1]})}});
+$('daylist').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.edit)openClass(sched.filter(function(c){return c.id==b.dataset.edit})[0]);else if(b.dataset.adddayv)openClass(null,{day:+b.dataset.adddayv})});
+$('addClass').onclick=function(){openClass(null,view==='all'?{}:{day:+view})};
+
+/* ---------- پنجره کلاس ---------- */
+function openClass(c,pre){
+  c=c||Object.assign({day:0,slot:S0,class_type:'economy',student_id:null,topic:'',note:''},pre||{});
+  var ss=[];for(var s=S0;s<=S1;s++)ss.push([s,tm(s)]);
+  $('cDay').innerHTML=opts(DAYS.map(function(d,i){return [i,d]}),c.day);$('cSlot').innerHTML=opts(ss,c.slot);
+  $('cType').innerHTML=opts(Object.keys(TYPES).map(function(k){return [k,TYPES[k][0]+' ('+FD(TYPES[k][1]*30)+' دقیقه)']}),c.class_type);
+  $('cStu').innerHTML='<option value="">— بدون دانش‌آموز —</option>'+opts(students.filter(function(s){return s.active||s.id===c.student_id}).map(function(s){return [s.id,'کد '+FD(s.id)+' · '+s.name]}),c.student_id);
+  $('cTopic').innerHTML='<option value="">—</option>'+opts(TOPICS.map(function(t){return [t,t]}),c.topic);
+  $('cNote').value=c.note||'';$('cId').value=c.id||'';$('cDel').hidden=!c.id;$('cErr').textContent='';$('cTitle').textContent=c.id?'ویرایش کلاس':'کلاس جدید';
+  if($('dlgStu').open)$('dlgStu').close();$('dlgClass').showModal()}
+$('cStu').onchange=function(){var s=stu(+this.value);if(s&&s.term&&!$('cTopic').value)$('cTopic').value=s.term};
+$('fClass').addEventListener('submit',async function(e){e.preventDefault();
+  var id=$('cId').value,o={day:+$('cDay').value,slot:+$('cSlot').value,class_type:$('cType').value,student_id:$('cStu').value?+$('cStu').value:null,topic:$('cTopic').value||null,note:$('cNote').value.trim()||null};
+  var n=TYPES[o.class_type][1];
+  if(o.slot+n>S1+1){$('cErr').textContent='پایان کلاس از ساعت ۲۲:۰۰ بیشتر می‌شود.';return}
+  if(sched.some(function(c){return String(c.id)!==id&&c.day===o.day&&o.slot<c.slot+TYPES[c.class_type][1]&&c.slot<o.slot+n})){$('cErr').textContent='این زمان با کلاس دیگری تداخل دارد.';return}
+  try{if(id)await patch('schedule','id=eq.'+id,o);else await post('schedule',o);$('dlgClass').close();await loadCore();toast('ذخیره شد')}catch(x){$('cErr').textContent='ذخیره نشد؛ دوباره تلاش کنید.'}});
+$('cDel').onclick=async function(){if(!confirm('این کلاس حذف شود؟'))return;try{await del('schedule','id=eq.'+$('cId').value);$('dlgClass').close();await loadCore();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=function(){b.closest('dialog').close()}});
+
+/* ---------- دانش‌آموزان ---------- */
+function drawStu(){
+  var q=$('sq').value.trim(),all=$('sall').checked,L=students.filter(function(s){return (all||s.active)&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
+  $('scount').textContent=FD(L.length)+' دانش‌آموز';
+  $('stb').innerHTML=L.map(function(s){var t=sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' '+tm(c.slot)}).join('، ');
+    return '<tr><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b>'+(s.active?'':' <small>(غیرفعال)</small>')+'</td><td>'+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">دانش‌آموزی پیدا نشد.</td></tr>'}
+$('sq').oninput=drawStu;$('sall').onchange=drawStu;
+$('fAdd').addEventListener('submit',async function(e){e.preventDefault();
+  try{await post('students',{name:$('aName').value.trim(),term:$('aTerm').value||null});$('aName').value='';await loadCore();toast('دانش‌آموز اضافه شد')}catch(x){toast('افزودن ممکن نشد',1)}});
+$('stb').addEventListener('click',function(e){var b=e.target.closest('button[data-s]');if(b)openStu(stu(+b.dataset.s))});
+function openStu(s){
+  $('sId').value=s.id;$('sTitle').textContent='کد '+FD(s.id)+' — '+s.name;$('sName').value=s.name;
+  $('sTerm').innerHTML='<option value="">—</option>'+opts(TOPICS.map(function(t){return [t,t]}),s.term);
+  [['sPhone','phone'],['sGrade','grade'],['sInt','interests'],['sStr','strengths'],['sWeak','weaknesses'],['sCon','concerns'],['sLast','last_session']].forEach(function(p){$(p[0]).value=s[p[1]]||''});
+  $('sAge').value=s.age||'';$('sActive').checked=s.active;
+  var t=sched.filter(function(c){return c.student_id===s.id});
+  $('sTimes').innerHTML=t.length?t.map(function(c){return DAYS[c.day]+' '+rng(c.slot,TYPES[c.class_type][1])+' · '+TYPES[c.class_type][0]}).join('<br>'):'هنوز زمانی تعیین نشده.';
+  $('dlgStu').showModal()}
+$('fStu').addEventListener('submit',async function(e){e.preventDefault();
+  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked};
+  try{await patch('students','id=eq.'+$('sId').value,o);$('dlgStu').close();await loadCore();toast('ذخیره شد')}catch(x){toast('ذخیره نشد',1)}});
+$('sDel').onclick=async function(){if(!confirm('این دانش‌آموز حذف شود؟ (کلاس‌های او در جدول بدون دانش‌آموز می‌مانند.) برای نگه داشتن سابقه بهتر است او را غیرفعال کنید.'))return;
+  try{await del('students','id=eq.'+$('sId').value);$('dlgStu').close();await loadCore();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+$('sSched').onclick=function(){var s=stu(+$('sId').value);openClass(null,{student_id:s.id,topic:s.term||''})};
+
+/* ---------- آمار ---------- */
+var per='month',lastRows=[];
+function buildMatrix(){
+  $('mx').innerHTML='<thead><tr><th>ترم / موضوع</th>'+ST.map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'</tr></thead><tbody>'+TOPICS.map(function(p,i){return '<tr><th style="text-align:right">'+p+'</th>'+ST.map(function(t){return '<td><input type="number" inputmode="numeric" min="0" max="99" data-p="'+i+'" data-t="'+t+'" aria-label="'+p+' '+TYPES[t][0]+'"></td>'}).join('')+'</tr>'}).join('')+'</tbody><tfoot><tr><th style="text-align:right">جمع</th>'+ST.map(function(t){return '<td id="tot-'+t+'"><b>۰</b></td>'}).join('')+'</tr></tfoot>'}
+function totals(){ST.forEach(function(t){var n=0;document.querySelectorAll('#mx input[data-t="'+t+'"]').forEach(function(i){n+=+i.value||0});$('tot-'+t).innerHTML='<b>'+FD(n)+'</b>'})}
+$('mx').addEventListener('input',totals);
+async function loadEntry(){var d=jget('eDate');if(!d)return;
+  try{var rows=await rest('sessions?select=*&day=eq.'+iso(d));
+    document.querySelectorAll('#mx input').forEach(function(i){i.value=''});$('mentors').value='';
+    rows.forEach(function(r){if(r.class_type==='mentors')$('mentors').value=r.count;else{var i=document.querySelector('#mx input[data-p="'+TOPICS.indexOf(r.topic)+'"][data-t="'+r.class_type+'"]');if(i)i.value=r.count}});
+    totals();$('entLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)}catch(e){}}
+$('eDate').addEventListener('change',loadEntry);
+$('ePrev').onclick=function(){jset('eDate',addd(jget('eDate'),-1));loadEntry()};$('eNext').onclick=function(){jset('eDate',addd(jget('eDate'),1));loadEntry()};$('eToday').onclick=function(){jset('eDate',today());loadEntry()};
+$('saveEntry').onclick=async function(){var d=jget('eDate'),rows=[];if(!d)return;
+  document.querySelectorAll('#mx input').forEach(function(i){var n=+i.value;if(n>0)rows.push({day:iso(d),topic:TOPICS[+i.dataset.p],class_type:i.dataset.t,count:Math.min(n,200)})});
+  var m=+$('mentors').value;if(m>0)rows.push({day:iso(d),topic:'—',class_type:'mentors',count:Math.min(m,200)});
+  try{await del('sessions','day=eq.'+iso(d));if(rows.length)await rest('sessions',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});toast('ثبت شد');report()}catch(e){toast('ثبت نشد؛ آیا supabase-admin.sql اجرا شده است؟',1)}};
+$('per').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;per=b.dataset.p;document.querySelectorAll('#per button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});report()});
+$('rDate').addEventListener('change',report);
+function hrs(min){return FD(+(min/60).toFixed(1)).replace('.','٫')}
+async function report(){
+  var a=jget('rDate');if(!a)return;var r=range(a,per);
+  $('rLabel').textContent=per==='day'?jlabel(r[0]):'از '+jlabel(r[0])+' تا '+jlabel(r[1]);
+  var rows;try{rows=await rest('sessions?select=*&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&order=day.asc&limit=5000')}catch(e){$('rOut').innerHTML='<p class="hint">خواندن آمار ممکن نشد.</p>';return}
+  lastRows=rows;var byT={},byP={},byK={},tot=0,min=0;
+  rows.forEach(function(x){var m=x.count*TYPES[x.class_type][1]*30;tot+=x.count;min+=m;
+    byT[x.class_type]=byT[x.class_type]||[0,0];byT[x.class_type][0]+=x.count;byT[x.class_type][1]+=m;
+    byP[x.topic]=byP[x.topic]||{};byP[x.topic][x.class_type]=(byP[x.topic][x.class_type]||0)+x.count;
+    var p=jp(new Date(x.day+'T00:00:00Z')),k=per==='year'?JM[p.month-1]:DAYS[wd(new Date(x.day+'T00:00:00Z'))]+' '+jlabel(new Date(x.day+'T00:00:00Z'));
+    byK[k]=byK[k]||[0,0];byK[k][0]+=x.count;byK[k][1]+=m});
+  var h='<div class="kpis"><div class="kpi"><b>'+FD(tot)+'</b><span>کل کلاس‌ها</span></div><div class="kpi"><b>'+hrs(min)+'</b><span>ساعت تدریس</span></div>'+Object.keys(TYPES).map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD((byT[t]||[0])[0])+'</b><span>'+TYPES[t][0]+'</span></div>'}).join('')+'</div>';
+  if(!tot){$('rOut').innerHTML=h+'<p class="hint">در این بازه کلاسی ثبت نشده است.</p>';return}
+  var tops=TOPICS.concat(['—']).filter(function(p){return byP[p]});
+  h+='<div class="g2"><div><b>به تفکیک ترم و نوع</b><div class="tbl num"><table><thead><tr><th style="text-align:right">ترم / موضوع</th>'+Object.keys(TYPES).map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'<th>جمع</th></tr></thead><tbody>'+tops.map(function(p){var s=0;return '<tr><td style="text-align:right">'+(p==='—'?'مربیان':p)+'</td>'+Object.keys(TYPES).map(function(t){var n=byP[p][t]||0;s+=n;return '<td>'+(n?FD(n):'')+'</td>'}).join('')+'<td><b>'+FD(s)+'</b></td></tr>'}).join('')+'</tbody></table></div></div>';
+  if(per!=='day')h+='<div><b>'+(per==='year'?'به تفکیک ماه':'به تفکیک روز')+'</b><div class="tbl num"><table><thead><tr><th style="text-align:right">'+(per==='year'?'ماه':'روز')+'</th><th>کلاس</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(byK).map(function(k){return '<tr><td style="text-align:right">'+k+'</td><td>'+FD(byK[k][0])+'</td><td>'+hrs(byK[k][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
+  $('rOut').innerHTML=h+'</div>'}
+$('csv').onclick=function(){
+  var L=['تاریخ شمسی,تاریخ میلادی,موضوع,نوع کلاس,تعداد,مدت (دقیقه)'];
+  lastRows.forEach(function(x){var p=jp(new Date(x.day+'T00:00:00Z'));L.push([p.year+'/'+p.month+'/'+p.day,x.day,x.topic==='—'?'':x.topic,TYPES[x.class_type][0],x.count,x.count*TYPES[x.class_type][1]*30].join(','))});
+  var u=URL.createObjectURL(new Blob(['\ufeff'+L.join('\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='classes-report.csv';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
+
+/* ---------- رزرو از سایت ---------- */
+var st={},cur=0,siteLoaded=false;
+function sdraw(){
+  $('atabs').innerHTML=DAYS.map(function(d,i){return '<button type="button" role="tab" data-d="'+i+'" aria-selected="'+(i===cur)+'">'+d+'</button>'}).join('');
+  var h='';for(var s=S0;s<=S1;s++){var k=cur+'-'+s,v=st[k]||'';h+='<button type="button" class="chip '+(v==='free'?'fr':v==='booked'?'bk':'')+'" data-k="'+k+'"><span>'+rng(s,1)+'</span><em>'+(v==='free'?'قابل رزرو':v==='booked'?'رزرو شده':'غیرفعال')+'</em></button>'}
+  $('aslots').innerHTML=h}
+$('atabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b){cur=+b.dataset.d;sdraw()}});
+$('aslots').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=b.dataset.k,v=st[k];if(!v)st[k]='free';else if(v==='free')st[k]='booked';else delete st[k];sdraw()});
+$('dayfree').onclick=function(){for(var s=S0;s<=S1;s++)st[cur+'-'+s]='free';sdraw()};
+$('dayclear').onclick=function(){for(var s=S0;s<=S1;s++)delete st[cur+'-'+s];sdraw()};
+$('dayall').onclick=function(){for(var d=0;d<7;d++)for(var s=S0;s<=S1;s++){var v=st[cur+'-'+s];if(v)st[d+'-'+s]=v;else delete st[d+'-'+s]}sdraw()};
+$('saveweek').onclick=async function(){try{await del('slots','day=gte.0');var rows=Object.keys(st).map(function(k){var p=k.split('-');return {day:+p[0],slot:+p[1],status:st[k]}});
+  if(rows.length)await rest('slots',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});$('weekmsg').textContent='ذخیره شد.'}catch(e){$('weekmsg').textContent='ذخیره نشد.'}};
+async function loadSite(){
+  try{var s=await rest('slots?select=day,slot,status');st={};s.forEach(function(x){st[x.day+'-'+x.slot]=x.status});sdraw();
+  var j=await rest('bookings?select=*&order=created_at.desc');$('inboxhint').textContent=j.length?'':'هنوز درخواستی ثبت نشده است.';
+  var box=$('inbox');box.innerHTML='';
+  j.forEach(function(i){var d=document.createElement('div');d.className='msg';d.innerHTML='<b></b> <small></small><br><span></span><br><small></small>';
+    d.children[0].textContent=i.name+(i.status==='done'?' ✓':'');d.children[1].textContent=new Date(i.created_at).toLocaleString('fa-IR');
+    d.children[3].textContent=[i.topic,i.mode,i.contact,i.source?('آشنایی: '+i.source):''].filter(Boolean).join(' | ');d.children[5].textContent=(i.times||[]).join('، ')+(i.msg?' — '+i.msg:'');
+    var bt=document.createElement('div');bt.className='btns';
+    var a=document.createElement('button');a.className='btn ghost';a.textContent=i.status==='done'?'بازگشت به جدید':'انجام شد';a.onclick=async function(){await patch('bookings','id=eq.'+i.id,{status:i.status==='done'?'new':'done'});loadSite()};bt.appendChild(a);
+    if(i.slot_keys&&i.slot_keys.length){var rb=document.createElement('button');rb.className='btn ghost';rb.textContent='قرمز کردن زمان‌ها (رزرو شده)';
+      rb.onclick=async function(){for(var q=0;q<i.slot_keys.length;q++){var p=i.slot_keys[q].split('-');await patch('slots','day=eq.'+p[0]+'&slot=eq.'+p[1],{status:'booked'})}await patch('bookings','id=eq.'+i.id,{status:'done'});loadSite()};bt.appendChild(rb)}
+    var r=document.createElement('button');r.className='btn red';r.textContent='حذف';r.onclick=async function(){if(confirm('این درخواست حذف شود؟')){await del('bookings','id=eq.'+i.id);loadSite()}};bt.appendChild(r);
+    d.appendChild(bt);box.appendChild(d)});siteLoaded=true}catch(e){}}
+
+/* ---------- تب‌ها و شروع ---------- */
+function showTab(t){sessionStorage.setItem('tab',t);
+  document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
+  ['week','stu','stats','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite()}
+$('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
+function enter(){showApp(true);
+  $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
+  jsel('eDate',today());jsel('rDate',today());buildMatrix();
+  if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
+  loadCore();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
-else if(tok){show(true);load().catch(function(){})}
+else if(tok)enter();
 </script></body></html>
