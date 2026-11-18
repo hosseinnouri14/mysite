@@ -76,20 +76,46 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0;color:var
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover{transform:none}}
 
-.week{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--bg);margin-bottom:8px}
-.week table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;text-align:center}
-.week th,.week td{border:1px solid var(--line);padding:0}
-.week th{padding:4px;font-weight:500;color:var(--muted);background:var(--surface)}
-.week td button{display:block;width:100%;height:30px;border:0;background:transparent;color:var(--ink);cursor:default;font:inherit}
-.week td button.free{background:var(--soft);cursor:pointer}
-.week td button.sel,.week td button.on{background:var(--accent);color:var(--accent-ink)}
-.week td button.on,.week td button.free,.week td button.admin{cursor:pointer}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 8px}
 #admin{display:none}
 .msg{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--surface)}
 .msg small{color:var(--muted)}
 .msg .btns{margin-top:8px}.msg .btn{padding:3px 14px;font-size:14px}
 .links{display:flex;gap:16px;flex-wrap:wrap}.courses{list-style:none;margin:8px 0 0;padding:0}.courses li{padding:8px 0;border-top:1px solid var(--line)}.courses li:first-child{border-top:0}.courses a{font-weight:500;text-decoration-color:var(--accent);text-underline-offset:4px}
+
+:root{--okbg:#e1f4e6;--okink:#17692f;--badbg:#fde6e4;--badink:#a11d1d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
+:root[data-theme="dark"]{--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}
+html,body{overflow-x:clip}
+img{max-width:100%}
+a{text-decoration:none}
+.courses a{color:var(--accent);text-decoration:none}
+.hero>*,.about>*,.grid>*,.book>*,.stats>*{min-width:0}
+input,select,textarea{font-size:16px;max-width:100%}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tabs button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:3px 14px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button.has::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--okink);margin-inline-start:6px}
+.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:560px){.slots{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.chip{font:inherit;min-height:54px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;line-height:1.5;background:var(--bg);color:var(--muted);cursor:pointer}
+.chip span{font-size:14.5px;font-weight:500}.chip em{font-style:normal;font-size:12.5px}
+.chip.fr{background:var(--okbg);color:var(--okink);border-color:var(--okink)}
+.chip.fr.sel{background:var(--okink);color:var(--okbg)}
+.chip.bk{background:var(--badbg);color:var(--badink);border-color:var(--badink)}
+.chip.bk:disabled{cursor:not-allowed}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;margin:0 0 10px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+.empty{color:var(--muted);font-size:14.5px;margin:0}
+@media(max-width:600px){
+  body{font-size:16px}.wrap{padding:0 16px}
+  section{padding-top:48px}
+  .hero{padding:28px 0 40px;gap:28px}.hero h1{font-size:30px}.hero p.lead{font-size:17px}
+  h2{font-size:25px}.stats b{font-size:21px}.stats div{padding:14px 8px}
+  .book{padding:18px;border-radius:18px;gap:24px}
+  .btns .btn{flex:1 1 auto;text-align:center}
+  footer .wrap{flex-direction:column}
+}
 </style>
 </head>
 <body>
@@ -179,7 +205,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       </div>
       <div>
         <form id="f">
-          <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+          <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;border:0;padding:0">
           <div class="row">
             <label>نام و نام خانوادگی<input name="name" required autocomplete="name"></label>
             <label>شماره تماس یا ایمیل<input name="contact" required dir="ltr" style="text-align:right"></label>
@@ -192,9 +218,16 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
               <select name="mode"><option>آنلاین</option><option>حضوری</option><option>فرقی نمی‌کند</option></select>
             </label>
           </div>
+          <label>نحوه آشنایی با من
+            <select name="source" required><option value="">انتخاب کنید</option><option>سایت فرادرس</option><option>دانش‌آموز قبلی</option><option>سایت یاسان</option><option>مجله فرادرس</option><option>لینکدین</option><option>اینستاگرام</option><option>گوگل</option><option>سایر موارد</option></select>
+          </label>
           <div><b style="font-size:14.5px;font-weight:500">زمان‌های آزاد من</b>
             <p class="hint" id="wkhint">در حال بارگذاری برنامه…</p>
-            <div class="week" id="wk" hidden></div>
+            <div id="wk" hidden>
+              <div class="tabs" id="tabs" role="tablist" aria-label="روز هفته"></div>
+              <p class="legend"><span><i style="background:var(--okbg);border:1px solid var(--okink)"></i>قابل رزرو</span><span><i style="background:var(--badbg);border:1px solid var(--badink)"></i>رزرو شده</span></p>
+              <div class="slots" id="slots"></div>
+            </div>
             <input name="time" placeholder="یا زمان پیشنهادی خودتان را بنویسید" aria-label="زمان پیشنهادی"></div>
           <label>توضیحات<textarea name="msg" placeholder="سطح فعلی، هدف و هر نکته‌ای که باید بدانم"></textarea></label>
           <button class="btn" type="submit">آماده‌سازی پیام رزرو</button>
@@ -214,44 +247,45 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 <script src="config.js"></script>
 <script>
 var CONFIG={email:"hosseinnouri14@gmail.com",telegram:"hossein_nouri_k"};
-var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],H0=8,H1=20;
-var fa=function(n){return Number(n).toLocaleString('fa-IR')};
-var free=new Set(),sel=new Set();
-var $=function(i){return document.getElementById(i)};
+var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],S0=16,S1=43; // نیم‌ساعت‌ها از ۸:۰۰ تا ۲۲:۰۰
+var fa=function(n){return Number(n).toLocaleString('fa-IR')},$=function(i){return document.getElementById(i)};
+var C=window.SITE_CONFIG,live=!!(C&&C.key&&C.key.indexOf('PASTE')!==0);
+var slots={},sel=new Set(),cur=0;
 var f=$('f'),out=$('out'),txt=$('txt');
-function grid(el){
-  var h='<table><tr><th></th>'+DAYS.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr>';
-  for(var t=H0;t<=H1;t++){
-    h+='<tr><th>'+fa(t)+'–'+fa(t+1)+'</th>';
-    for(var d=0;d<7;d++){
-      var k=d+'-'+t,on=sel.has(k),fr=free.has(k);
-      h+='<td><button type="button" data-k="'+k+'" class="'+(fr?(on?'free sel':'free'):'')+'"'+(fr?'':' disabled')+' aria-pressed="'+on+'" aria-label="'+DAYS[d]+' '+fa(t)+'">'+(on?'✓':'')+'</button></td>';
-    }
-    h+='</tr>';
-  }
-  el.innerHTML=h+'</table>';
-}
-function label(k){var a=k.split('-');return DAYS[a[0]]+' '+fa(a[1])+' تا '+fa(+a[1]+1)}
+function tm(s){var m=s*30;return fa(Math.floor(m/60))+':'+(m%60?'۳۰':'۰۰')}
+function label(k){var a=k.split('-');return DAYS[a[0]]+' '+tm(+a[1])+' تا '+tm(+a[1]+1)}
+function hasFree(d){for(var s=S0;s<=S1;s++)if(slots[d+'-'+s]==='free')return true;return false}
 function draw(){
-  if(free.size){grid($('wk'));$('wk').hidden=false;$('wkhint').textContent='ساعت‌های رنگی آزاد هستند. هر چند ساعت که می‌خواهید انتخاب کنید.'}
-  else{$('wk').hidden=true;$('wkhint').textContent='زمان پیشنهادی خودتان را بنویسید.'}
+  var has=Object.keys(slots).length>0;
+  $('wk').hidden=!has;
+  $('wkhint').textContent=has?'روز را انتخاب کنید و زمان‌های «قابل رزرو» را بزنید. می‌توانید چند زمان انتخاب کنید.':'زمان پیشنهادی خودتان را بنویسید.';
+  if(!has)return;
+  $('tabs').innerHTML=DAYS.map(function(d,i){return '<button type="button" role="tab" data-d="'+i+'" aria-selected="'+(i===cur)+'" class="'+(hasFree(i)?'has':'')+'">'+d+'</button>'}).join('');
+  var h='';
+  for(var s=S0;s<=S1;s++){
+    var k=cur+'-'+s,v=slots[k];if(!v)continue;
+    var on=sel.has(k);
+    if(v==='booked')h+='<button type="button" class="chip bk" disabled><span>'+tm(s)+' تا '+tm(s+1)+'</span><em>رزرو شده</em></button>';
+    else h+='<button type="button" class="chip fr'+(on?' sel':'')+'" data-k="'+k+'" aria-pressed="'+on+'"><span>'+tm(s)+' تا '+tm(s+1)+'</span><em>'+(on?'انتخاب شد ✓':'قابل رزرو')+'</em></button>';
+  }
+  $('slots').innerHTML=h||'<p class="empty" style="grid-column:1/-1">برای این روز زمانی ثبت نشده است.</p>';
 }
-$('wk').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b||b.disabled)return;var k=b.dataset.k;sel.has(k)?sel.delete(k):sel.add(k);draw()});
+$('tabs').addEventListener('click',function(e){var b=e.target.closest('button[data-d]');if(!b)return;cur=+b.dataset.d;draw()});
+$('slots').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;var k=b.dataset.k;sel.has(k)?sel.delete(k):sel.add(k);draw()});
 function chosen(){
   var a=Array.from(sel).sort(function(x,y){var p=x.split('-'),q=y.split('-');return p[0]-q[0]||p[1]-q[1]}).map(label);
   var t=f.elements.time.value.trim();if(t)a.push(t);return a;
 }
 f.addEventListener('submit',async function(e){
-  e.preventDefault();var d=new FormData(f),times=chosen(),btn=f.querySelector('button[type=submit]');
-  var m="سلام آقای نوری،\nمی‌خواهم کلاس خصوصی رزرو کنم.\n\nنام: "+d.get('name')+"\nتماس: "+d.get('contact')+"\nموضوع: "+d.get('topic')+"\nنحوه برگزاری: "+d.get('mode')+"\nزمان مناسب: "+(times.join('، ')||'-')+"\nتوضیحات: "+(d.get('msg')||'-');
+  e.preventDefault();var d=new FormData(f),times=chosen(),keys=Array.from(sel),btn=f.querySelector('button[type=submit]');
+  var m="سلام آقای نوری،\nمی‌خواهم کلاس خصوصی رزرو کنم.\n\nنام: "+d.get('name')+"\nتماس: "+d.get('contact')+"\nموضوع: "+d.get('topic')+"\nنحوه برگزاری: "+d.get('mode')+"\nنحوه آشنایی: "+d.get('source')+"\nزمان مناسب: "+(times.join('، ')||'-')+"\nتوضیحات: "+(d.get('msg')||'-');
   txt.textContent=m;
   $('mail').href="mailto:"+CONFIG.email+"?subject="+encodeURIComponent("رزرو کلاس خصوصی")+"&body="+encodeURIComponent(m);
   var tg=$('tg');tg.hidden=false;tg.href="https://t.me/"+CONFIG.telegram+"?text="+encodeURIComponent(m);
-  var C=window.SITE_CONFIG,live=C&&C.key&&C.key.indexOf('PASTE')!==0;
   if(live&&!d.get('website')){
     btn.disabled=true;
     try{
-      var r=await fetch(C.url+'/rest/v1/bookings',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:d.get('name'),contact:d.get('contact'),topic:d.get('topic'),mode:d.get('mode'),msg:d.get('msg')||'',times:times})});
+      var r=await fetch(C.url+'/rest/v1/bookings',{method:'POST',headers:{apikey:C.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:d.get('name'),contact:d.get('contact'),topic:d.get('topic'),mode:d.get('mode'),source:d.get('source'),msg:d.get('msg')||'',times:times,slot_keys:keys})});
       if(!r.ok)throw new Error('fail');
       $('saved').textContent='درخواست شما ثبت شد و به‌زودی با شما تماس می‌گیرم.';f.reset();sel.clear();draw();
     }catch(err){$('saved').textContent='ثبت در سایت ممکن نشد. لطفاً پیام را با ایمیل یا تلگرام بفرستید.'}
@@ -261,8 +295,11 @@ f.addEventListener('submit',async function(e){
 });
 $('copy').addEventListener('click',function(){var b=this;try{navigator.clipboard.writeText(txt.textContent).then(function(){b.textContent='کپی شد'},function(){})}catch(e){}});
 draw();
-(function(){var C=window.SITE_CONFIG;if(!C||!C.key||C.key.indexOf('PASTE')===0)return;
-  fetch(C.url+'/rest/v1/slots?select=day,hour',{headers:{apikey:C.key}}).then(function(r){return r.json()}).then(function(a){free=new Set(a.map(function(x){return x.day+'-'+x.hour}));draw()}).catch(function(){});})();
+if(live)fetch(C.url+'/rest/v1/slots?select=day,slot,status',{headers:{apikey:C.key}}).then(function(r){return r.json()}).then(function(a){
+  slots={};a.forEach(function(x){slots[x.day+'-'+x.slot]=x.status});
+  for(var i=0;i<7;i++)if(hasFree(i)){cur=i;break}
+  draw();
+}).catch(function(){});
 </script>
 </body>
 </html>

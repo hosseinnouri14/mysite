@@ -75,14 +75,6 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:28px 0;color:var
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover{transform:none}}
 
-.week{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--bg);margin-bottom:8px}
-.week table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;text-align:center}
-.week th,.week td{border:1px solid var(--line);padding:0}
-.week th{padding:4px;font-weight:500;color:var(--muted);background:var(--surface)}
-.week td button{display:block;width:100%;height:30px;border:0;background:transparent;color:var(--ink);cursor:default;font:inherit}
-.week td button.free{background:var(--soft);cursor:pointer}
-.week td button.sel,.week td button.on{background:var(--accent);color:var(--accent-ink)}
-.week td button.on,.week td button.free,.week td button.admin{cursor:pointer}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 8px}
 #admin{display:none}
 .msg{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--surface)}
@@ -93,6 +85,40 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 #login{max-width:360px;margin:80px auto;display:grid;gap:14px}
 #panel{display:none;padding:32px 0}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+
+:root{--okbg:#e1f4e6;--okink:#17692f;--badbg:#fde6e4;--badink:#a11d1d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
+:root[data-theme="dark"]{--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}
+html,body{overflow-x:clip}
+img{max-width:100%}
+a{text-decoration:none}
+.courses a{color:var(--accent);text-decoration:none}
+.hero>*,.about>*,.grid>*,.book>*,.stats>*{min-width:0}
+input,select,textarea{font-size:16px;max-width:100%}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tabs button{font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:3px 14px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button.has::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--okink);margin-inline-start:6px}
+.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:560px){.slots{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.chip{font:inherit;min-height:54px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;line-height:1.5;background:var(--bg);color:var(--muted);cursor:pointer}
+.chip span{font-size:14.5px;font-weight:500}.chip em{font-style:normal;font-size:12.5px}
+.chip.fr{background:var(--okbg);color:var(--okink);border-color:var(--okink)}
+.chip.fr.sel{background:var(--okink);color:var(--okbg)}
+.chip.bk{background:var(--badbg);color:var(--badink);border-color:var(--badink)}
+.chip.bk:disabled{cursor:not-allowed}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;margin:0 0 10px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+.empty{color:var(--muted);font-size:14.5px;margin:0}
+@media(max-width:600px){
+  body{font-size:16px}.wrap{padding:0 16px}
+  section{padding-top:48px}
+  .hero{padding:28px 0 40px;gap:28px}.hero h1{font-size:30px}.hero p.lead{font-size:17px}
+  h2{font-size:25px}.stats b{font-size:21px}.stats div{padding:14px 8px}
+  .book{padding:18px;border-radius:18px;gap:24px}
+  .btns .btn{flex:1 1 auto;text-align:center}
+  footer .wrap{flex-direction:column}
+}
 </style></head><body>
 <div class="wrap">
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
@@ -103,17 +129,19 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
   <div class="top"><h1 style="margin:0">پنل مدیریت</h1><span class="btns"><a class="btn ghost" href="/">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></span></div>
   <div class="book" style="grid-template-columns:1fr">
     <div><h2>برنامه هفتگی زمان‌های آزاد</h2>
-      <p class="hint">روی ساعت‌ها بزنید تا آزاد یا غیرآزاد شود، سپس ذخیره کنید.</p>
-      <div class="week" id="wkadmin"></div>
-      <div class="btns"><button class="btn" id="saveweek" type="button">ذخیره برنامه</button><button class="btn ghost" id="clearweek" type="button">پاک کردن همه</button><span id="weekmsg" role="status" style="align-self:center"></span></div></div>
+      <p class="hint">هر نیم‌ساعت را بزنید تا بین «غیرفعال»، «قابل رزرو» و «رزرو شده» عوض شود. در پایان «ذخیره برنامه» را بزنید.</p>
+      <div id="wkadmin"><div class="tabs" id="atabs" role="tablist" aria-label="روز هفته"></div><p class="legend"><span><i style="background:var(--bg);border:1px solid var(--line)"></i>غیرفعال</span><span><i style="background:var(--okbg);border:1px solid var(--okink)"></i>قابل رزرو</span><span><i style="background:var(--badbg);border:1px solid var(--badink)"></i>رزرو شده</span></p><div class="slots" id="aslots"></div></div>
+      <div class="btns" style="margin-bottom:10px"><button class="btn ghost" id="dayfree" type="button">همه ساعت‌های این روز قابل رزرو</button><button class="btn ghost" id="dayclear" type="button">پاک کردن این روز</button><button class="btn ghost" id="dayall" type="button">کپی این روز برای همه روزها</button></div>
+      <div class="btns"><button class="btn" id="saveweek" type="button">ذخیره برنامه</button><span id="weekmsg" role="status" style="align-self:center"></span></div></div>
     <div><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
   </div>
 </div></div>
 <script>
 var C=window.SITE_CONFIG,tok=sessionStorage.getItem('tok')||'';
-var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],H0=8,H1=20;
+var DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"],S0=16,S1=43;
 var fa=function(n){return Number(n).toLocaleString('fa-IR')},$=function(i){return document.getElementById(i)};
-var adm=new Set();
+var st={},cur=0;
+function tm(s){var m=s*30;return fa(Math.floor(m/60))+':'+(m%60?'۳۰':'۰۰')}
 function show(on){$('login').style.display=on?'none':'grid';$('panel').style.display=on?'block':'none'}
 async function rest(path,o){
   o=o||{};o.headers=Object.assign({apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},o.headers||{});
@@ -122,25 +150,29 @@ async function rest(path,o){
   if(!r.ok)throw new Error('fail');
   var t=await r.text();return t?JSON.parse(t):null;
 }
-function grid(){
-  var h='<table><tr><th></th>'+DAYS.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr>';
-  for(var t=H0;t<=H1;t++){h+='<tr><th>'+fa(t)+'–'+fa(t+1)+'</th>';
-    for(var d=0;d<7;d++){var k=d+'-'+t,on=adm.has(k);h+='<td><button type="button" data-k="'+k+'" class="'+(on?'on':'admin')+'" aria-pressed="'+on+'" aria-label="'+DAYS[d]+' '+fa(t)+'">'+(on?'✓':'')+'</button></td>'}
-    h+='</tr>'}
-  $('wkadmin').innerHTML=h+'</table>';
+function draw(){
+  $('atabs').innerHTML=DAYS.map(function(d,i){return '<button type="button" role="tab" data-d="'+i+'" aria-selected="'+(i===cur)+'">'+d+'</button>'}).join('');
+  var h='';
+  for(var s=S0;s<=S1;s++){var k=cur+'-'+s,v=st[k]||'';
+    h+='<button type="button" class="chip '+(v==='free'?'fr':v==='booked'?'bk':'off')+'" data-k="'+k+'"><span>'+tm(s)+' تا '+tm(s+1)+'</span><em>'+(v==='free'?'قابل رزرو':v==='booked'?'رزرو شده':'غیرفعال')+'</em></button>';}
+  $('aslots').innerHTML=h;
 }
-$('wkadmin').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;var k=b.dataset.k;adm.has(k)?adm.delete(k):adm.add(k);grid()});
-$('clearweek').onclick=function(){adm=new Set();grid()};
+$('atabs').addEventListener('click',function(e){var b=e.target.closest('button[data-d]');if(!b)return;cur=+b.dataset.d;draw()});
+$('aslots').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;var k=b.dataset.k,v=st[k];
+  if(!v)st[k]='free';else if(v==='free')st[k]='booked';else delete st[k];draw()});
+$('dayfree').onclick=function(){for(var s=S0;s<=S1;s++)st[cur+'-'+s]='free';draw()};
+$('dayclear').onclick=function(){for(var s=S0;s<=S1;s++)delete st[cur+'-'+s];draw()};
+$('dayall').onclick=function(){for(var d=0;d<7;d++)for(var s=S0;s<=S1;s++){var v=st[cur+'-'+s],k=d+'-'+s;if(v)st[k]=v;else delete st[k]}draw()};
 $('saveweek').onclick=async function(){
   try{
     await rest('slots?day=gte.0',{method:'DELETE'});
-    var rows=Array.from(adm).map(function(k){var p=k.split('-');return {day:+p[0],hour:+p[1]}});
+    var rows=Object.keys(st).map(function(k){var p=k.split('-');return {day:+p[0],slot:+p[1],status:st[k]}});
     if(rows.length)await rest('slots',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});
     $('weekmsg').textContent='ذخیره شد.';
   }catch(e){$('weekmsg').textContent='ذخیره نشد.'}
 };
 async function load(){
-  var s=await rest('slots?select=day,hour');adm=new Set(s.map(function(x){return x.day+'-'+x.hour}));grid();
+  var s=await rest('slots?select=day,slot,status');st={};s.forEach(function(x){st[x.day+'-'+x.slot]=x.status});draw();
   var j=await rest('bookings?select=*&order=created_at.desc');
   $('inboxhint').textContent=j.length?'':'هنوز درخواستی ثبت نشده است.';
   var box=$('inbox');box.innerHTML='';
@@ -149,14 +181,23 @@ async function load(){
     d.innerHTML='<b></b> <small></small><br><span></span><br><small></small>';
     d.children[0].textContent=i.name+(i.status==='done'?' ✓':'');
     d.children[1].textContent=new Date(i.created_at).toLocaleString('fa-IR');
-    d.children[3].textContent=[i.topic,i.mode,i.contact].join(' | ');
+    d.children[3].textContent=[i.topic,i.mode,i.contact,i.source?('آشنایی: '+i.source):''].filter(Boolean).join(' | ');
     d.children[5].textContent=(i.times||[]).join('، ')+(i.msg?' — '+i.msg:'');
     var bt=document.createElement('div');bt.className='btns';
     var a=document.createElement('button');a.className='btn ghost';a.textContent=i.status==='done'?'بازگشت به جدید':'انجام شد';
     a.onclick=async function(){await rest('bookings?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({status:i.status==='done'?'new':'done'})});load()};
+    bt.appendChild(a);
+    if(i.slot_keys&&i.slot_keys.length){
+      var rb=document.createElement('button');rb.className='btn ghost';rb.textContent='قرمز کردن زمان‌ها (رزرو شده)';
+      rb.onclick=async function(){
+        for(var q=0;q<i.slot_keys.length;q++){var p=i.slot_keys[q].split('-');await rest('slots?day=eq.'+p[0]+'&slot=eq.'+p[1],{method:'PATCH',body:JSON.stringify({status:'booked'})})}
+        await rest('bookings?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({status:'done'})});load();
+      };
+      bt.appendChild(rb);
+    }
     var r=document.createElement('button');r.className='btn ghost';r.textContent='حذف';
     r.onclick=async function(){if(confirm('این درخواست حذف شود؟')){await rest('bookings?id=eq.'+i.id,{method:'DELETE'});load()}};
-    bt.appendChild(a);bt.appendChild(r);d.appendChild(bt);box.appendChild(d);
+    bt.appendChild(r);d.appendChild(bt);box.appendChild(d);
   });
 }
 $('login').addEventListener('submit',async function(e){e.preventDefault();$('lerr').textContent='';
