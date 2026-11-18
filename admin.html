@@ -7,9 +7,9 @@
 <script src="config.js"></script>
 <style>
 :root{--bg:#f1f2ef;--surface:#fbfbf9;--ink:#2b211d;--muted:#6a6360;--line:#dcdad4;--accent:#0f6b63;--accent-ink:#fff;--soft:#e2ece9;--okbg:#e1f4e6;--okink:#17692f;--badbg:#fde6e4;--badink:#a11d1d}
-@media (prefers-color-scheme:dark){:root{--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b;--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b;--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}}
 *{box-sizing:border-box}html,body{overflow-x:clip}
-body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.8 'Vazirmatn',Tahoma,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font,"Vazirmatn"),Tahoma,sans-serif;font-size:var(--fs,15.5px);line-height:1.8}
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}
 .wrap{max-width:1280px;margin:0 auto;padding:0 16px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
@@ -33,9 +33,9 @@ textarea{min-height:70px;resize:vertical}label{display:grid;gap:3px;font-size:14
 .sc thead th{position:sticky;top:0;background:var(--surface);z-index:2;font-weight:500;color:var(--muted)}.sc thead th.today{color:var(--accent);font-weight:700}
 .sc tbody th{position:sticky;right:0;background:var(--surface);z-index:1;white-space:nowrap;font-weight:400;color:var(--muted);min-width:120px}.sc thead th:first-child{right:0;z-index:3}
 .add{width:100%;background:var(--bg);border:0;border-radius:8px;padding:6px 8px;color:var(--muted);cursor:pointer;text-align:right}.add:hover{background:var(--soft)}
-.t-premium{--c:#7c4dcc}.t-economy{--c:#2b7de0}.t-gapino{--c:#e07b2b}.t-vip{--c:#c79a12}.t-mentors{--c:#6b7a80}
-.cls{border-inline-start:4px solid var(--c);background:color-mix(in srgb,var(--c) 16%,var(--surface));border-radius:8px;padding:5px 8px;text-align:right;display:grid;gap:1px;height:100%;line-height:1.6}
-.cls small{color:var(--muted)}.badge{font-size:12.5px;color:var(--c);font-weight:700}
+.t-premium{--c:var(--ty-premium)}.t-economy{--c:var(--ty-economy)}.t-gapino{--c:var(--ty-gapino)}.t-vip{--c:var(--ty-vip)}.t-mentors{--c:var(--ty-mentors)}
+.cls{border-inline-start:4px solid var(--c);background:color-mix(in srgb,var(--c) 20%,var(--surface));border-radius:8px;padding:5px 8px;text-align:right;display:grid;gap:1px;height:100%;line-height:1.6}
+.cls small{color:var(--muted)}.badge{font-size:12px;color:#fff;font-weight:700;border-radius:99px;padding:0 10px;justify-self:start;line-height:1.7}
 .dl .row{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;margin-bottom:8px}@media(max-width:560px){.dl .row{grid-template-columns:1fr}}
 .tbl{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .tbl table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}.tbl th,.tbl td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}.tbl th{color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0}
@@ -54,6 +54,18 @@ dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface)
 .msg{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--bg)}.msg small{color:var(--muted)}.msg .btns{margin-top:6px}
 .jsel{display:flex;gap:6px;flex-wrap:wrap}.jsel select{width:auto}
 @media(max-width:600px){.wrap{padding:0 12px}.card{padding:14px}.top h1{font-size:16px}}
+
+:root[data-theme=dark]{--bg:#15181a;--surface:#1d2124;--ink:#eee9e4;--muted:#a39d98;--line:#32383b;--accent:#5fd4c4;--accent-ink:#0b1c19;--soft:#1f2c2b;--okbg:#173a24;--okink:#86e3a6;--badbg:#3f1d1d;--badink:#ff9d9d}
+:root{--ty-premium:#b45309;--ty-economy:#475569;--ty-gapino:#0e7490;--ty-vip:#be185d;--ty-mentors:#4d7c0f}
+.kpi[class*=" t-"]{border-inline-start:4px solid var(--c)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 10px;font-size:13px;color:var(--muted);align-items:center}.dotc{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}.legend .badge{margin-inline-end:2px}
+.warnbox{background:var(--badbg);color:var(--badink);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.task{border-inline-start:4px solid var(--c);background:color-mix(in srgb,var(--c) 16%,var(--surface));border-radius:8px;padding:5px 8px;text-align:right;display:grid;gap:1px;height:100%;line-height:1.6}.task small{color:var(--muted)}.task.done b{text-decoration:line-through;opacity:.65}.chk{display:flex;gap:6px;align-items:center;font-weight:500}.chk input{width:auto}
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}.note{text-align:right;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:3px;min-height:110px;align-content:start}.note span{color:var(--muted);font-size:14px;overflow-wrap:anywhere}.note small{color:var(--muted)}
+.chat{display:grid;gap:10px;margin:12px 0;max-height:60vh;overflow:auto}.bub{border-radius:14px;padding:10px 14px;border:1px solid var(--line);background:var(--bg)}.bub.assistant{background:var(--soft)}.bub .who{font-size:12.5px;color:var(--muted)}.bub .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.chart{overflow-x:auto}.hb{display:grid;grid-template-columns:110px 1fr 120px;gap:8px;align-items:center;margin:4px 0;font-size:14px}.hb i{display:block;height:12px;border-radius:6px;background:var(--accent)}@media(max-width:560px){.hb{grid-template-columns:80px 1fr 90px}}
+.clr{display:flex;align-items:center;gap:8px}.clr input{width:42px;height:32px;padding:0;border:0;background:none;cursor:pointer}
+summary{cursor:pointer;font-weight:500}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -61,15 +73,16 @@ dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface)
   <button class="btn" type="submit">ورود</button><p id="lerr" role="alert" style="margin:0;color:var(--badink)"></p></form>
 
 <div id="app" hidden>
-<header class="top"><div class="wrap"><h1>پنل مدیریت</h1><div class="btns"><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
+<header class="top"><div class="wrap"><h1>پنل مدیریت</h1><div class="btns"><button class="btn ghost" id="openSet">⚙ تنظیمات</button><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
 <div class="wrap" style="padding-top:12px">
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="stats" role="tab">آمار کلاس‌های برگزارشده</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">تقویم روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
   <div class="bar" style="justify-content:space-between;margin-bottom:10px"><div class="seg" id="views"></div><button class="btn" id="addClass">+ کلاس جدید</button></div>
+  <div class="legend" id="legend"></div>
   <div class="sc" id="sc"><table id="wt"></table></div>
   <div class="dl" id="daylist" hidden></div>
 </section>
@@ -98,7 +111,69 @@ dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface)
     <div class="btns" style="margin-top:10px"><button class="btn" id="saveweek">ذخیره زمان‌ها</button><span id="weekmsg" role="status"></span></div></div>
   <div class="card"><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
 </section>
+<section id="t-cal" hidden>
+  <div class="bar" style="margin-bottom:8px"><div class="jsel" id="cDate"></div><button class="btn ghost" id="cPrev">روز قبل</button><button class="btn ghost" id="cNext">روز بعد</button><button class="btn ghost" id="cToday">امروز</button><button class="btn" id="addTask">+ کار شخصی</button></div>
+  <p class="hint"><b id="cLabel"></b> — <span id="calsum"></span></p>
+  <div id="calwarn" class="warnbox" hidden>جدول کارهای شخصی ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="sc"><table id="ct" style="min-width:640px"></table></div>
+</section>
+
+<section id="t-fin" hidden>
+  <div class="card"><h2 id="fTitle">ثبت واریزی</h2>
+    <form id="fForm" class="fg"><label>تاریخ<div class="jsel" id="fDate"></div></label>
+      <label>مبلغ (تومان)<input id="fAmount" inputmode="numeric" required placeholder="مثلاً ۱۲۰۰۰۰۰"><small id="fPrev" class="hint"></small></label>
+      <label>منبع<select id="fSrc"></select></label><label>یادداشت<input id="fNote"></label>
+      <div class="btns w"><button class="btn" type="submit" id="fSave">ثبت واریزی</button><button class="btn ghost" type="button" id="fCancel" hidden>انصراف از ویرایش</button></div></form></div>
+  <div id="finwarn" class="warnbox" hidden>جدول مالی ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="margin-bottom:8px"><label style="display:flex;align-items:center;gap:8px">سال<select id="fYear" style="width:auto"></select></label></div>
+  <div class="kpis" id="fKpi"></div>
+  <div class="card"><h2>عملکرد ماهانه</h2><p class="hint">میلیون تومان؛ سال انتخاب‌شده در برابر سال قبل</p><div class="chart" id="chM"></div></div>
+  <div class="card"><h2>عملکرد سالانه</h2><p class="hint">میلیون تومان؛ جمع هر سال</p><div class="chart" id="chY"></div></div>
+  <div class="card"><h2>به تفکیک منبع</h2><div id="chS"></div></div>
+  <div class="card"><h2>فهرست واریزی‌ها</h2><div class="bar" style="margin-bottom:8px"><select id="fMonth" style="width:auto"></select></div>
+    <div class="tbl num"><table><thead><tr><th style="text-align:right">تاریخ</th><th>مبلغ (تومان)</th><th>منبع</th><th style="text-align:right">یادداشت</th><th></th></tr></thead><tbody id="fRows"></tbody></table></div></div>
+</section>
+
+<section id="t-notes" hidden>
+  <div class="bar" style="margin-bottom:10px;justify-content:space-between"><input id="nq" placeholder="جستجو در یادداشت‌ها" style="max-width:280px"><button class="btn" id="addNote">+ یادداشت جدید</button></div>
+  <div id="nwarn" class="warnbox" hidden>جدول یادداشت‌ها ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="notes" id="nl"></div>
+</section>
+
+<section id="t-ai" hidden>
+  <div class="card"><h2>پرامپت و هوش مصنوعی</h2><p class="hint">پیام خود را بنویسید و بفرستید. گفتگو تا وقتی صفحه باز است ادامه پیدا می‌کند.</p>
+    <details><summary>نقش و دستور کلی هوش مصنوعی</summary><textarea id="aiSys" style="margin-top:8px"></textarea></details>
+    <div class="bar" style="margin-top:10px"><select id="aiTpl" style="max-width:240px"><option value="">قالب آماده…</option><option value="0">طرح درس یک جلسه</option><option value="1">تمرین و پروژه کوچک</option><option value="2">بازخورد برای دانش‌آموز و والدین</option><option value="3">ایده محتوای مقاله</option></select>
+      <select id="aiStu" style="max-width:220px"></select><button class="btn ghost" id="aiAddStu" type="button">افزودن اطلاعات دانش‌آموز</button></div>
+    <p class="hint" style="margin-top:6px">اطلاعات دانش‌آموز فقط با زدن «ارسال» و داخل همان پیام به سرویس هوش مصنوعی فرستاده می‌شود.</p>
+    <div class="chat" id="chatbox"></div>
+    <textarea id="aiIn" rows="4" placeholder="پرامپت خود را بنویسید… (Ctrl+Enter برای ارسال)"></textarea>
+    <div class="btns" style="margin-top:8px"><button class="btn" id="aiSend">ارسال</button><button class="btn ghost" id="aiClear">گفتگوی جدید</button><span id="aiBusy" hidden>در حال دریافت پاسخ…</span></div>
+    <div id="aiErr" class="warnbox" style="margin-top:10px" hidden></div></div>
+</section>
 </div></div>
+
+<dialog id="dlgTask"><form id="fTask"><h2 id="tTitleH" style="margin-top:0">کار شخصی</h2><input type="hidden" id="tId">
+  <div class="fg"><label class="w">عنوان<input id="tTitle" required placeholder="مثلاً مطالعه"></label>
+  <label>تاریخ<div class="jsel" id="tDate"></div></label><label>ساعت شروع<select id="tSlot"></select></label>
+  <label>مدت<select id="tDur"></select></label><label>رنگ<input type="color" id="tColor" style="height:38px;padding:2px"></label>
+  <label class="w">یادداشت<textarea id="tNote"></textarea></label><label class="w" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tDone" style="width:auto"> انجام شد</label></div>
+  <p id="tErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="tDel">حذف</button><button class="btn ghost" type="button" data-close>انصراف</button></div></form></dialog>
+
+<dialog id="dlgNote"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
+  <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:220px"></textarea></label>
+  <label class="w" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="nPin" style="width:auto"> سنجاق شود</label></div>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="nDel">حذف</button><button class="btn ghost" type="button" data-close>بستن</button></div></form></dialog>
+
+<dialog id="dlgSet"><h2 style="margin-top:0">تنظیمات و شخصی‌سازی</h2>
+  <div class="fg"><label>حالت نمایش<select id="pTheme"><option value="auto">خودکار (مطابق دستگاه)</option><option value="light">روشن</option><option value="dark">تیره</option></select></label>
+  <label>فونت برنامه<select id="pFont"></select></label>
+  <label>اندازه متن<select id="pSize"><option value="14">کوچک</option><option value="15.5">معمولی</option><option value="17">بزرگ</option><option value="19">خیلی بزرگ</option></select></label>
+  <label class="clr w" style="display:flex"><input type="color" id="pAccent"><span>رنگ اصلی برنامه</span><button class="mini" id="pAccentReset" type="button">پیش‌فرض</button></label></div>
+  <h3 style="margin:14px 0 4px;font-size:16px">رنگ ترم‌ها (رنگ کادر کلاس)</h3><div class="fg" id="pTopics"></div>
+  <h3 style="margin:14px 0 4px;font-size:16px">رنگ نوع کلاس (برچسب کلاس)</h3><div class="fg" id="pTypes"></div>
+  <div class="btns" style="margin-top:14px"><button class="btn" id="pSave" type="button">ذخیره</button><button class="btn ghost" id="pReset" type="button">بازنشانی همه</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
 <dialog id="dlgClass"><form id="fClass"><h2 id="cTitle" style="margin-top:0">کلاس</h2><input type="hidden" id="cId">
   <div class="fg"><label>روز<select id="cDay"></select></label><label>ساعت شروع<select id="cSlot"></select></label>
@@ -182,9 +257,9 @@ async function loadCore(){
 
 /* ---------- برنامه هفتگی ---------- */
 function cnt(d){return sched.filter(function(c){return c.day===d}).length}
-function card(c){var s=stu(c.student_id),T=TYPES[c.class_type];
-  return '<div class="cls t-'+c.class_type+'"><b>'+esc(s?s.name:T[0])+'</b><small>'+(s?'کد '+FD(s.id)+' · ':'')+esc(c.topic||(s&&s.term)||'')+'</small><span class="badge">'+T[0]+'</span><div><button class="mini" data-edit="'+c.id+'">ویرایش</button></div></div>'}
-function drawWeek(){
+function card(c){var s=stu(c.student_id),T=TYPES[c.class_type],tp=c.topic||(s&&s.term)||'';
+  return '<div class="cls" style="--c:'+(tp?tcol(tp):'#6b7a80')+'"><b>'+esc(s?s.name:T[0])+'</b><small>'+(s?'کد '+FD(s.id)+' · ':'')+esc(tp)+'</small><span class="badge" style="background:var(--ty-'+c.class_type+')">'+T[0]+'</span><div><button class="mini" data-edit="'+c.id+'">ویرایش</button></div></div>'}
+function drawWeek(){drawLegend();
   $('views').innerHTML='<button data-v="all" aria-pressed="'+(view==='all')+'">جدول هفته</button>'+DAYS.map(function(d,i){return '<button data-v="'+i+'" aria-pressed="'+(view===String(i))+'">'+d+(cnt(i)?' ('+FD(cnt(i))+')':'')+'</button>'}).join('');
   var all=view==='all';$('sc').hidden=!all;$('daylist').hidden=all;
   if(all){
@@ -230,7 +305,7 @@ function drawStu(){
   var q=$('sq').value.trim(),all=$('sall').checked,L=students.filter(function(s){return (all||s.active)&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
   $('scount').textContent=FD(L.length)+' دانش‌آموز';
   $('stb').innerHTML=L.map(function(s){var t=sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' '+tm(c.slot)}).join('، ');
-    return '<tr><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b>'+(s.active?'':' <small>(غیرفعال)</small>')+'</td><td>'+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">دانش‌آموزی پیدا نشد.</td></tr>'}
+    return '<tr><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b>'+(s.active?'':' <small>(غیرفعال)</small>')+'</td><td>'+dot(s.term)+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">دانش‌آموزی پیدا نشد.</td></tr>'}
 $('sq').oninput=drawStu;$('sall').onchange=drawStu;
 $('fAdd').addEventListener('submit',async function(e){e.preventDefault();
   try{await post('students',{name:$('aName').value.trim(),term:$('aTerm').value||null});$('aName').value='';await loadCore();toast('دانش‌آموز اضافه شد')}catch(x){toast('افزودن ممکن نشد',1)}});
@@ -253,7 +328,7 @@ $('sSched').onclick=function(){var s=stu(+$('sId').value);openClass(null,{studen
 /* ---------- آمار ---------- */
 var per='month',lastRows=[];
 function buildMatrix(){
-  $('mx').innerHTML='<thead><tr><th>ترم / موضوع</th>'+ST.map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'</tr></thead><tbody>'+TOPICS.map(function(p,i){return '<tr><th style="text-align:right">'+p+'</th>'+ST.map(function(t){return '<td><input type="number" inputmode="numeric" min="0" max="99" data-p="'+i+'" data-t="'+t+'" aria-label="'+p+' '+TYPES[t][0]+'"></td>'}).join('')+'</tr>'}).join('')+'</tbody><tfoot><tr><th style="text-align:right">جمع</th>'+ST.map(function(t){return '<td id="tot-'+t+'"><b>۰</b></td>'}).join('')+'</tr></tfoot>'}
+  $('mx').innerHTML='<thead><tr><th>ترم / موضوع</th>'+ST.map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'</tr></thead><tbody>'+TOPICS.map(function(p,i){return '<tr><th style="text-align:right">'+dot(p)+p+'</th>'+ST.map(function(t){return '<td><input type="number" inputmode="numeric" min="0" max="99" data-p="'+i+'" data-t="'+t+'" aria-label="'+p+' '+TYPES[t][0]+'"></td>'}).join('')+'</tr>'}).join('')+'</tbody><tfoot><tr><th style="text-align:right">جمع</th>'+ST.map(function(t){return '<td id="tot-'+t+'"><b>۰</b></td>'}).join('')+'</tr></tfoot>'}
 function totals(){ST.forEach(function(t){var n=0;document.querySelectorAll('#mx input[data-t="'+t+'"]').forEach(function(i){n+=+i.value||0});$('tot-'+t).innerHTML='<b>'+FD(n)+'</b>'})}
 $('mx').addEventListener('input',totals);
 async function loadEntry(){var d=jget('eDate');if(!d)return;
@@ -283,7 +358,7 @@ async function report(){
   var h='<div class="kpis"><div class="kpi"><b>'+FD(tot)+'</b><span>کل کلاس‌ها</span></div><div class="kpi"><b>'+hrs(min)+'</b><span>ساعت تدریس</span></div>'+Object.keys(TYPES).map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD((byT[t]||[0])[0])+'</b><span>'+TYPES[t][0]+'</span></div>'}).join('')+'</div>';
   if(!tot){$('rOut').innerHTML=h+'<p class="hint">در این بازه کلاسی ثبت نشده است.</p>';return}
   var tops=TOPICS.concat(['—']).filter(function(p){return byP[p]});
-  h+='<div class="g2"><div><b>به تفکیک ترم و نوع</b><div class="tbl num"><table><thead><tr><th style="text-align:right">ترم / موضوع</th>'+Object.keys(TYPES).map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'<th>جمع</th></tr></thead><tbody>'+tops.map(function(p){var s=0;return '<tr><td style="text-align:right">'+(p==='—'?'مربیان':p)+'</td>'+Object.keys(TYPES).map(function(t){var n=byP[p][t]||0;s+=n;return '<td>'+(n?FD(n):'')+'</td>'}).join('')+'<td><b>'+FD(s)+'</b></td></tr>'}).join('')+'</tbody></table></div></div>';
+  h+='<div class="g2"><div><b>به تفکیک ترم و نوع</b><div class="tbl num"><table><thead><tr><th style="text-align:right">ترم / موضوع</th>'+Object.keys(TYPES).map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'<th>جمع</th></tr></thead><tbody>'+tops.map(function(p){var s=0;return '<tr><td style="text-align:right">'+(p==='—'?'مربیان':dot(p)+p)+'</td>'+Object.keys(TYPES).map(function(t){var n=byP[p][t]||0;s+=n;return '<td>'+(n?FD(n):'')+'</td>'}).join('')+'<td><b>'+FD(s)+'</b></td></tr>'}).join('')+'</tbody></table></div></div>';
   if(per!=='day')h+='<div><b>'+(per==='year'?'به تفکیک ماه':'به تفکیک روز')+'</b><div class="tbl num"><table><thead><tr><th style="text-align:right">'+(per==='year'?'ماه':'روز')+'</th><th>کلاس</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(byK).map(function(k){return '<tr><td style="text-align:right">'+k+'</td><td>'+FD(byK[k][0])+'</td><td>'+hrs(byK[k][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
   $('rOut').innerHTML=h+'</div>'}
 $('csv').onclick=function(){
@@ -318,17 +393,180 @@ async function loadSite(){
     var r=document.createElement('button');r.className='btn red';r.textContent='حذف';r.onclick=async function(){if(confirm('این درخواست حذف شود؟')){await del('bookings','id=eq.'+i.id);loadSite()}};bt.appendChild(r);
     d.appendChild(bt);box.appendChild(d)});siteLoaded=true}catch(e){}}
 
+/* ========== تنظیمات، رنگ‌ها و فونت ========== */
+var DEFTOPIC={"پایتون ترم ۱":"#5aa9f0","پایتون ترم ۲":"#2b7de0","پایتون ترم ۳":"#1650a8","طراحی وب ترم ۱":"#4cc38a","طراحی وب ترم ۲":"#1f9461","اینترنت اشیا":"#f0a030","بازی‌سازی ترم ۱":"#b98af0","بازی‌سازی ترم ۲":"#8a4fd8","شبکه و امنیت":"#e5534b","هوش مصنوعی":"#e255a1"};
+var DEFTYPE={premium:'#b45309',economy:'#475569',gapino:'#0e7490',vip:'#be185d',mentors:'#4d7c0f'};
+var FONTS=[['Vazirmatn','وزیرمتن (پیش‌فرض)'],['Noto Sans Arabic','نوتو سنس عربی'],['Noto Naskh Arabic','نوتو نسخ'],['Noto Kufi Arabic','نوتو کوفی'],['Tahoma','تاهوما (فونت سیستم)']];
+var prefs={theme:'auto',font:'Vazirmatn',size:15.5,accent:null,topics:{},types:{}};
+try{Object.assign(prefs,JSON.parse(localStorage.getItem('prefs')||'{}'))}catch(e){}
+function tcol(t){return (prefs.topics&&prefs.topics[t])||DEFTOPIC[t]||'#6b7a80'}
+function ycol(k){return (prefs.types&&prefs.types[k])||DEFTYPE[k]}
+function dot(t){return t?'<span class="dotc" style="background:'+tcol(t)+'"></span>':''}
+function inkFor(h){var n=parseInt(h.slice(1),16);return (0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))>150?'#10201e':'#ffffff'}
+function loadFont(f){if(f==='Vazirmatn'||f==='Tahoma'||document.getElementById('fnt-'+f))return;var l=document.createElement('link');l.id='fnt-'+f;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+f.replace(/ /g,'+')+':wght@400;500;700&display=swap';document.head.appendChild(l)}
+function applyPrefs(){var r=document.documentElement;
+  if(prefs.theme==='light'||prefs.theme==='dark')r.dataset.theme=prefs.theme;else delete r.dataset.theme;
+  loadFont(prefs.font);r.style.setProperty('--font','"'+prefs.font+'"');r.style.setProperty('--fs',prefs.size+'px');
+  if(prefs.accent){r.style.setProperty('--accent',prefs.accent);r.style.setProperty('--accent-ink',inkFor(prefs.accent))}else{r.style.removeProperty('--accent');r.style.removeProperty('--accent-ink')}
+  Object.keys(TYPES).forEach(function(k){r.style.setProperty('--ty-'+k,ycol(k))})}
+applyPrefs();
+function redrawColors(){drawWeek();if(!$('t-cal').hidden)drawCal();if(!$('t-stu').hidden)drawStu()}
+function drawLegend(){$('legend').innerHTML='<span>ترم‌ها:</span>'+TOPICS.map(function(t){return '<span>'+dot(t)+t+'</span>'}).join('')+'<span style="margin-inline-start:8px">نوع کلاس:</span>'+Object.keys(TYPES).map(function(k){return '<span class="badge" style="background:var(--ty-'+k+')">'+TYPES[k][0]+'</span>'}).join('')}
+function openSet(){
+  $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS,prefs.font);$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
+  $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
+  $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
+  $('dlgSet').showModal()}
+$('openSet').onclick=openSet;
+$('pTheme').onchange=function(){prefs.theme=this.value;applyPrefs()};
+$('pFont').onchange=function(){prefs.font=this.value;applyPrefs()};
+$('pSize').onchange=function(){prefs.size=+this.value;applyPrefs()};
+$('pAccent').oninput=function(){prefs.accent=this.value;applyPrefs()};
+$('pAccentReset').onclick=function(){prefs.accent=null;applyPrefs();$('pAccent').value='#0f6b63'};
+$('dlgSet').addEventListener('input',function(e){var t=e.target;
+  if(t.dataset.pt!==undefined){prefs.topics=prefs.topics||{};prefs.topics[TOPICS[+t.dataset.pt]]=t.value;redrawColors()}
+  if(t.dataset.py){prefs.types=prefs.types||{};prefs.types[t.dataset.py]=t.value;applyPrefs();redrawColors()}});
+async function savePrefs(){try{localStorage.setItem('prefs',JSON.stringify(prefs))}catch(e){}
+  try{await rest('settings',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key:'prefs',value:prefs})});toast('تنظیمات ذخیره شد')}
+  catch(e){toast('روی همین دستگاه ذخیره شد؛ برای همگام‌سازی supabase-admin2.sql را اجرا کنید')}}
+$('pSave').onclick=async function(){await savePrefs();$('dlgSet').close()};
+$('pReset').onclick=function(){if(!confirm('همه تنظیمات به حالت پیش‌فرض برگردد؟'))return;prefs={theme:'auto',font:'Vazirmatn',size:15.5,accent:null,topics:{},types:{}};applyPrefs();redrawColors();openSet()};
+async function loadPrefsRemote(){try{var r=await rest('settings?select=value&key=eq.prefs');if(r&&r[0]){Object.assign(prefs,r[0].value);try{localStorage.setItem('prefs',JSON.stringify(prefs))}catch(e){}applyPrefs();redrawColors()}}catch(e){}}
+
+/* ========== تقویم روزانه و کارهای شخصی ========== */
+var calTasks=[];
+function taskCard(t){return '<div class="task'+(t.done?' done':'')+'" style="--c:'+(t.color||'var(--accent)')+'"><label class="chk"><input type="checkbox" data-tdone="'+t.id+'"'+(t.done?' checked':'')+'><b>'+esc(t.title)+'</b></label><small>'+FD(t.dur*30)+' دقیقه'+(t.note?' · '+esc(t.note):'')+'</small><div><button class="mini" data-tedit="'+t.id+'">ویرایش</button></div></div>'}
+async function loadCal(){var d=jget('cDate');if(!d)return;
+  $('cLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)+(iso(d)===iso(today())?' (امروز)':'');
+  try{calTasks=await rest('tasks?select=*&day=eq.'+iso(d)+'&order=slot.asc');$('calwarn').hidden=true}catch(e){calTasks=[];if(e.message!=='auth')$('calwarn').hidden=false}
+  drawCal()}
+function drawCal(){var d=jget('cDate');if(!d)return;var w=wd(d),cl=sched.filter(function(c){return c.day===w}),cov={},tov={},cm=0,tmn=0,done=0;
+  cl.forEach(function(c){var n=TYPES[c.class_type][1];cm+=n*30;for(var k=0;k<n;k++)cov[c.slot+k]=k?'skip':c});
+  calTasks.forEach(function(t){tmn+=t.dur*30;if(t.done)done++;for(var k=0;k<t.dur;k++)tov[t.slot+k]=k?'skip':t});
+  $('calsum').textContent=FD(cl.length)+' کلاس ('+hrs(cm)+' ساعت) · '+FD(calTasks.length)+' کار شخصی ('+hrs(tmn)+' ساعت'+(calTasks.length?'، '+FD(done)+' انجام‌شده':'')+')';
+  var h='<thead><tr><th>ساعت</th><th>کلاس‌ها</th><th>کارهای شخصی</th></tr></thead><tbody>';
+  for(var s=S0;s<=S1;s++){h+='<tr><th>'+rng(s,1)+'</th>';
+    var a=cov[s];if(a!=='skip')h+=a?'<td rowspan="'+TYPES[a.class_type][1]+'">'+card(a)+'</td>':'<td></td>';
+    var b=tov[s];if(b!=='skip')h+=b?'<td rowspan="'+Math.min(b.dur,S1+1-s)+'">'+taskCard(b)+'</td>':'<td><button class="add" data-tadd="'+s+'">+ کار شخصی</button></td>';
+    h+='</tr>'}
+  $('ct').innerHTML=h+'</tbody>'}
+$('cDate').addEventListener('change',loadCal);
+$('cPrev').onclick=function(){jset('cDate',addd(jget('cDate'),-1));loadCal()};$('cNext').onclick=function(){jset('cDate',addd(jget('cDate'),1));loadCal()};$('cToday').onclick=function(){jset('cDate',today());loadCal()};
+$('addTask').onclick=function(){openTask()};
+$('ct').addEventListener('click',function(e){var b=e.target.closest('button,input');if(!b)return;
+  if(b.dataset.edit)openClass(sched.filter(function(c){return String(c.id)===b.dataset.edit})[0]);
+  else if(b.dataset.tadd)openTask(null,{slot:+b.dataset.tadd});
+  else if(b.dataset.tedit)openTask(calTasks.filter(function(t){return String(t.id)===b.dataset.tedit})[0]);
+  else if(b.dataset.tdone){patch('tasks','id=eq.'+b.dataset.tdone,{done:b.checked}).then(loadCal).catch(function(){toast('ذخیره نشد',1)})}});
+function openTask(t,pre){
+  t=t||Object.assign({id:null,slot:S0+2,dur:2,title:'',note:'',color:prefs.accent||'#0f6b63',done:false},pre||{});
+  jsel('tDate',t.id?new Date(t.day+'T00:00:00Z'):(jget('cDate')||today()));
+  var ss=[],ds=[];for(var s=S0;s<=S1;s++)ss.push([s,tm(s)]);for(var n=1;n<=16;n++)ds.push([n,FD(n*30)+' دقیقه']);
+  $('tSlot').innerHTML=opts(ss,t.slot);$('tDur').innerHTML=opts(ds,t.dur);$('tTitle').value=t.title;$('tNote').value=t.note||'';$('tColor').value=t.color&&t.color.charAt(0)==='#'?t.color:'#0f6b63';$('tDone').checked=!!t.done;
+  $('tId').value=t.id||'';$('tDel').hidden=!t.id;$('tErr').textContent='';$('tTitleH').textContent=t.id?'ویرایش کار شخصی':'کار شخصی جدید';$('dlgTask').showModal()}
+$('fTask').addEventListener('submit',async function(e){e.preventDefault();
+  var d=jget('tDate'),id=$('tId').value;if(!d)return;
+  var o={day:iso(d),slot:+$('tSlot').value,dur:+$('tDur').value,title:$('tTitle').value.trim(),note:$('tNote').value.trim()||null,color:$('tColor').value,done:$('tDone').checked};
+  if(o.slot+o.dur>S1+1){$('tErr').textContent='پایان کار از ساعت ۲۲:۰۰ بیشتر می‌شود.';return}
+  try{var ex=await rest('tasks?select=id,slot,dur&day=eq.'+o.day);
+    if(ex.some(function(x){return String(x.id)!==id&&o.slot<x.slot+x.dur&&x.slot<o.slot+o.dur})){$('tErr').textContent='این بازه با کار شخصی دیگری تداخل دارد.';return}
+    if(id)await patch('tasks','id=eq.'+id,o);else await post('tasks',o);$('dlgTask').close();jset('cDate',d);await loadCal();toast('ذخیره شد')}catch(x){$('tErr').textContent='ذخیره نشد؛ آیا supabase-admin2.sql اجرا شده است؟'}});
+$('tDel').onclick=async function(){if(!confirm('این کار حذف شود؟'))return;try{await del('tasks','id=eq.'+$('tId').value);$('dlgTask').close();await loadCal();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+
+/* ========== یادداشت‌ها ========== */
+var notes=[];
+async function loadNotes(){try{notes=await rest('notes?select=*&order=pinned.desc,updated_at.desc');$('nwarn').hidden=true}catch(e){if(e.message!=='auth')$('nwarn').hidden=false}drawNotes()}
+function drawNotes(){var q=$('nq').value.trim(),L=notes.filter(function(n){return !q||((n.title||'')+' '+(n.body||'')).indexOf(q)>-1});
+  $('nl').innerHTML=L.map(function(n){return '<button class="note" data-n="'+n.id+'">'+(n.pinned?'📌 ':'')+'<b>'+esc(n.title||'بدون عنوان')+'</b><span>'+esc((n.body||'').slice(0,140))+'</span><small>'+new Date(n.updated_at).toLocaleDateString('fa-IR')+'</small></button>'}).join('')||'<p class="hint">یادداشتی نیست.</p>'}
+$('nq').oninput=drawNotes;
+function openNote(n){n=n||{id:null,title:'',body:'',pinned:false};$('nId').value=n.id||'';$('nTitle').value=n.title||'';$('nBody').value=n.body||'';$('nPin').checked=!!n.pinned;$('nDel').hidden=!n.id;$('dlgNote').showModal()}
+$('addNote').onclick=function(){openNote()};
+$('nl').addEventListener('click',function(e){var b=e.target.closest('button[data-n]');if(b)openNote(notes.filter(function(n){return String(n.id)===b.dataset.n})[0])});
+$('fNote2').addEventListener('submit',async function(e){e.preventDefault();var id=$('nId').value,o={title:$('nTitle').value.trim()||null,body:$('nBody').value,pinned:$('nPin').checked,updated_at:new Date().toISOString()};
+  try{if(id)await patch('notes','id=eq.'+id,o);else await post('notes',o);$('dlgNote').close();await loadNotes();toast('ذخیره شد')}catch(x){toast('ذخیره نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}});
+$('nDel').onclick=async function(){if(!confirm('این یادداشت حذف شود؟'))return;try{await del('notes','id=eq.'+$('nId').value);$('dlgNote').close();await loadNotes()}catch(x){toast('حذف نشد',1)}};
+
+/* ========== هوش مصنوعی ========== */
+var chat=[],TPL=['یک طرح درس ۶۰ دقیقه‌ای برای ترم «…» بنویس. شامل هدف جلسه، مراحل زمان‌بندی‌شده، مثال و تمرین پایانی.','برای ترم «…» یک پروژه کوچک و جذاب همراه با مراحل انجام و معیار ارزیابی پیشنهاد بده.','بر اساس اطلاعات زیر، یک بازخورد مثبت و سازنده برای دانش‌آموز و یک پیام کوتاه برای والدین بنویس.','برای یک مقاله آموزشی درباره «…» ۵ ایده عنوان و سرفصل پیشنهاد بده.'];
+$('aiSys').value=localStorage.getItem('aiSys')||'تو دستیار یک مدرس برنامه‌نویسی برای کودکان و نوجوانان هستی. فارسی، ساده و کاربردی پاسخ بده.';
+$('aiSys').oninput=function(){try{localStorage.setItem('aiSys',this.value)}catch(e){}};
+$('aiTpl').onchange=function(){if(this.value!==''){$('aiIn').value=TPL[+this.value];this.value='';$('aiIn').focus()}};
+function fillAiStu(){$('aiStu').innerHTML='<option value="">دانش‌آموز…</option>'+opts(students.filter(function(s){return s.active}).map(function(s){return [s.id,s.name]}),'')}
+$('aiAddStu').onclick=function(){var s=stu(+$('aiStu').value);if(!s)return;
+  var L=['نام: '+s.name,s.term&&'ترم: '+s.term,s.age&&'سن: '+s.age,s.grade&&'پایه: '+s.grade,s.interests&&'علایق: '+s.interests,s.strengths&&'نقاط قوت: '+s.strengths,s.weaknesses&&'نقاط ضعف: '+s.weaknesses,s.concerns&&'دغدغه‌ها: '+s.concerns,s.last_session&&'وضعیت جلسه قبلی: '+s.last_session].filter(Boolean);
+  $('aiIn').value=($('aiIn').value?$('aiIn').value+'\n\n':'')+'اطلاعات دانش‌آموز:\n'+L.join('\n')};
+function drawChat(){$('chatbox').innerHTML=chat.map(function(m,i){return '<div class="bub '+m.role+'"><div class="who">'+(m.role==='user'?'شما':'هوش مصنوعی')+'</div><div class="txt"></div>'+(m.role==='assistant'?'<div class="btns" style="margin-top:6px"><button class="mini" data-cpy="'+i+'">کپی</button><button class="mini" data-sv="'+i+'">ذخیره در یادداشت‌ها</button></div>':'')+'</div>'}).join('');
+  document.querySelectorAll('#chatbox .txt').forEach(function(e,i){e.textContent=chat[i].text});$('chatbox').scrollTop=1e6}
+$('chatbox').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.cpy){try{await navigator.clipboard.writeText(chat[+b.dataset.cpy].text);toast('کپی شد')}catch(x){}}
+  if(b.dataset.sv){try{await post('notes',{title:'پاسخ هوش مصنوعی',body:chat[+b.dataset.sv].text});toast('در یادداشت‌ها ذخیره شد')}catch(x){toast('ذخیره نشد',1)}}});
+async function sendAI(){var t=$('aiIn').value.trim();if(!t)return;
+  chat.push({role:'user',text:t});$('aiIn').value='';drawChat();$('aiBusy').hidden=false;$('aiSend').disabled=true;$('aiErr').hidden=true;
+  try{var r=await fetch(C.url+'/functions/v1/ai-chat',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({system:$('aiSys').value,messages:chat.map(function(m){return {role:m.role,content:m.text}})})});
+    if(r.status===404)throw new Error('nofn');
+    var j=await r.json().catch(function(){return {}});if(!r.ok||j.error)throw new Error(j.error||('http '+r.status));
+    chat.push({role:'assistant',text:j.text||''})}
+  catch(e){chat.pop();$('aiIn').value=t;$('aiErr').hidden=false;
+    $('aiErr').textContent=e.message==='nofn'?'تابع ai-chat هنوز در Supabase ساخته نشده است. مراحل در فایل ai-setup.md توضیح داده شده است.':'ارسال نشد: '+e.message}
+  $('aiBusy').hidden=true;$('aiSend').disabled=false;drawChat()}
+$('aiSend').onclick=sendAI;$('aiIn').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))sendAI()});
+$('aiClear').onclick=function(){chat=[];drawChat();$('aiErr').hidden=true};
+
+/* ========== مالی ========== */
+var inc=[],fEdit=null,SRC=['یاسان','فرادرس','کلاس خصوصی','مجله فرادرس','سایر'],jc={};
+function jpi(k){return jc[k]||(jc[k]=jp(new Date(k+'T00:00:00Z')))}
+function ND(s){return String(s).replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)}).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)}).replace(/\D/g,'')}
+function money(n){return FD(Math.round(n).toLocaleString('en-US')).replace(/,/g,'٬')}
+function niceMax(m){var p=Math.pow(10,Math.floor(Math.log10(m))),f=m/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+function bars(labels,series,unit){
+  var W=720,H=250,pl=40,pr=8,pt=14,pb=30,iw=W-pl-pr,ih=H-pt-pb,n=labels.length,sw=iw/n,mx=0;
+  series.forEach(function(q){q.v.forEach(function(x){if(x>mx)mx=x})});var top=niceMax(mx||unit);
+  var h='<svg viewBox="0 0 '+W+' '+H+'" role="img" style="width:100%;min-width:560px;height:auto">';
+  for(var i=0;i<=4;i++){var y=pt+ih-ih*i/4;h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--muted)">'+FD(+(top*i/4/unit).toFixed(1))+'</text>'}
+  var bw=Math.min(26,sw/(series.length+.6));
+  labels.forEach(function(lb,i){var cx=W-pr-sw*(i+.5);h+='<text x="'+cx+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="var(--muted)">'+lb+'</text>';
+    series.forEach(function(q,k){var v=q.v[i],bh=ih*v/top,x=cx+bw*series.length/2-(k+1)*bw+1;h+='<rect x="'+x+'" y="'+(pt+ih-bh)+'" width="'+(bw-2)+'" height="'+(v?Math.max(bh,1):0)+'" rx="3" fill="'+q.c+'"><title>'+q.n+' — '+lb+': '+money(v)+' تومان</title></rect>'})});
+  return h+'</svg>'}
+async function loadFin(){try{inc=await rest('income?select=*&order=day.asc&limit=5000');$('finwarn').hidden=true}catch(e){inc=[];if(e.message!=='auth')$('finwarn').hidden=false}drawFin()}
+function drawFin(){
+  var cy=jp(today()).year,ys={};inc.forEach(function(x){ys[jpi(x.day).year]=1});ys[cy]=1;
+  var years=Object.keys(ys).map(Number).sort(function(a,b){return b-a}),cur=+$('fYear').value||cy;if(years.indexOf(cur)<0)cur=cy;
+  $('fYear').innerHTML=years.map(function(y){return '<option value="'+y+'"'+(y===cur?' selected':'')+'>'+FD(y)+'</option>'}).join('');
+  var by={};inc.forEach(function(x){var p=jpi(x.day);by[p.year]=by[p.year]||new Array(12).fill(0);by[p.year][p.month-1]+=x.amount});
+  var m=by[cur]||new Array(12).fill(0),prev=by[cur-1]||new Array(12).fill(0),tot=m.reduce(function(a,b){return a+b},0),nz=m.filter(Boolean).length,best=m.indexOf(Math.max.apply(null,m)),cm=jp(today()).month-1;
+  $('fKpi').innerHTML='<div class="kpi"><b>'+money(tot)+'</b><span>جمع سال (تومان)</span></div>'+(cur===cy?'<div class="kpi"><b>'+money(m[cm])+'</b><span>ماه جاری ('+JM[cm]+')</span></div>':'')+'<div class="kpi"><b>'+money(nz?tot/nz:0)+'</b><span>میانگین ماهانه</span></div><div class="kpi"><b>'+(tot?JM[best]:'—')+'</b><span>'+(tot?'بهترین ماه: '+money(m[best]):'بهترین ماه')+'</span></div>';
+  $('chM').innerHTML=bars(JM,[{n:FD(cur-1),c:'var(--muted)',v:prev},{n:FD(cur),c:'var(--accent)',v:m}],1e6);
+  var yl=Object.keys(by).map(Number).sort(function(a,b){return a-b}).slice(-8);if(!yl.length)yl=[cy];
+  $('chY').innerHTML=bars(yl.map(FD),[{n:'جمع سال',c:'var(--accent)',v:yl.map(function(y){return (by[y]||[]).reduce(function(a,b){return a+b},0)})}],1e6);
+  var src={};inc.forEach(function(x){if(jpi(x.day).year===cur){var k=x.source||'سایر';src[k]=(src[k]||0)+x.amount}});
+  var sk=Object.keys(src).sort(function(a,b){return src[b]-src[a]}),mx=sk.length?src[sk[0]]:1;
+  $('chS').innerHTML=sk.map(function(k){return '<div class="hb"><span>'+esc(k)+'</span><i style="width:'+Math.max(2,src[k]/mx*100)+'%"></i><span>'+money(src[k])+'</span></div>'}).join('')||'<p class="hint">واریزی‌ای برای این سال ثبت نشده است.</p>';
+  var fm=+$('fMonth').value||0;$('fMonth').innerHTML='<option value="0">همه ماه‌ها</option>'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(fm===i+1?' selected':'')+'>'+n+'</option>'}).join('');
+  var L=inc.filter(function(x){var p=jpi(x.day);return p.year===cur&&(!fm||p.month===fm)}).reverse();
+  $('fRows').innerHTML=L.map(function(x){return '<tr><td style="text-align:right">'+jlabel(new Date(x.day+'T00:00:00Z'))+'</td><td><b>'+money(x.amount)+'</b></td><td>'+esc(x.source)+'</td><td style="text-align:right">'+esc(x.note)+'</td><td><button class="mini" data-fe="'+x.id+'">ویرایش</button> <button class="mini" style="background:var(--badink);color:#fff" data-fd="'+x.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted)">موردی نیست.</td></tr>'}
+$('fYear').onchange=drawFin;$('fMonth').onchange=drawFin;
+$('fAmount').oninput=function(){var n=+ND(this.value);$('fPrev').textContent=n?money(n)+' تومان':''};
+function fReset(){fEdit=null;$('fAmount').value='';$('fNote').value='';$('fPrev').textContent='';$('fTitle').textContent='ثبت واریزی';$('fSave').textContent='ثبت واریزی';$('fCancel').hidden=true}
+$('fCancel').onclick=fReset;
+$('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=jget('fDate'),n=+ND($('fAmount').value);if(!d||!n)return;
+  var o={day:iso(d),amount:n,source:$('fSrc').value,note:$('fNote').value.trim()||null};
+  try{if(fEdit)await patch('income','id=eq.'+fEdit,o);else await post('income',o);fReset();await loadFin();toast('ثبت شد')}catch(x){toast('ثبت نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}});
+$('fRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.fd){if(confirm('این واریزی حذف شود؟')){try{await del('income','id=eq.'+b.dataset.fd);loadFin()}catch(x){toast('حذف نشد',1)}}}
+  if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=x.amount;$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent=money(x.amount)+' تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
+function initModules(){jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
+
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
-  ['week','stu','stats','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
-  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite()}
+  ['week','cal','stu','stats','fin','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu()}
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
   jsel('eDate',today());jsel('rDate',today());buildMatrix();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
-  loadCore();showTab(sessionStorage.getItem('tab')||'week')}
+  loadCore();loadPrefsRemote();initModules();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
 else if(tok)enter();
 </script></body></html>
