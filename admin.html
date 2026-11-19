@@ -11,7 +11,7 @@
 *{box-sizing:border-box}html,body{overflow-x:clip}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font,"Vazirmatn"),Tahoma,sans-serif;font-size:var(--fs,15.5px);line-height:1.8}
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}
-.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+.wrap{max-width:1600px;margin:0 auto;padding:0 20px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 .btn{border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:4px 18px;font-weight:700;cursor:pointer;display:inline-block}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}.btn.red{background:transparent;color:var(--badink);border-color:var(--badink)}
@@ -21,7 +21,7 @@ textarea{min-height:70px;resize:vertical}label{display:grid;gap:3px;font-size:14
 .top{background:var(--surface);border-bottom:1px solid var(--line)}.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;height:58px}
 .top h1{font-size:19px;margin:0}.top .btns,.bar,.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:16px;background:var(--bg);position:sticky;top:0;z-index:5}
-.tabs button{border:0;border-bottom:3px solid transparent;background:none;padding:10px 16px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+.tabs button{border:0;border-bottom:3px solid transparent;background:none;padding:9px 12px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500;font-size:14.5px}
 .tabs button[aria-selected=true]{color:var(--ink);border-color:var(--accent);font-weight:700}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
 .card h2{margin:0 0 4px;font-size:19px}.hint{color:var(--muted);font-size:14px;margin:0 0 10px}
@@ -78,6 +78,9 @@ summary{cursor:pointer;font-weight:500}
 #dSrc{min-height:360px;font-family:monospace;border-radius:0 0 12px 12px;line-height:1.6}
 .rli{display:block;width:100%;text-align:right;border:0;border-bottom:1px solid var(--line);background:none;padding:8px 4px;cursor:pointer}.rli small{color:var(--muted);display:block}.rli[aria-current=true]{background:var(--soft)}
 .stat{font-size:12.5px;border-radius:99px;padding:0 10px;color:#fff;font-weight:700;display:inline-block}
+@media(min-width:900px){.tabs{flex-wrap:wrap;overflow:visible}}
+.note.done{opacity:.6}.note.over{border-color:var(--badink)}.due{font-size:13.5px;color:var(--muted)}.due.bad{color:var(--badink);font-weight:700}.ntags{display:flex;flex-wrap:wrap;gap:4px}
+.ntg{border:1px solid var(--c);color:var(--c);background:transparent;border-radius:99px;padding:0 12px;cursor:pointer;font-size:13.5px}.ntg.on{background:var(--c);color:#fff}.tagb{color:#fff;background:var(--c);border-radius:99px;padding:0 9px;font-size:12px}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -192,8 +195,10 @@ summary{cursor:pointer;font-weight:500}
 </section>
 
 <section id="t-notes" hidden>
-  <div class="bar" style="margin-bottom:10px;justify-content:space-between"><input id="nq" placeholder="جستجو در یادداشت‌ها" style="max-width:280px"><button class="btn" id="addNote">+ یادداشت جدید</button></div>
-  <div id="nwarn" class="warnbox" hidden>جدول یادداشت‌ها ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="margin-bottom:10px;justify-content:space-between"><div class="bar"><input id="nq" placeholder="جستجو در یادداشت‌ها" style="max-width:240px"><select id="nSort" style="width:auto" aria-label="مرتب‌سازی"><option value="new">مرتب‌سازی: جدیدترین</option><option value="due">مرتب‌سازی: نزدیک‌ترین زمان</option></select></div>
+    <div class="btns"><button class="btn ghost" id="nNotif">اعلان مرورگر</button><button class="btn ghost" id="nTest">ارسال آزمایشی یادآوری</button><button class="btn" id="addNote">+ یادداشت جدید</button></div></div>
+  <div class="seg" id="nFilter" style="margin-bottom:10px"></div>
+  <div id="nwarn" class="warnbox" hidden>جدول‌های یادداشت یا یادآوری آماده نیستند. فایل‌های <b>supabase-admin2.sql</b> و <b>supabase-admin5.sql</b> را در Supabase اجرا کنید.</div>
   <div class="notes" id="nl"></div>
 </section>
 
@@ -241,9 +246,15 @@ summary{cursor:pointer;font-weight:500}
   <div class="btns" style="margin-top:12px"><button class="btn" id="bSend">ارسال از طریق پنل پیامکی</button><button class="btn ghost" id="bCopy">کپی شماره‌ها</button><button class="btn ghost" id="bCsv">دانلود CSV</button><button class="btn ghost" type="button" data-close>بستن</button></div>
   <p id="bRes" role="status" style="margin:8px 0 0;font-weight:700"></p><div id="bErr" class="warnbox" style="margin-top:8px" hidden></div></dialog>
 
-<dialog id="dlgNote"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
-  <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:220px"></textarea></label>
-  <label class="w" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="nPin" style="width:auto"> سنجاق شود</label></div>
+<dialog id="dlgNote" style="width:min(640px,94vw)"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
+  <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:150px"></textarea></label>
+  <div class="w"><b>تگ‌ها</b><div id="nTags" class="ntags" style="margin:6px 0"></div><div class="bar"><input id="nNewTag" placeholder="تگ دلخواه…" style="max-width:200px"><button class="mini" type="button" id="nAddTag">+ افزودن تگ</button></div></div>
+  <label class="w chk"><input type="checkbox" id="nDated"> تاریخ و ساعت دارد (یادآوری)</label>
+  <div class="w" id="nDueBox" hidden><div class="bar"><div class="jsel" id="nDue"></div><input type="time" id="nTime" style="width:auto" aria-label="ساعت"></div>
+    <p class="hint" style="margin:8px 0 4px">یادآوری‌ها (به تلگرام شما ارسال می‌شود):</p><div id="nRem" class="bar"></div>
+    <div class="btns" style="margin-top:8px"><button class="btn ghost" type="button" id="nIcs">افزودن به تقویم گوشی (.ics)</button></div></div>
+  <label class="chk"><input type="checkbox" id="nPin"> سنجاق شود</label><label class="chk"><input type="checkbox" id="nDone"> انجام شد</label></div>
+  <p id="nErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
   <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="nDel">حذف</button><button class="btn ghost" type="button" data-close>بستن</button></div></form></dialog>
 
 <dialog id="dlgSet"><h2 style="margin-top:0">تنظیمات و شخصی‌سازی</h2>
@@ -254,6 +265,7 @@ summary{cursor:pointer;font-weight:500}
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ ترم‌ها (رنگ کادر کلاس)</h3><div class="fg" id="pTopics"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ نوع کلاس (برچسب کلاس)</h3><div class="fg" id="pTypes"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های برنامه‌ریزی روزانه</h3><div id="pTags" style="display:grid;gap:8px"></div><button class="mini" id="pTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
+  <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های یادداشت‌ها</h3><div id="pNTags" style="display:grid;gap:8px"></div><button class="mini" id="pNTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
   <div class="btns" style="margin-top:14px"><button class="btn" id="pSave" type="button">ذخیره</button><button class="btn ghost" id="pReset" type="button">بازنشانی همه</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
 <dialog id="dlgClass"><form id="fClass"><h2 id="cTitle" style="margin-top:0">کلاس</h2><input type="hidden" id="cId">
@@ -526,7 +538,7 @@ function openSet(){
   $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS,prefs.font);$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
   $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
   $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
-  drawTagSet();$('dlgSet').showModal()}
+  drawTagSet();drawNTagSet();$('dlgSet').showModal()}
 $('openSet').onclick=openSet;
 $('pTheme').onchange=function(){prefs.theme=this.value;applyPrefs()};
 $('pFont').onchange=function(){prefs.font=this.value;applyPrefs()};
@@ -782,18 +794,86 @@ $('lNotes').addEventListener('click',async function(e){var b=e.target.closest('b
   if(b.dataset.sdel){try{await del('learning_notes','id=eq.'+b.dataset.sdel);lnotes=lnotes.filter(function(x){return String(x.id)!==b.dataset.sdel});drawLDetail()}catch(x){toast('حذف نشد',1)}}
   if(b.dataset.scol){var n=lnotes.filter(function(x){return String(x.id)===b.dataset.scol})[0];n.color=STK[(STK.indexOf(n.color)+1)%STK.length];try{await patch('learning_notes','id=eq.'+n.id,{color:n.color})}catch(x){}drawLDetail()}});
 
-/* ========== یادداشت‌ها ========== */
-var notes=[];
-async function loadNotes(){try{notes=await rest('notes?select=*&order=pinned.desc,updated_at.desc');$('nwarn').hidden=true}catch(e){if(e.message!=='auth')$('nwarn').hidden=false}drawNotes()}
-function drawNotes(){var q=$('nq').value.trim(),L=notes.filter(function(n){return !q||((n.title||'')+' '+(n.body||'')).indexOf(q)>-1});
-  $('nl').innerHTML=L.map(function(n){return '<button class="note" data-n="'+n.id+'">'+(n.pinned?'📌 ':'')+'<b>'+esc(n.title||'بدون عنوان')+'</b><span>'+esc((n.body||'').slice(0,140))+'</span><small>'+new Date(n.updated_at).toLocaleDateString('fa-IR')+'</small></button>'}).join('')||'<p class="hint">یادداشتی نیست.</p>'}
-$('nq').oninput=drawNotes;
-function openNote(n){n=n||{id:null,title:'',body:'',pinned:false};$('nId').value=n.id||'';$('nTitle').value=n.title||'';$('nBody').value=n.body||'';$('nPin').checked=!!n.pinned;$('nDel').hidden=!n.id;$('dlgNote').showModal()}
+/* ========== یادداشت‌ها، تگ و یادآوری ========== */
+var DEFNT=[{n:'ایده',c:'#f0a030'},{n:'مشکل فراگیر',c:'#e5534b'},{n:'یادآوری',c:'#2b7de0'},{n:'مالی',c:'#1f9461'},{n:'سایر',c:'#6b7a80'}];
+var notes=[],rems=[],nFil='all',nSortK='new',nSel=new Set(),RO=[[0,'سر وقت'],[15,'۱۵ دقیقه قبل'],[60,'۱ ساعت قبل'],[1440,'۱ روز قبل'],['m','صبح همان روز (۸:۰۰)']];
+function ntagList(){var L=(prefs.ntags&&prefs.ntags.length?prefs.ntags:DEFNT).slice();notes.forEach(function(n){(n.tags||[]).forEach(function(t){if(!L.some(function(x){return x.n===t}))L.push({n:t,c:'#6b7a80'})})});return L}
+function ntColor(n){var t=ntagList().filter(function(x){return x.n===n})[0];return t?t.c:'#6b7a80'}
+function ensureNT(){if(!prefs.ntags||!prefs.ntags.length)prefs.ntags=DEFNT.map(function(x){return {n:x.n,c:x.c}})}
+function dueText(iso){var d=new Date(iso),u=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));return DAYS[wd(u)]+' '+jlabel(u)+' — '+FD(('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2))}
+async function loadNotes(){
+  try{notes=await rest('notes?select=*&order=pinned.desc,updated_at.desc');$('nwarn').hidden=true}catch(e){if(e.message!=='auth')$('nwarn').hidden=false}
+  try{rems=await rest('reminders?select=*&order=fire_at.asc&limit=500')}catch(e){rems=[]}
+  drawNotes()}
+function drawNotes(){
+  var q=$('nq').value.trim(),now=Date.now();
+  var fl=[['all','همه'],['dated','زمان‌دار']].concat(ntagList().map(function(t){return [t.n,t.n]}));
+  $('nFilter').innerHTML=fl.map(function(x){return '<button data-f="'+esc(x[0])+'" aria-pressed="'+(nFil===x[0])+'">'+esc(x[1])+'</button>'}).join('');
+  var L=notes.filter(function(n){var tg=n.tags||[];return (nFil==='all'||(nFil==='dated'?!!n.due_at:tg.indexOf(nFil)>-1))&&(!q||((n.title||'')+' '+(n.body||'')+' '+tg.join(' ')).indexOf(q)>-1)});
+  if(nSortK==='due')L.sort(function(a,b){var x=a.due_at&&!a.done?new Date(a.due_at).getTime():9e15,y=b.due_at&&!b.done?new Date(b.due_at).getTime():9e15;return x-y});
+  $('nl').innerHTML=L.map(function(n){var over=n.due_at&&!n.done&&new Date(n.due_at).getTime()<now,rc=rems.filter(function(r){return r.note_id===n.id&&!r.sent_at}).length;
+    return '<div class="note'+(n.done?' done':'')+(over?' over':'')+'" data-n="'+n.id+'" tabindex="0" role="button">'+
+      ((n.tags||[]).length?'<div class="ntags">'+(n.tags||[]).map(function(t){return '<span class="tagb" style="--c:'+ntColor(t)+'">'+esc(t)+'</span>'}).join('')+'</div>':'')+
+      '<b>'+(n.pinned?'📌 ':'')+esc(n.title||'بدون عنوان')+'</b><span>'+esc((n.body||'').slice(0,140))+'</span>'+
+      (n.due_at?'<div class="due'+(over?' bad':'')+'"><label class="chk"><input type="checkbox" data-ndone="'+n.id+'"'+(n.done?' checked':'')+'> '+dueText(n.due_at)+(over?' (گذشته)':'')+'</label>'+(rc?'<span>🔔 '+FD(rc)+' یادآوری</span>':'')+'</div>':'')+
+      '<small>'+new Date(n.updated_at).toLocaleDateString('fa-IR')+'</small></div>'}).join('')||'<p class="hint">یادداشتی نیست.</p>'}
+$('nq').oninput=drawNotes;$('nSort').onchange=function(){nSortK=this.value;drawNotes()};
+$('nFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){nFil=b.dataset.f;drawNotes()}});
 $('addNote').onclick=function(){openNote()};
-$('nl').addEventListener('click',function(e){var b=e.target.closest('button[data-n]');if(b)openNote(notes.filter(function(n){return String(n.id)===b.dataset.n})[0])});
-$('fNote2').addEventListener('submit',async function(e){e.preventDefault();var id=$('nId').value,o={title:$('nTitle').value.trim()||null,body:$('nBody').value,pinned:$('nPin').checked,updated_at:new Date().toISOString()};
-  try{if(id)await patch('notes','id=eq.'+id,o);else await post('notes',o);$('dlgNote').close();await loadNotes();toast('ذخیره شد')}catch(x){toast('ذخیره نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}});
+async function openFromCard(e){
+  var cb=e.target.closest('input[data-ndone]');
+  if(cb){try{await patch('notes','id=eq.'+cb.dataset.ndone,{done:cb.checked});await loadNotes()}catch(x){toast('ذخیره نشد',1)}return}
+  if(e.target.closest('label'))return;
+  var c=e.target.closest('[data-n]');if(c)openNote(notes.filter(function(n){return String(n.id)===c.dataset.n})[0])}
+$('nl').addEventListener('click',openFromCard);
+$('nl').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.dataset.n)openFromCard(e)});
+function drawNTags(){$('nTags').innerHTML=ntagList().map(function(t){var on=nSel.has(t.n);return '<button type="button" class="ntg'+(on?' on':'')+'" data-t="'+esc(t.n)+'" style="--c:'+t.c+'" aria-pressed="'+on+'">'+esc(t.n)+'</button>'}).join('')}
+$('nTags').addEventListener('click',function(e){var b=e.target.closest('button');if(b){var t=b.dataset.t;nSel.has(t)?nSel.delete(t):nSel.add(t);drawNTags()}});
+$('nNewTag').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('nAddTag').click()}});
+$('nAddTag').onclick=function(){var t=$('nNewTag').value.trim();if(!t)return;ensureNT();if(!ntagList().some(function(x){return x.n===t})){prefs.ntags.push({n:t,c:TAGPAL[prefs.ntags.length%TAGPAL.length]});savePrefs()}nSel.add(t);$('nNewTag').value='';drawNTags()};
+$('nDated').onchange=function(){$('nDueBox').hidden=!this.checked};
+function openNote(n){n=n||{id:null,title:'',body:'',pinned:false,tags:[],due_at:null,done:false};
+  $('nId').value=n.id||'';$('nTitle').value=n.title||'';$('nBody').value=n.body||'';$('nPin').checked=!!n.pinned;$('nDone').checked=!!n.done;
+  nSel=new Set(n.tags||[]);drawNTags();$('nNewTag').value='';
+  var dated=!!n.due_at,b=dated?new Date(n.due_at):null;$('nDated').checked=dated;$('nDueBox').hidden=!dated;
+  jsel('nDue',b?new Date(Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())):addd(today(),1));
+  $('nTime').value=b?('0'+b.getHours()).slice(-2)+':'+('0'+b.getMinutes()).slice(-2):'16:00';
+  var offs=new Set();if(n.id&&dated)rems.filter(function(r){return r.note_id===n.id}).forEach(function(r){offs.add(String(r.label))});else offs.add('60');
+  $('nRem').innerHTML=RO.map(function(o){return '<label class="chk"><input type="checkbox" data-ro="'+o[0]+'"'+(offs.has(String(o[0]))?' checked':'')+'> '+o[1]+'</label>'}).join('');
+  $('nDel').hidden=!n.id;$('nErr').textContent='';$('dlgNote').showModal()}
+function readDue(){var d=jget('nDue'),t=($('nTime').value||'16:00').split(':');if(!d)return null;return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),+t[0],+t[1])}
+function fireTimes(due){var out=[];document.querySelectorAll('#nRem input:checked').forEach(function(c){var k=c.dataset.ro,ft=k==='m'?new Date(due.getFullYear(),due.getMonth(),due.getDate(),8,0):new Date(due.getTime()-(+k)*60000);if(ft.getTime()<=due.getTime())out.push({label:k,t:ft})});return out}
+$('fNote2').addEventListener('submit',async function(e){e.preventDefault();
+  var id=$('nId').value,dated=$('nDated').checked,due=dated?readDue():null;
+  if(dated&&!due){$('nErr').textContent='تاریخ نامعتبر است.';return}
+  var o={title:$('nTitle').value.trim()||null,body:$('nBody').value,pinned:$('nPin').checked,tags:Array.from(nSel),done:$('nDone').checked,due_at:due?due.toISOString():null,updated_at:new Date().toISOString()};
+  try{var nid;if(id){await patch('notes','id=eq.'+id,o);nid=id}else{var x=await post('notes',o);nid=x[0].id}
+    await del('reminders','note_id=eq.'+nid);var skipped=0;
+    if(due){var all=fireTimes(due),rows=all.filter(function(f){return f.t.getTime()>Date.now()}).map(function(f){return {note_id:+nid,fire_at:f.t.toISOString(),label:f.label}});skipped=all.length-rows.length;
+      if(rows.length)await rest('reminders',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}})}
+    $('dlgNote').close();await loadNotes();toast(skipped?'ذخیره شد؛ '+FD(skipped)+' یادآوری چون زمانش گذشته بود ثبت نشد':'ذخیره شد')}
+  catch(x){$('nErr').textContent='ذخیره نشد؛ آیا supabase-admin5.sql اجرا شده است؟'}});
 $('nDel').onclick=async function(){if(!confirm('این یادداشت حذف شود؟'))return;try{await del('notes','id=eq.'+$('nId').value);$('dlgNote').close();await loadNotes()}catch(x){toast('حذف نشد',1)}};
+function icsEsc(t){return String(t||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;')}
+$('nIcs').onclick=function(){var due=$('nDated').checked?readDue():null;if(!due){$('nErr').textContent='اول تاریخ و ساعت را مشخص کنید.';return}
+  var f=function(x){return x.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'')},title=$('nTitle').value.trim()||'یادداشت';
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//panel//FA','BEGIN:VEVENT','UID:note-'+($('nId').value||Date.now())+'@panel','DTSTAMP:'+f(new Date()),'DTSTART:'+f(due),'DTEND:'+f(new Date(due.getTime()+3600e3)),'SUMMARY:'+icsEsc(title),'DESCRIPTION:'+icsEsc($('nBody').value)];
+  fireTimes(due).forEach(function(x){var m=Math.max(0,Math.round((due.getTime()-x.t.getTime())/60000));L.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc(title),'TRIGGER:'+(m?'-PT'+m+'M':'PT0S'),'END:VALARM')});
+  L.push('END:VEVENT','END:VCALENDAR');
+  var u=URL.createObjectURL(new Blob([L.join('\r\n')],{type:'text/calendar;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='note-reminder.ics';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
+$('nTest').onclick=async function(){
+  try{var r=await fetch(C.url+'/functions/v1/send-reminders',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({test:true})});
+    if(r.status===404)throw new Error('nofn');var j=await r.json().catch(function(){return {}});if(!r.ok||j.error)throw new Error(j.error||('http '+r.status));toast('پیام آزمایشی به تلگرام ارسال شد')}
+  catch(e){toast(e.message==='nofn'?'تابع send-reminders هنوز ساخته نشده است (فایل reminders-setup.md)':'ارسال نشد: '+e.message,1)}};
+$('nNotif').onclick=async function(){if(!('Notification' in window)){toast('مرورگر شما اعلان را پشتیبانی نمی‌کند',1);return}var p=await Notification.requestPermission();toast(p==='granted'?'اعلان مرورگر فعال شد (تا وقتی پنل باز است)':'اجازه اعلان داده نشد',p!=='granted')};
+function checkDue(){if(!tok||!('Notification' in window)||Notification.permission!=='granted')return;
+  var seen={};try{seen=JSON.parse(localStorage.getItem('nSeen')||'{}')}catch(e){}var now=Date.now(),ch=false;
+  rems.forEach(function(r){var t=new Date(r.fire_at).getTime();if(t<=now&&now-t<3600e3&&!seen[r.id]){var n=notes.filter(function(x){return x.id===r.note_id})[0];if(n&&!n.done){new Notification('⏰ '+(n.title||'یادآوری'),{body:n.due_at?dueText(n.due_at):''});seen[r.id]=1;ch=true}}});
+  if(ch)try{localStorage.setItem('nSeen',JSON.stringify(seen))}catch(e){}}
+var chkN=0;setInterval(function(){if(!tok)return;checkDue();if(++chkN%10===0)loadNotes()},30000);
+function drawNTagSet(){ensureNT();$('pNTags').innerHTML=prefs.ntags.map(function(t,i){return '<div class="clr"><input type="color" data-nt="'+i+'" value="'+t.c+'"><input data-nn="'+i+'" value="'+esc(t.n)+'" style="flex:1" aria-label="نام تگ"><button class="mini" type="button" data-ntd="'+i+'" style="background:var(--badink);color:#fff">حذف</button></div>'}).join('')}
+$('dlgSet').addEventListener('input',function(e){var t=e.target;if(t.dataset.nt!==undefined){ensureNT();prefs.ntags[+t.dataset.nt].c=t.value;if(!$('t-notes').hidden)drawNotes()}if(t.dataset.nn!==undefined){ensureNT();prefs.ntags[+t.dataset.nn].n=t.value}});
+$('dlgSet').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.ntd!==undefined){ensureNT();prefs.ntags.splice(+b.dataset.ntd,1);drawNTagSet()}if(b.id==='pNTagAdd'){ensureNT();prefs.ntags.push({n:'تگ جدید',c:TAGPAL[prefs.ntags.length%TAGPAL.length]});drawNTagSet()}});
 
 /* ========== هوش مصنوعی ========== */
 var chat=[],TPL=['یک طرح درس ۶۰ دقیقه‌ای برای ترم «…» بنویس. شامل هدف جلسه، مراحل زمان‌بندی‌شده، مثال و تمرین پایانی.','برای ترم «…» یک پروژه کوچک و جذاب همراه با مراحل انجام و معیار ارزیابی پیشنهاد بده.','بر اساس اطلاعات زیر، یک بازخورد مثبت و سازنده برای دانش‌آموز و یک پیام کوتاه برای والدین بنویس.','برای یک مقاله آموزشی درباره «…» ۵ ایده عنوان و سرفصل پیشنهاد بده.'];
@@ -876,7 +956,7 @@ function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
   jsel('eDate',today());jsel('rDate',today());buildEntry();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
-  loadCore();loadPrefsRemote();initModules();showTab(sessionStorage.getItem('tab')||'week')}
+  loadCore();loadPrefsRemote();initModules();loadNotes();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
 else if(tok)enter();
 </script></body></html>
