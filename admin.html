@@ -66,6 +66,11 @@ dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface)
 .chart{overflow-x:auto}.hb{display:grid;grid-template-columns:110px 1fr 120px;gap:8px;align-items:center;margin:4px 0;font-size:14px}.hb i{display:block;height:12px;border-radius:6px;background:var(--accent)}@media(max-width:560px){.hb{grid-template-columns:80px 1fr 90px}}
 .clr{display:flex;align-items:center;gap:8px}.clr input{width:42px;height:32px;padding:0;border:0;background:none;cursor:pointer}
 summary{cursor:pointer;font-weight:500}
+.blkcell{background:repeating-linear-gradient(45deg,transparent 0 8px,color-mix(in srgb,var(--ink) 6%,transparent) 8px 16px)}.cls .lock{font-size:12.5px;color:var(--muted)}
+.pb{height:10px;border-radius:6px;background:var(--line);overflow:hidden}.pb i{display:block;height:100%;background:var(--c,var(--accent))}.pb.big{height:14px}
+.lcard{text-align:right;background:var(--surface);border:1px solid var(--line);border-inline-start:5px solid var(--c);border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:4px;align-content:start}.lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ug{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin:10px 0}.ug button{border:1px solid var(--line);background:var(--bg);border-radius:8px;min-height:36px;cursor:pointer}.ug button.on{background:var(--okbg);color:var(--okink);border-color:var(--okink);font-weight:700}
+.stks{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:10px}.stk{background:var(--s);color:#2b211d;border-radius:4px 4px 16px 4px;padding:8px;box-shadow:0 3px 8px rgba(0,0,0,.2);display:grid;gap:4px}.stk textarea,.stk input{background:transparent;border:0;color:inherit;min-height:84px;padding:2px;width:100%}.stk input{min-height:0;font-weight:700;border-bottom:1px dashed rgba(0,0,0,.3)}.stk .btns{justify-content:space-between}.stk button{border:0;background:rgba(0,0,0,.12);border-radius:6px;cursor:pointer;color:inherit;padding:0 10px;font-size:13px}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -77,7 +82,7 @@ summary{cursor:pointer;font-weight:500}
 <div class="wrap" style="padding-top:12px">
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">تقویم روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
@@ -95,10 +100,10 @@ summary{cursor:pointer;font-weight:500}
 </section>
 
 <section id="t-stats" hidden>
-  <div class="card"><h2>ثبت کلاس‌های برگزارشده</h2><p class="hint">روز را انتخاب کنید و تعداد کلاس‌های هر ترم و نوع را بنویسید. جمع هر نوع خودکار حساب می‌شود.</p>
+  <div class="card"><h2>ثبت کلاس‌های برگزارشده</h2><p class="hint">روز را انتخاب کنید و تعداد کلاس‌های برگزارشده از هر نوع را بنویسید. کلاس‌های هوش مصنوعی زیرمجموعه همان تعداد هستند.</p>
     <div class="bar" style="margin-bottom:10px"><div class="jsel" id="eDate"></div><button class="btn ghost" id="ePrev" type="button">روز قبل</button><button class="btn ghost" id="eNext" type="button">روز بعد</button><button class="btn ghost" id="eToday" type="button">امروز</button><b id="entLabel"></b></div>
-    <div class="tbl mx num"><table id="mx"></table></div>
-    <div class="bar" style="margin-top:10px"><label style="display:flex;align-items:center;gap:8px">جلسه مربیان<input type="number" id="mentors" min="0" max="99" style="width:70px"></label><button class="btn" id="saveEntry">ذخیره این روز</button></div></div>
+    <div class="g2" id="entGrid"></div><h3 style="margin:14px 0 6px;font-size:16px">از این تعداد، کلاس‌های هوش مصنوعی</h3><div class="g2" id="entAi"></div>
+    <div class="bar" style="margin-top:12px"><button class="btn" id="saveEntry">ذخیره این روز</button><span id="entSum" class="hint" style="margin:0"></span></div></div>
   <div class="card"><h2>گزارش</h2>
     <div class="bar"><div class="seg" id="per"><button data-p="day">روزانه</button><button data-p="week">هفتگی</button><button data-p="month" aria-pressed="true">ماهانه</button><button data-p="year">سالانه</button></div><div class="jsel" id="rDate"></div><button class="btn ghost" id="csv">دانلود CSV</button></div>
     <p class="hint" id="rLabel" style="margin-top:8px"></p><div id="rOut"></div></div>
@@ -112,16 +117,17 @@ summary{cursor:pointer;font-weight:500}
   <div class="card"><h2>درخواست‌های رزرو</h2><p class="hint" id="inboxhint">در حال بارگذاری…</p><div id="inbox"></div></div>
 </section>
 <section id="t-cal" hidden>
-  <div class="bar" style="margin-bottom:8px"><div class="jsel" id="cDate"></div><button class="btn ghost" id="cPrev">روز قبل</button><button class="btn ghost" id="cNext">روز بعد</button><button class="btn ghost" id="cToday">امروز</button><button class="btn" id="addTask">+ کار شخصی</button></div>
+  <div class="bar" style="margin-bottom:8px"><div class="jsel" id="cDate"></div><button class="btn ghost" id="cPrev">روز قبل</button><button class="btn ghost" id="cNext">روز بعد</button><button class="btn ghost" id="cToday">امروز</button><button class="btn" id="addTask">+ برنامه جدید</button></div>
   <p class="hint"><b id="cLabel"></b> — <span id="calsum"></span></p>
-  <div id="calwarn" class="warnbox" hidden>جدول کارهای شخصی ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
-  <div class="sc"><table id="ct" style="min-width:640px"></table></div>
+  <div class="legend" id="calTags"></div>
+  <div id="calwarn" class="warnbox" hidden>جدول برنامه‌ریزی آماده نیست. فایل‌های <b>supabase-admin2.sql</b> و <b>supabase-admin3.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="sc"><table id="ct" style="min-width:420px"></table></div>
 </section>
 
 <section id="t-fin" hidden>
   <div class="card"><h2 id="fTitle">ثبت واریزی</h2>
     <form id="fForm" class="fg"><label>تاریخ<div class="jsel" id="fDate"></div></label>
-      <label>مبلغ (تومان)<input id="fAmount" inputmode="numeric" required placeholder="مثلاً ۱۲۰۰۰۰۰"><small id="fPrev" class="hint"></small></label>
+      <label>مبلغ (تومان)<input id="fAmount" inputmode="numeric" required dir="ltr" style="text-align:right" placeholder="۱,۲۰۰,۰۰۰"><small id="fPrev" class="hint"></small></label>
       <label>منبع<select id="fSrc"></select></label><label>یادداشت<input id="fNote"></label>
       <div class="btns w"><button class="btn" type="submit" id="fSave">ثبت واریزی</button><button class="btn ghost" type="button" id="fCancel" hidden>انصراف از ویرایش</button></div></form></div>
   <div id="finwarn" class="warnbox" hidden>جدول مالی ساخته نشده است. فایل <b>supabase-admin2.sql</b> را در Supabase اجرا کنید.</div>
@@ -132,6 +138,24 @@ summary{cursor:pointer;font-weight:500}
   <div class="card"><h2>به تفکیک منبع</h2><div id="chS"></div></div>
   <div class="card"><h2>فهرست واریزی‌ها</h2><div class="bar" style="margin-bottom:8px"><select id="fMonth" style="width:auto"></select></div>
     <div class="tbl num"><table><thead><tr><th style="text-align:right">تاریخ</th><th>مبلغ (تومان)</th><th>منبع</th><th style="text-align:right">یادداشت</th><th></th></tr></thead><tbody id="fRows"></tbody></table></div></div>
+</section>
+
+<section id="t-comm" hidden>
+  <div class="card"><h2>پیامک به والدین</h2><p class="hint">قالب را انتخاب کنید و برای هر دانش‌آموز روی «پیامک» بزنید؛ پیام آماده در برنامه پیامک گوشی باز می‌شود و فقط «ارسال» را می‌زنید. (ارسال خودکار بدون باز شدن برنامه پیامک نیاز به سرویس پیامکی دارد.)</p>
+    <div class="seg" id="smsT"><button data-k="start">شروع دوره</button><button data-k="next">رفتن به دوره بعد</button><button data-k="absent">غیبت در جلسه</button></div>
+    <div class="fg" style="margin-top:10px"><label class="w">متن قالب<textarea id="smsTxt" style="min-height:110px"></textarea></label>
+      <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان}</p>
+      <label>تاریخ در پیام<div class="jsel" id="mDate"></div></label>
+      <div class="btns" style="align-self:end"><button class="btn" id="smsSave" type="button">ذخیره قالب</button><button class="btn ghost" id="smsReset" type="button">بازگرداندن پیش‌فرض</button></div></div></div>
+  <input id="mq" placeholder="جستجوی دانش‌آموز" style="max-width:260px;margin-bottom:10px"><div id="mlist"></div>
+</section>
+
+<section id="t-learn" hidden>
+  <div id="lwarn" class="warnbox" hidden>جدول مسیر یادگیری ساخته نشده است. فایل <b>supabase-admin3.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="margin-bottom:10px;justify-content:space-between"><div class="seg" id="lFilter"></div><button class="btn" id="addLearn">+ مسیر جدید</button></div>
+  <div class="kpis" id="lKpi"></div>
+  <div class="card"><h2>واحدهای تمام‌شده در ۶ ماه اخیر</h2><div class="chart" id="lChart"></div></div>
+  <div class="lcards" id="lList"></div>
 </section>
 
 <section id="t-notes" hidden>
@@ -156,10 +180,23 @@ summary{cursor:pointer;font-weight:500}
 <dialog id="dlgTask"><form id="fTask"><h2 id="tTitleH" style="margin-top:0">کار شخصی</h2><input type="hidden" id="tId">
   <div class="fg"><label class="w">عنوان<input id="tTitle" required placeholder="مثلاً مطالعه"></label>
   <label>تاریخ<div class="jsel" id="tDate"></div></label><label>ساعت شروع<select id="tSlot"></select></label>
-  <label>مدت<select id="tDur"></select></label><label>رنگ<input type="color" id="tColor" style="height:38px;padding:2px"></label>
+  <label>مدت<select id="tDur"></select></label><label>تگ (اختیاری)<input id="tTag" list="tagList" placeholder="بدون تگ"><datalist id="tagList"></datalist></label>
   <label class="w">یادداشت<textarea id="tNote"></textarea></label><label class="w" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tDone" style="width:auto"> انجام شد</label></div>
   <p id="tErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
   <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="tDel">حذف</button><button class="btn ghost" type="button" data-close>انصراف</button></div></form></dialog>
+
+<dialog id="dlgLearn" style="width:min(780px,96vw)"><h2 id="lTitleH" style="margin-top:0">مسیر یادگیری</h2><input type="hidden" id="lId">
+  <div class="fg"><label>نوع<select id="lKind"></select></label><label>عنوان<input id="lTitle" required></label>
+  <label>نویسنده / استاد / گوینده<input id="lAuthor"></label>
+  <label>واحد (فصل، قسمت، …)<input id="lUnit" list="unitList"><datalist id="unitList"><option value="فصل"><option value="قسمت"><option value="جلسه"><option value="ویدیو"><option value="بخش"><option value="صفحه"></datalist></label>
+  <label>تعداد کل<input id="lTotal" type="number" min="1" max="1000"></label></div>
+  <div class="btns" style="margin-top:10px"><button class="btn" id="lSave" type="button">ذخیره اطلاعات</button><button class="btn red" id="lDel" type="button">حذف مسیر</button><button class="btn ghost" type="button" data-close>بستن</button></div>
+  <div id="lBody" hidden><hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <div class="pb big"><i id="lBar" style="width:0"></i></div><p id="lPct" style="margin:6px 0"></p>
+    <div class="btns"><button class="btn ghost" type="button" id="lAll">همه انجام شد</button><button class="btn ghost" type="button" id="lNone">پاک کردن پیشرفت</button></div>
+    <div class="ug" id="lUnits"></div>
+    <div class="bar" style="justify-content:space-between"><b>یادداشت‌های چسبان (نکات مهم)</b><button class="btn" id="lStkAdd" type="button">+ یادداشت</button></div>
+    <div class="stks" id="lNotes"></div></div></dialog>
 
 <dialog id="dlgNote"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
   <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:220px"></textarea></label>
@@ -173,6 +210,7 @@ summary{cursor:pointer;font-weight:500}
   <label class="clr w" style="display:flex"><input type="color" id="pAccent"><span>رنگ اصلی برنامه</span><button class="mini" id="pAccentReset" type="button">پیش‌فرض</button></label></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ ترم‌ها (رنگ کادر کلاس)</h3><div class="fg" id="pTopics"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ نوع کلاس (برچسب کلاس)</h3><div class="fg" id="pTypes"></div>
+  <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های برنامه‌ریزی روزانه</h3><div id="pTags" style="display:grid;gap:8px"></div><button class="mini" id="pTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
   <div class="btns" style="margin-top:14px"><button class="btn" id="pSave" type="button">ذخیره</button><button class="btn ghost" id="pReset" type="button">بازنشانی همه</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
 <dialog id="dlgClass"><form id="fClass"><h2 id="cTitle" style="margin-top:0">کلاس</h2><input type="hidden" id="cId">
@@ -185,6 +223,7 @@ summary{cursor:pointer;font-weight:500}
 <dialog id="dlgStu"><form id="fStu"><h2 id="sTitle" style="margin-top:0">دانش‌آموز</h2><input type="hidden" id="sId">
   <div class="fg"><label>نام<input id="sName" required></label><label>ترم<select id="sTerm"></select></label>
   <label>شماره تماس<input id="sPhone" dir="ltr" inputmode="tel"></label><label>سن<input id="sAge" type="number" min="3" max="99"></label>
+  <label>نام والد<input id="sPName"></label><label>شماره موبایل والد<input id="sPPhone" dir="ltr" inputmode="tel" placeholder="09123456789"></label>
   <label class="w">پایه تحصیلی<input id="sGrade"></label><label class="w">علایق<textarea id="sInt"></textarea></label>
   <label>نقاط قوت<textarea id="sStr"></textarea></label><label>نقاط ضعف<textarea id="sWeak"></textarea></label>
   <label class="w">دغدغه‌ها<textarea id="sCon"></textarea></label><label class="w">وضعیت جلسه قبلی<textarea id="sLast"></textarea></label>
@@ -313,57 +352,63 @@ $('stb').addEventListener('click',function(e){var b=e.target.closest('button[dat
 function openStu(s){
   $('sId').value=s.id;$('sTitle').textContent='کد '+FD(s.id)+' — '+s.name;$('sName').value=s.name;
   $('sTerm').innerHTML='<option value="">—</option>'+opts(TOPICS.map(function(t){return [t,t]}),s.term);
-  [['sPhone','phone'],['sGrade','grade'],['sInt','interests'],['sStr','strengths'],['sWeak','weaknesses'],['sCon','concerns'],['sLast','last_session']].forEach(function(p){$(p[0]).value=s[p[1]]||''});
+  [['sPName','parent_name'],['sPPhone','parent_phone'],['sPhone','phone'],['sGrade','grade'],['sInt','interests'],['sStr','strengths'],['sWeak','weaknesses'],['sCon','concerns'],['sLast','last_session']].forEach(function(p){$(p[0]).value=s[p[1]]||''});
   $('sAge').value=s.age||'';$('sActive').checked=s.active;
   var t=sched.filter(function(c){return c.student_id===s.id});
   $('sTimes').innerHTML=t.length?t.map(function(c){return DAYS[c.day]+' '+rng(c.slot,TYPES[c.class_type][1])+' · '+TYPES[c.class_type][0]}).join('<br>'):'هنوز زمانی تعیین نشده.';
   $('dlgStu').showModal()}
 $('fStu').addEventListener('submit',async function(e){e.preventDefault();
-  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked};
+  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,parent_name:$('sPName').value.trim()||null,parent_phone:$('sPPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked};
   try{await patch('students','id=eq.'+$('sId').value,o);$('dlgStu').close();await loadCore();toast('ذخیره شد')}catch(x){toast('ذخیره نشد',1)}});
 $('sDel').onclick=async function(){if(!confirm('این دانش‌آموز حذف شود؟ (کلاس‌های او در جدول بدون دانش‌آموز می‌مانند.) برای نگه داشتن سابقه بهتر است او را غیرفعال کنید.'))return;
   try{await del('students','id=eq.'+$('sId').value);$('dlgStu').close();await loadCore();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
 $('sSched').onclick=function(){var s=stu(+$('sId').value);openClass(null,{student_id:s.id,topic:s.term||''})};
 
 /* ---------- آمار ---------- */
-var per='month',lastRows=[];
-function buildMatrix(){
-  $('mx').innerHTML='<thead><tr><th>ترم / موضوع</th>'+ST.map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'</tr></thead><tbody>'+TOPICS.map(function(p,i){return '<tr><th style="text-align:right">'+dot(p)+p+'</th>'+ST.map(function(t){return '<td><input type="number" inputmode="numeric" min="0" max="99" data-p="'+i+'" data-t="'+t+'" aria-label="'+p+' '+TYPES[t][0]+'"></td>'}).join('')+'</tr>'}).join('')+'</tbody><tfoot><tr><th style="text-align:right">جمع</th>'+ST.map(function(t){return '<td id="tot-'+t+'"><b>۰</b></td>'}).join('')+'</tr></tfoot>'}
-function totals(){ST.forEach(function(t){var n=0;document.querySelectorAll('#mx input[data-t="'+t+'"]').forEach(function(i){n+=+i.value||0});$('tot-'+t).innerHTML='<b>'+FD(n)+'</b>'})}
-$('mx').addEventListener('input',totals);
+var per='month',lastRows=[],ET=['premium','economy','gapino','vip','mentors'],AIT='هوش مصنوعی';
+function hrs(min){return FD(+(min/60).toFixed(1)).replace('.','٫')}
+function numIn(id,aria){return '<input type="number" inputmode="numeric" min="0" max="99" id="'+id+'" aria-label="'+aria+'">'}
+function buildEntry(){
+  $('entGrid').innerHTML=ET.map(function(t){return '<label class="t-'+t+'" style="border-inline-start:4px solid var(--c);padding-inline-start:10px">'+TYPES[t][0]+' <small class="hint">('+FD(TYPES[t][1]*30)+' دقیقه)</small>'+numIn('e-'+t,TYPES[t][0])+'</label>'}).join('');
+  $('entAi').innerHTML=['premium','economy'].map(function(t){return '<label class="t-'+t+'" style="border-inline-start:4px solid var(--c);padding-inline-start:10px">هوش مصنوعی — '+TYPES[t][0]+numIn('ai-'+t,'هوش مصنوعی '+TYPES[t][0])+'</label>'}).join('')}
+function entSum(){var n=0,m=0;ET.forEach(function(t){var x=+$('e-'+t).value||0;n+=x;m+=x*TYPES[t][1]*30});$('entSum').textContent='جمع این روز: '+FD(n)+' کلاس، '+hrs(m)+' ساعت'}
+$('entGrid').addEventListener('input',entSum);
 async function loadEntry(){var d=jget('eDate');if(!d)return;
-  try{var rows=await rest('sessions?select=*&day=eq.'+iso(d));
-    document.querySelectorAll('#mx input').forEach(function(i){i.value=''});$('mentors').value='';
-    rows.forEach(function(r){if(r.class_type==='mentors')$('mentors').value=r.count;else{var i=document.querySelector('#mx input[data-p="'+TOPICS.indexOf(r.topic)+'"][data-t="'+r.class_type+'"]');if(i)i.value=r.count}});
-    totals();$('entLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)}catch(e){}}
+  try{var rows=await rest('sessions?select=*&day=eq.'+iso(d)),dash={};
+    ET.forEach(function(t){$('e-'+t).value=''});['premium','economy'].forEach(function(t){$('ai-'+t).value=''});
+    rows.forEach(function(r){if(r.topic==='—')dash[r.class_type]=1});
+    rows.forEach(function(r){var t=r.class_type;
+      if(r.topic==='—')$('e-'+t).value=r.count;
+      else{if(r.topic===AIT&&$('ai-'+t))$('ai-'+t).value=r.count;if(!dash[t])$('e-'+t).value=(+$('e-'+t).value||0)+r.count}});
+    entSum();$('entLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)}catch(e){}}
 $('eDate').addEventListener('change',loadEntry);
 $('ePrev').onclick=function(){jset('eDate',addd(jget('eDate'),-1));loadEntry()};$('eNext').onclick=function(){jset('eDate',addd(jget('eDate'),1));loadEntry()};$('eToday').onclick=function(){jset('eDate',today());loadEntry()};
 $('saveEntry').onclick=async function(){var d=jget('eDate'),rows=[];if(!d)return;
-  document.querySelectorAll('#mx input').forEach(function(i){var n=+i.value;if(n>0)rows.push({day:iso(d),topic:TOPICS[+i.dataset.p],class_type:i.dataset.t,count:Math.min(n,200)})});
-  var m=+$('mentors').value;if(m>0)rows.push({day:iso(d),topic:'—',class_type:'mentors',count:Math.min(m,200)});
+  for(var i=0;i<ET.length;i++){var t=ET[i],n=+$('e-'+t).value||0;if(n>0)rows.push({day:iso(d),topic:'—',class_type:t,count:Math.min(n,200)})}
+  var bad=false;['premium','economy'].forEach(function(t){var a=+$('ai-'+t).value||0,n=+$('e-'+t).value||0;if(a>n)bad=true;if(a>0)rows.push({day:iso(d),topic:AIT,class_type:t,count:Math.min(a,200)})});
+  if(bad){toast('تعداد کلاس هوش مصنوعی نمی‌تواند از کل همان نوع بیشتر باشد',1);return}
   try{await del('sessions','day=eq.'+iso(d));if(rows.length)await rest('sessions',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});toast('ثبت شد');report()}catch(e){toast('ثبت نشد؛ آیا supabase-admin.sql اجرا شده است؟',1)}};
 $('per').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;per=b.dataset.p;document.querySelectorAll('#per button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});report()});
 $('rDate').addEventListener('change',report);
-function hrs(min){return FD(+(min/60).toFixed(1)).replace('.','٫')}
 async function report(){
   var a=jget('rDate');if(!a)return;var r=range(a,per);
   $('rLabel').textContent=per==='day'?jlabel(r[0]):'از '+jlabel(r[0])+' تا '+jlabel(r[1]);
   var rows;try{rows=await rest('sessions?select=*&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&order=day.asc&limit=5000')}catch(e){$('rOut').innerHTML='<p class="hint">خواندن آمار ممکن نشد.</p>';return}
-  lastRows=rows;var byT={},byP={},byK={},tot=0,min=0;
-  rows.forEach(function(x){var m=x.count*TYPES[x.class_type][1]*30;tot+=x.count;min+=m;
-    byT[x.class_type]=byT[x.class_type]||[0,0];byT[x.class_type][0]+=x.count;byT[x.class_type][1]+=m;
-    byP[x.topic]=byP[x.topic]||{};byP[x.topic][x.class_type]=(byP[x.topic][x.class_type]||0)+x.count;
-    var p=jp(new Date(x.day+'T00:00:00Z')),k=per==='year'?JM[p.month-1]:DAYS[wd(new Date(x.day+'T00:00:00Z'))]+' '+jlabel(new Date(x.day+'T00:00:00Z'));
-    byK[k]=byK[k]||[0,0];byK[k][0]+=x.count;byK[k][1]+=m});
-  var h='<div class="kpis"><div class="kpi"><b>'+FD(tot)+'</b><span>کل کلاس‌ها</span></div><div class="kpi"><b>'+hrs(min)+'</b><span>ساعت تدریس</span></div>'+Object.keys(TYPES).map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD((byT[t]||[0])[0])+'</b><span>'+TYPES[t][0]+'</span></div>'}).join('')+'</div>';
+  lastRows=rows;var dash={},byT={},ai={premium:0,economy:0},byK={},tot=0,min=0;
+  rows.forEach(function(x){if(x.topic==='—')dash[x.day+'|'+x.class_type]=1});
+  rows.forEach(function(x){var t=x.class_type,legacy=x.topic!=='—'&&!dash[x.day+'|'+t];
+    if(x.topic===AIT)ai[t]=(ai[t]||0)+x.count;
+    if(x.topic==='—'||legacy){var m=x.count*TYPES[t][1]*30;tot+=x.count;min+=m;byT[t]=byT[t]||[0,0];byT[t][0]+=x.count;byT[t][1]+=m;
+      var dd=new Date(x.day+'T00:00:00Z'),p=jp(dd),k=per==='year'?JM[p.month-1]:DAYS[wd(dd)]+' '+jlabel(dd);byK[k]=byK[k]||[0,0];byK[k][0]+=x.count;byK[k][1]+=m}});
+  var h='<div class="kpis"><div class="kpi"><b>'+FD(tot)+'</b><span>کل کلاس‌ها</span></div><div class="kpi"><b>'+hrs(min)+'</b><span>ساعت تدریس</span></div>'+Object.keys(TYPES).map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD((byT[t]||[0])[0])+'</b><span>'+TYPES[t][0]+'</span></div>'}).join('')+
+    ['premium','economy'].map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD(ai[t]||0)+'</b><span>هوش مصنوعی — '+TYPES[t][0]+'</span></div>'}).join('')+'</div>';
   if(!tot){$('rOut').innerHTML=h+'<p class="hint">در این بازه کلاسی ثبت نشده است.</p>';return}
-  var tops=TOPICS.concat(['—']).filter(function(p){return byP[p]});
-  h+='<div class="g2"><div><b>به تفکیک ترم و نوع</b><div class="tbl num"><table><thead><tr><th style="text-align:right">ترم / موضوع</th>'+Object.keys(TYPES).map(function(t){return '<th>'+TYPES[t][0]+'</th>'}).join('')+'<th>جمع</th></tr></thead><tbody>'+tops.map(function(p){var s=0;return '<tr><td style="text-align:right">'+(p==='—'?'مربیان':dot(p)+p)+'</td>'+Object.keys(TYPES).map(function(t){var n=byP[p][t]||0;s+=n;return '<td>'+(n?FD(n):'')+'</td>'}).join('')+'<td><b>'+FD(s)+'</b></td></tr>'}).join('')+'</tbody></table></div></div>';
+  h+='<div class="g2"><div><b>به تفکیک نوع کلاس</b><div class="tbl num"><table><thead><tr><th style="text-align:right">نوع</th><th>تعداد</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(TYPES).filter(function(t){return byT[t]}).map(function(t){return '<tr><td style="text-align:right"><span class="badge" style="background:var(--ty-'+t+')">'+TYPES[t][0]+'</span></td><td>'+FD(byT[t][0])+'</td><td>'+hrs(byT[t][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
   if(per!=='day')h+='<div><b>'+(per==='year'?'به تفکیک ماه':'به تفکیک روز')+'</b><div class="tbl num"><table><thead><tr><th style="text-align:right">'+(per==='year'?'ماه':'روز')+'</th><th>کلاس</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(byK).map(function(k){return '<tr><td style="text-align:right">'+k+'</td><td>'+FD(byK[k][0])+'</td><td>'+hrs(byK[k][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
   $('rOut').innerHTML=h+'</div>'}
 $('csv').onclick=function(){
-  var L=['تاریخ شمسی,تاریخ میلادی,موضوع,نوع کلاس,تعداد,مدت (دقیقه)'];
-  lastRows.forEach(function(x){var p=jp(new Date(x.day+'T00:00:00Z'));L.push([p.year+'/'+p.month+'/'+p.day,x.day,x.topic==='—'?'':x.topic,TYPES[x.class_type][0],x.count,x.count*TYPES[x.class_type][1]*30].join(','))});
+  var L=['تاریخ شمسی,تاریخ میلادی,نوع کلاس,ردیف,تعداد,مدت (دقیقه)'];
+  lastRows.forEach(function(x){var p=jp(new Date(x.day+'T00:00:00Z'));L.push([p.year+'/'+p.month+'/'+p.day,x.day,TYPES[x.class_type][0],x.topic==='—'?'کل کلاس‌ها':(x.topic===AIT?'از این تعداد هوش مصنوعی':x.topic),x.count,x.topic==='—'?x.count*TYPES[x.class_type][1]*30:''].join(','))});
   var u=URL.createObjectURL(new Blob(['\ufeff'+L.join('\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='classes-report.csv';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
 
 /* ---------- رزرو از سایت ---------- */
@@ -416,7 +461,7 @@ function openSet(){
   $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS,prefs.font);$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
   $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
   $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
-  $('dlgSet').showModal()}
+  drawTagSet();$('dlgSet').showModal()}
 $('openSet').onclick=openSet;
 $('pTheme').onchange=function(){prefs.theme=this.value;applyPrefs()};
 $('pFont').onchange=function(){prefs.font=this.value;applyPrefs()};
@@ -433,21 +478,29 @@ $('pSave').onclick=async function(){await savePrefs();$('dlgSet').close()};
 $('pReset').onclick=function(){if(!confirm('همه تنظیمات به حالت پیش‌فرض برگردد؟'))return;prefs={theme:'auto',font:'Vazirmatn',size:15.5,accent:null,topics:{},types:{}};applyPrefs();redrawColors();openSet()};
 async function loadPrefsRemote(){try{var r=await rest('settings?select=value&key=eq.prefs');if(r&&r[0]){Object.assign(prefs,r[0].value);try{localStorage.setItem('prefs',JSON.stringify(prefs))}catch(e){}applyPrefs();redrawColors()}}catch(e){}}
 
-/* ========== تقویم روزانه و کارهای شخصی ========== */
+/* ========== برنامه‌ریزی روزانه ========== */
+var DEFTAGS=[{n:'مطالعه',c:'#2b7de0'},{n:'ورزش',c:'#1f9461'},{n:'آماده‌سازی کلاس',c:'#8a4fd8'},{n:'کار اداری',c:'#f0a030'},{n:'شخصی',c:'#e255a1'}],TAGPAL=['#14b8a6','#e255a1','#f0a030','#6366f1','#84cc16','#ef4444'];
+function tagList(){return prefs.tags&&prefs.tags.length?prefs.tags:DEFTAGS}
+function tagColor(n){var t=tagList().filter(function(x){return x.n===n})[0];return t?t.c:'#6b7a80'}
+function ensureTags(){if(!prefs.tags||!prefs.tags.length)prefs.tags=DEFTAGS.map(function(x){return {n:x.n,c:x.c}})}
 var calTasks=[];
-function taskCard(t){return '<div class="task'+(t.done?' done':'')+'" style="--c:'+(t.color||'var(--accent)')+'"><label class="chk"><input type="checkbox" data-tdone="'+t.id+'"'+(t.done?' checked':'')+'><b>'+esc(t.title)+'</b></label><small>'+FD(t.dur*30)+' دقیقه'+(t.note?' · '+esc(t.note):'')+'</small><div><button class="mini" data-tedit="'+t.id+'">ویرایش</button></div></div>'}
+function taskCard(t){return '<div class="task'+(t.done?' done':'')+'" style="--c:'+(t.tag?tagColor(t.tag):'#6b7a80')+'"><label class="chk"><input type="checkbox" data-tdone="'+t.id+'"'+(t.done?' checked':'')+'><b>'+esc(t.title)+'</b></label><small>'+(t.tag?'🏷 '+esc(t.tag)+' · ':'')+FD(t.dur*30)+' دقیقه'+(t.note?' · '+esc(t.note):'')+'</small><div><button class="mini" data-tedit="'+t.id+'">ویرایش</button></div></div>'}
 async function loadCal(){var d=jget('cDate');if(!d)return;
   $('cLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)+(iso(d)===iso(today())?' (امروز)':'');
   try{calTasks=await rest('tasks?select=*&day=eq.'+iso(d)+'&order=slot.asc');$('calwarn').hidden=true}catch(e){calTasks=[];if(e.message!=='auth')$('calwarn').hidden=false}
   drawCal()}
-function drawCal(){var d=jget('cDate');if(!d)return;var w=wd(d),cl=sched.filter(function(c){return c.day===w}),cov={},tov={},cm=0,tmn=0,done=0;
-  cl.forEach(function(c){var n=TYPES[c.class_type][1];cm+=n*30;for(var k=0;k<n;k++)cov[c.slot+k]=k?'skip':c});
-  calTasks.forEach(function(t){tmn+=t.dur*30;if(t.done)done++;for(var k=0;k<t.dur;k++)tov[t.slot+k]=k?'skip':t});
-  $('calsum').textContent=FD(cl.length)+' کلاس ('+hrs(cm)+' ساعت) · '+FD(calTasks.length)+' کار شخصی ('+hrs(tmn)+' ساعت'+(calTasks.length?'، '+FD(done)+' انجام‌شده':'')+')';
-  var h='<thead><tr><th>ساعت</th><th>کلاس‌ها</th><th>کارهای شخصی</th></tr></thead><tbody>';
-  for(var s=S0;s<=S1;s++){h+='<tr><th>'+rng(s,1)+'</th>';
-    var a=cov[s];if(a!=='skip')h+=a?'<td rowspan="'+TYPES[a.class_type][1]+'">'+card(a)+'</td>':'<td></td>';
-    var b=tov[s];if(b!=='skip')h+=b?'<td rowspan="'+Math.min(b.dur,S1+1-s)+'">'+taskCard(b)+'</td>':'<td><button class="add" data-tadd="'+s+'">+ کار شخصی</button></td>';
+function drawCal(){var d=jget('cDate');if(!d)return;var w=wd(d),cl=sched.filter(function(c){return c.day===w}),cov={},tov={},cs=0,ts=0,done=0,tg={};
+  cl.forEach(function(c){var n=TYPES[c.class_type][1];cs+=n;for(var k=0;k<n;k++)cov[c.slot+k]=k?'skip':c});
+  calTasks.forEach(function(t){ts+=t.dur;if(t.done)done++;var k2=t.tag||'بدون تگ';tg[k2]=(tg[k2]||0)+t.dur*30;for(var k=0;k<t.dur;k++)tov[t.slot+k]=k?'skip':t});
+  var free=(S1-S0+1)-cs-ts;
+  $('calsum').textContent=FD(cl.length)+' کلاس ('+hrs(cs*30)+' ساعت) · '+FD(calTasks.length)+' برنامه ('+hrs(ts*30)+' ساعت'+(calTasks.length?'، '+FD(done)+' انجام‌شده':'')+') · '+hrs(Math.max(free,0)*30)+' ساعت آزاد';
+  $('calTags').innerHTML=Object.keys(tg).map(function(k){return '<span class="badge" style="background:'+(k==='بدون تگ'?'#6b7a80':tagColor(k))+'">'+esc(k)+' · '+FD(tg[k])+' دقیقه</span>'}).join(' ');
+  var h='<thead><tr><th>ساعت</th><th>برنامه (زمان کلاس‌ها قفل است)</th></tr></thead><tbody>';
+  for(var s=S0;s<=S1;s++){h+='<tr><th>'+rng(s,1)+'</th>';var a=cov[s],b=tov[s];
+    if(a==='skip'||(b==='skip'&&!a)){h+='</tr>';continue}
+    if(a)h+='<td class="blkcell" rowspan="'+TYPES[a.class_type][1]+'">'+card(a).replace('<div><button','<div><span class="lock">🔒 زمان کلاس</span> <button')+'</td>';
+    else if(b)h+='<td rowspan="'+Math.min(b.dur,S1+1-s)+'">'+taskCard(b)+'</td>';
+    else h+='<td><button class="add" data-tadd="'+s+'">+ برنامه</button></td>';
     h+='</tr>'}
   $('ct').innerHTML=h+'</tbody>'}
 $('cDate').addEventListener('change',loadCal);
@@ -459,19 +512,104 @@ $('ct').addEventListener('click',function(e){var b=e.target.closest('button,inpu
   else if(b.dataset.tedit)openTask(calTasks.filter(function(t){return String(t.id)===b.dataset.tedit})[0]);
   else if(b.dataset.tdone){patch('tasks','id=eq.'+b.dataset.tdone,{done:b.checked}).then(loadCal).catch(function(){toast('ذخیره نشد',1)})}});
 function openTask(t,pre){
-  t=t||Object.assign({id:null,slot:S0+2,dur:2,title:'',note:'',color:prefs.accent||'#0f6b63',done:false},pre||{});
+  t=t||Object.assign({id:null,slot:S0+2,dur:2,title:'',note:'',tag:'',done:false},pre||{});
   jsel('tDate',t.id?new Date(t.day+'T00:00:00Z'):(jget('cDate')||today()));
   var ss=[],ds=[];for(var s=S0;s<=S1;s++)ss.push([s,tm(s)]);for(var n=1;n<=16;n++)ds.push([n,FD(n*30)+' دقیقه']);
-  $('tSlot').innerHTML=opts(ss,t.slot);$('tDur').innerHTML=opts(ds,t.dur);$('tTitle').value=t.title;$('tNote').value=t.note||'';$('tColor').value=t.color&&t.color.charAt(0)==='#'?t.color:'#0f6b63';$('tDone').checked=!!t.done;
-  $('tId').value=t.id||'';$('tDel').hidden=!t.id;$('tErr').textContent='';$('tTitleH').textContent=t.id?'ویرایش کار شخصی':'کار شخصی جدید';$('dlgTask').showModal()}
+  $('tSlot').innerHTML=opts(ss,t.slot);$('tDur').innerHTML=opts(ds,t.dur);$('tTitle').value=t.title;$('tNote').value=t.note||'';$('tTag').value=t.tag||'';$('tDone').checked=!!t.done;
+  $('tagList').innerHTML=tagList().map(function(x){return '<option value="'+esc(x.n)+'">'}).join('');
+  $('tId').value=t.id||'';$('tDel').hidden=!t.id;$('tErr').textContent='';$('tTitleH').textContent=t.id?'ویرایش برنامه':'برنامه جدید';$('dlgTask').showModal()}
 $('fTask').addEventListener('submit',async function(e){e.preventDefault();
   var d=jget('tDate'),id=$('tId').value;if(!d)return;
-  var o={day:iso(d),slot:+$('tSlot').value,dur:+$('tDur').value,title:$('tTitle').value.trim(),note:$('tNote').value.trim()||null,color:$('tColor').value,done:$('tDone').checked};
-  if(o.slot+o.dur>S1+1){$('tErr').textContent='پایان کار از ساعت ۲۲:۰۰ بیشتر می‌شود.';return}
+  var o={day:iso(d),slot:+$('tSlot').value,dur:+$('tDur').value,title:$('tTitle').value.trim(),note:$('tNote').value.trim()||null,tag:$('tTag').value.trim()||null,done:$('tDone').checked};
+  if(o.slot+o.dur>S1+1){$('tErr').textContent='پایان برنامه از ساعت ۲۲:۰۰ بیشتر می‌شود.';return}
+  var w=wd(d);if(sched.some(function(c){return c.day===w&&o.slot<c.slot+TYPES[c.class_type][1]&&c.slot<o.slot+o.dur})){$('tErr').textContent='این بازه با کلاس شما تداخل دارد و قابل برنامه‌ریزی نیست.';return}
   try{var ex=await rest('tasks?select=id,slot,dur&day=eq.'+o.day);
-    if(ex.some(function(x){return String(x.id)!==id&&o.slot<x.slot+x.dur&&x.slot<o.slot+o.dur})){$('tErr').textContent='این بازه با کار شخصی دیگری تداخل دارد.';return}
-    if(id)await patch('tasks','id=eq.'+id,o);else await post('tasks',o);$('dlgTask').close();jset('cDate',d);await loadCal();toast('ذخیره شد')}catch(x){$('tErr').textContent='ذخیره نشد؛ آیا supabase-admin2.sql اجرا شده است؟'}});
-$('tDel').onclick=async function(){if(!confirm('این کار حذف شود؟'))return;try{await del('tasks','id=eq.'+$('tId').value);$('dlgTask').close();await loadCal();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+    if(ex.some(function(x){return String(x.id)!==id&&o.slot<x.slot+x.dur&&x.slot<o.slot+o.dur})){$('tErr').textContent='این بازه با برنامه دیگری تداخل دارد.';return}
+    if(o.tag&&!tagList().some(function(x){return x.n===o.tag})){ensureTags();prefs.tags.push({n:o.tag,c:TAGPAL[prefs.tags.length%TAGPAL.length]});savePrefs()}
+    if(id)await patch('tasks','id=eq.'+id,o);else await post('tasks',o);$('dlgTask').close();jset('cDate',d);await loadCal();toast('ذخیره شد')}catch(x){$('tErr').textContent='ذخیره نشد؛ آیا supabase-admin2.sql و supabase-admin3.sql اجرا شده‌اند؟'}});
+$('tDel').onclick=async function(){if(!confirm('این برنامه حذف شود؟'))return;try{await del('tasks','id=eq.'+$('tId').value);$('dlgTask').close();await loadCal();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+function drawTagSet(){$('pTags').innerHTML=tagList().map(function(t,i){return '<div class="clr"><input type="color" data-tg="'+i+'" value="'+t.c+'"><input data-tn="'+i+'" value="'+esc(t.n)+'" style="flex:1" aria-label="نام تگ"><button class="mini" type="button" data-td="'+i+'" style="background:var(--badink);color:#fff">حذف</button></div>'}).join('')}
+$('dlgSet').addEventListener('input',function(e){var t=e.target;
+  if(t.dataset.tg!==undefined){ensureTags();prefs.tags[+t.dataset.tg].c=t.value;if(!$('t-cal').hidden)drawCal()}
+  if(t.dataset.tn!==undefined){ensureTags();prefs.tags[+t.dataset.tn].n=t.value}});
+$('dlgSet').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.td!==undefined){ensureTags();prefs.tags.splice(+b.dataset.td,1);drawTagSet()}
+  if(b.id==='pTagAdd'){ensureTags();prefs.tags.push({n:'تگ جدید',c:TAGPAL[prefs.tags.length%TAGPAL.length]});drawTagSet()}});
+
+/* ========== ارتباط با فراگیران (پیامک به والدین) ========== */
+var SMSN={start:'شروع دوره',next:'رفتن به دوره بعد',absent:'غیبت در جلسه'},smsKey='start',nextSel={};
+var DEFSMS={start:'{والد} عزیز، سلام. دوره «{ترم}» {نام} از {تاریخ} شروع می‌شود. زمان کلاس: {زمان}. موفق باشید. حسین نوری',
+  next:'{والد} عزیز، سلام. {نام} دوره «{ترم}» را با موفقیت به پایان رساند و از این پس وارد دوره «{ترم_بعد}» می‌شود. زمان کلاس: {زمان}. حسین نوری',
+  absent:'{والد} عزیز، سلام. {نام} در جلسه امروز ({تاریخ}) غایب بود. لطفاً در صورت امکان برای جلسه جبرانی هماهنگ فرمایید. حسین نوری'};
+function smsText(k){return (prefs.sms&&prefs.sms[k])||DEFSMS[k]}
+function nextOf(t){var i=TOPICS.indexOf(t);if(i<0||i+1>=TOPICS.length)return '';return TOPICS[i+1].replace(/ ترم .*$/,'')===t.replace(/ ترم .*$/,'')?TOPICS[i+1]:''}
+function phoneN(p){var d=ND(p||'');if(d.indexOf('0098')===0)d=d.slice(4);else if(d.indexOf('98')===0&&d.length>=12)d=d.slice(2);else if(d.charAt(0)==='0')d=d.slice(1);return d?'+98'+d:''}
+function stuTime(s){return sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' ساعت '+tm(c.slot)}).join('، ')||'طبق هماهنگی'}
+function smsFor(s){var dt=jget('mDate')||today(),nx=nextSel[s.id]||nextOf(s.term);
+  return smsText(smsKey).replace(/\{(.+?)\}/g,function(m,k){var v={'والد':s.parent_name||'والدین گرامی','نام':s.name,'ترم':s.term||'','ترم_بعد':nx,'تاریخ':jlabel(dt),'زمان':stuTime(s)}[k];return v===undefined?m:v})}
+function drawComm(){
+  document.querySelectorAll('#smsT button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.k===smsKey)});
+  var q=$('mq').value.trim(),L=students.filter(function(s){return s.active&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
+  $('mlist').innerHTML=L.map(function(s){var ph=phoneN(s.parent_phone),msg=smsFor(s),needNext=smsKey==='next'&&!(nextSel[s.id]||nextOf(s.term)),ok=ph&&!needNext;
+    return '<div class="msg"><b>'+esc(s.name)+'</b> <small>'+dot(s.term)+esc(s.term)+' · '+(s.parent_phone?esc(s.parent_name||'والد')+' — <span dir="ltr">'+esc(s.parent_phone)+'</span>':'شماره والد ثبت نشده')+'</small>'+
+     (smsKey==='next'?'<label style="margin-top:6px;max-width:260px">دوره بعد<select data-nx="'+s.id+'"><option value="">— انتخاب کنید —</option>'+opts(TOPICS.map(function(t){return [t,t]}),nextSel[s.id]||nextOf(s.term))+'</select></label>':'')+
+     '<p class="hint" style="margin:8px 0">'+esc(msg)+'</p><div class="btns">'+
+     (ok?'<a class="btn" href="sms:'+ph+'?body='+encodeURIComponent(msg)+'">ارسال پیامک</a><a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/'+ph.slice(1)+'?text='+encodeURIComponent(msg)+'">واتساپ</a>':'<button class="btn" disabled>ارسال پیامک</button>')+
+     '<button class="btn ghost" data-cp="'+s.id+'">کپی متن</button>'+(!ph?'<button class="btn ghost" data-sd="'+s.id+'">ثبت شماره والد</button>':'')+(needNext?'<small class="hint">دوره بعد را انتخاب کنید</small>':'')+'</div></div>'}).join('')||'<p class="hint">دانش‌آموز فعالی نیست.</p>'}
+$('smsT').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;smsKey=b.dataset.k;$('smsTxt').value=smsText(smsKey);drawComm()});
+$('smsTxt').oninput=function(){prefs.sms=prefs.sms||{};prefs.sms[smsKey]=this.value;drawComm()};
+$('smsSave').onclick=savePrefs;
+$('smsReset').onclick=function(){if(prefs.sms)delete prefs.sms[smsKey];$('smsTxt').value=smsText(smsKey);drawComm();savePrefs()};
+$('mq').oninput=drawComm;$('mDate').addEventListener('change',drawComm);
+$('mlist').addEventListener('change',function(e){var t=e.target;if(t.dataset.nx){nextSel[t.dataset.nx]=t.value;drawComm()}});
+$('mlist').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.cp){try{await navigator.clipboard.writeText(smsFor(stu(+b.dataset.cp)));toast('کپی شد')}catch(x){}}
+  if(b.dataset.sd)openStu(stu(+b.dataset.sd))});
+$('smsTxt').value=smsText('start');
+
+/* ========== مسیر یادگیری ========== */
+var LK={book:['کتاب','فصل','#8a4fd8'],course:['دوره آموزشی','قسمت','#2b7de0'],podcast:['پادکست','قسمت','#e07b2b'],other:['سایر','بخش','#6b7a80']},STK=['#fff3a3','#ffd1dc','#c9ecff','#d4f5c9'];
+var learn=[],lnotes=[],lf='all';
+function lcnt(l){return Object.keys(l.progress||{}).length}
+function lpct(l){return l.total?Math.min(100,Math.round(lcnt(l)*100/l.total)):0}
+function lget(id){return learn.filter(function(l){return String(l.id)===String(id)})[0]}
+async function loadLearn(){try{var r=await Promise.all([rest('learning?select=*&order=id.desc'),rest('learning_notes?select=*&order=id.asc')]);learn=r[0];lnotes=r[1];$('lwarn').hidden=true}catch(e){if(e.message!=='auth')$('lwarn').hidden=false}drawLearn()}
+function drawLearn(){
+  $('lFilter').innerHTML=[['all','همه']].concat(Object.keys(LK).map(function(k){return [k,LK[k][0]]})).map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(lf===x[0])+'">'+x[1]+'</button>'}).join('');
+  var cm=jp(today()),tu=0,du=0,dn=0,mon=0,cnt={};
+  learn.forEach(function(l){var n=lcnt(l);tu+=l.total;du+=n;if(l.total&&n>=l.total)dn++;Object.keys(l.progress||{}).forEach(function(k){var p=jpi(l.progress[k]);var key=p.year*12+p.month;cnt[key]=(cnt[key]||0)+1;if(p.year===cm.year&&p.month===cm.month)mon++})});
+  $('lKpi').innerHTML='<div class="kpi"><b>'+FD(learn.length)+'</b><span>مسیر یادگیری</span></div><div class="kpi"><b>'+FD(dn)+'</b><span>تمام‌شده</span></div><div class="kpi"><b>'+FD(tu?Math.round(du*100/tu):0)+'٪</b><span>پیشرفت کلی ('+FD(du)+' از '+FD(tu)+' واحد)</span></div><div class="kpi"><b>'+FD(mon)+'</b><span>واحد تمام‌شده در این ماه</span></div>';
+  var labs=[],vals=[];for(var i=5;i>=0;i--){var k=cm.year*12+cm.month-i,m=((k-1)%12+12)%12;labs.push(JM[m]);vals.push(cnt[k]||0)}
+  $('lChart').innerHTML=bars(labs,[{n:'واحد تمام‌شده',c:'var(--accent)',v:vals}],1,' واحد');
+  var L=learn.filter(function(l){return lf==='all'||l.kind===lf});
+  $('lList').innerHTML=L.map(function(l){var p=lpct(l);return '<button class="lcard" data-l="'+l.id+'" style="--c:'+LK[l.kind][2]+'"><span class="badge" style="background:var(--c)">'+LK[l.kind][0]+'</span><b>'+esc(l.title)+'</b><small class="hint" style="margin:0">'+esc(l.author)+'</small><div class="pb"><i style="width:'+p+'%"></i></div><span>'+FD(lcnt(l))+' از '+FD(l.total)+' '+esc(l.unit)+' — '+FD(p)+'٪'+(p>=100?' ✓':'')+'</span></button>'}).join('')||'<p class="hint">هنوز مسیری ثبت نشده است. با «+ مسیر جدید» شروع کنید.</p>'}
+$('lFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){lf=b.dataset.f;drawLearn()}});
+$('lList').addEventListener('click',function(e){var b=e.target.closest('button[data-l]');if(b)openLearn(lget(b.dataset.l))});
+$('addLearn').onclick=function(){openLearn()};
+function openLearn(l){l=l||{id:'',kind:'book',title:'',author:'',unit:'فصل',total:10};
+  $('lKind').innerHTML=opts(Object.keys(LK).map(function(k){return [k,LK[k][0]]}),l.kind);$('lId').value=l.id||'';$('lTitle').value=l.title;$('lAuthor').value=l.author||'';$('lUnit').value=l.unit;$('lTotal').value=l.total;
+  $('lDel').hidden=!l.id;$('lBody').hidden=!l.id;$('lTitleH').textContent=l.id?l.title:'مسیر یادگیری جدید';if(l.id)drawLDetail();$('dlgLearn').showModal()}
+$('lKind').onchange=function(){if(!$('lId').value)$('lUnit').value=LK[this.value][1]};
+function drawLDetail(){var l=lget($('lId').value);if(!l)return;var p=lpct(l),h='';
+  $('lBar').style.width=p+'%';$('lBar').parentElement.style.setProperty('--c',LK[l.kind][2]);$('lPct').textContent=FD(lcnt(l))+' از '+FD(l.total)+' '+l.unit+' — '+FD(p)+'٪';
+  for(var i=1;i<=l.total;i++)h+='<button type="button" data-u="'+i+'" class="'+((l.progress||{})[i]?'on':'')+'" aria-pressed="'+!!(l.progress||{})[i]+'" aria-label="'+esc(l.unit)+' '+i+'">'+FD(i)+'</button>';
+  $('lUnits').innerHTML=h;
+  $('lNotes').innerHTML=lnotes.filter(function(n){return String(n.learning_id)===String(l.id)}).map(function(n){return '<div class="stk" style="--s:'+(n.color||STK[0])+'"><input data-sref="'+n.id+'" value="'+esc(n.ref)+'" placeholder="مربوط به… (مثلاً '+esc(l.unit)+' ۳)"><textarea data-sbody="'+n.id+'" placeholder="نکته مهم…">'+esc(n.body)+'</textarea><div class="btns"><button type="button" data-scol="'+n.id+'">رنگ</button><button type="button" data-sdel="'+n.id+'">حذف</button></div></div>'}).join('')}
+async function saveProg(l){try{await patch('learning','id=eq.'+l.id,{progress:l.progress})}catch(e){toast('ذخیره نشد',1)}drawLDetail();drawLearn()}
+$('lUnits').addEventListener('click',function(e){var b=e.target.closest('button[data-u]');if(!b)return;var l=lget($('lId').value),k=b.dataset.u;l.progress=l.progress||{};if(l.progress[k])delete l.progress[k];else l.progress[k]=iso(today());saveProg(l)});
+$('lAll').onclick=function(){var l=lget($('lId').value);l.progress=l.progress||{};for(var i=1;i<=l.total;i++)if(!l.progress[i])l.progress[i]=iso(today());saveProg(l)};
+$('lNone').onclick=function(){if(!confirm('همه پیشرفت این مسیر پاک شود؟'))return;var l=lget($('lId').value);l.progress={};saveProg(l)};
+$('lSave').onclick=async function(){var id=$('lId').value,o={kind:$('lKind').value,title:$('lTitle').value.trim(),author:$('lAuthor').value.trim()||null,unit:$('lUnit').value.trim()||'فصل',total:Math.max(1,Math.min(1000,+$('lTotal').value||1))};
+  if(!o.title){toast('عنوان را بنویسید',1);return}
+  try{if(id){var l=lget(id),pr={};Object.keys(l.progress||{}).forEach(function(k){if(+k<=o.total)pr[k]=l.progress[k]});o.progress=pr;await patch('learning','id=eq.'+id,o);await loadLearn();$('lTitleH').textContent=o.title;drawLDetail();toast('ذخیره شد')}
+    else{var r=await post('learning',o);await loadLearn();openLearn(lget(r[0].id))}}catch(e){toast('ذخیره نشد؛ آیا supabase-admin3.sql اجرا شده است؟',1)}};
+$('lDel').onclick=async function(){if(!confirm('این مسیر و یادداشت‌هایش حذف شود؟'))return;try{await del('learning','id=eq.'+$('lId').value);$('dlgLearn').close();await loadLearn();toast('حذف شد')}catch(e){toast('حذف نشد',1)}};
+$('lStkAdd').onclick=async function(){try{await post('learning_notes',{learning_id:+$('lId').value,body:'',ref:'',color:STK[0]});var r=await rest('learning_notes?select=*&order=id.asc');lnotes=r;drawLDetail()}catch(e){toast('افزودن نشد',1)}};
+$('lNotes').addEventListener('focusout',async function(e){var t=e.target,id=t.dataset.sbody||t.dataset.sref;if(!id)return;var n=lnotes.filter(function(x){return String(x.id)===id})[0],o=t.dataset.sbody?{body:t.value}:{ref:t.value};
+  if(n&&(t.dataset.sbody?n.body:n.ref)!==t.value){Object.assign(n,o);try{await patch('learning_notes','id=eq.'+id,o)}catch(x){toast('ذخیره نشد',1)}}});
+$('lNotes').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.sdel){try{await del('learning_notes','id=eq.'+b.dataset.sdel);lnotes=lnotes.filter(function(x){return String(x.id)!==b.dataset.sdel});drawLDetail()}catch(x){toast('حذف نشد',1)}}
+  if(b.dataset.scol){var n=lnotes.filter(function(x){return String(x.id)===b.dataset.scol})[0];n.color=STK[(STK.indexOf(n.color)+1)%STK.length];try{await patch('learning_notes','id=eq.'+n.id,{color:n.color})}catch(x){}drawLDetail()}});
 
 /* ========== یادداشت‌ها ========== */
 var notes=[];
@@ -516,16 +654,16 @@ $('aiClear').onclick=function(){chat=[];drawChat();$('aiErr').hidden=true};
 var inc=[],fEdit=null,SRC=['یاسان','فرادرس','کلاس خصوصی','مجله فرادرس','سایر'],jc={};
 function jpi(k){return jc[k]||(jc[k]=jp(new Date(k+'T00:00:00Z')))}
 function ND(s){return String(s).replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)}).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)}).replace(/\D/g,'')}
-function money(n){return FD(Math.round(n).toLocaleString('en-US')).replace(/,/g,'٬')}
+function money(n){return FD(Math.round(n).toLocaleString('en-US'))}
 function niceMax(m){var p=Math.pow(10,Math.floor(Math.log10(m))),f=m/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
-function bars(labels,series,unit){
+function bars(labels,series,unit,suf){
   var W=720,H=250,pl=40,pr=8,pt=14,pb=30,iw=W-pl-pr,ih=H-pt-pb,n=labels.length,sw=iw/n,mx=0;
   series.forEach(function(q){q.v.forEach(function(x){if(x>mx)mx=x})});var top=niceMax(mx||unit);
   var h='<svg viewBox="0 0 '+W+' '+H+'" role="img" style="width:100%;min-width:560px;height:auto">';
-  for(var i=0;i<=4;i++){var y=pt+ih-ih*i/4;h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--muted)">'+FD(+(top*i/4/unit).toFixed(1))+'</text>'}
+  for(var i=0;i<=4;i++){var y=pt+ih-ih*i/4;h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--muted)">'+FD(+(top*i/4/unit).toFixed(unit===1&&top>=4?0:1))+'</text>'}
   var bw=Math.min(26,sw/(series.length+.6));
   labels.forEach(function(lb,i){var cx=W-pr-sw*(i+.5);h+='<text x="'+cx+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="var(--muted)">'+lb+'</text>';
-    series.forEach(function(q,k){var v=q.v[i],bh=ih*v/top,x=cx+bw*series.length/2-(k+1)*bw+1;h+='<rect x="'+x+'" y="'+(pt+ih-bh)+'" width="'+(bw-2)+'" height="'+(v?Math.max(bh,1):0)+'" rx="3" fill="'+q.c+'"><title>'+q.n+' — '+lb+': '+money(v)+' تومان</title></rect>'})});
+    series.forEach(function(q,k){var v=q.v[i],bh=ih*v/top,x=cx+bw*series.length/2-(k+1)*bw+1;h+='<rect x="'+x+'" y="'+(pt+ih-bh)+'" width="'+(bw-2)+'" height="'+(v?Math.max(bh,1):0)+'" rx="3" fill="'+q.c+'"><title>'+q.n+' — '+lb+': '+money(v)+(suf===undefined?' تومان':suf)+'</title></rect>'})});
   return h+'</svg>'}
 async function loadFin(){try{inc=await rest('income?select=*&order=day.asc&limit=5000');$('finwarn').hidden=true}catch(e){inc=[];if(e.message!=='auth')$('finwarn').hidden=false}drawFin()}
 function drawFin(){
@@ -545,7 +683,8 @@ function drawFin(){
   var L=inc.filter(function(x){var p=jpi(x.day);return p.year===cur&&(!fm||p.month===fm)}).reverse();
   $('fRows').innerHTML=L.map(function(x){return '<tr><td style="text-align:right">'+jlabel(new Date(x.day+'T00:00:00Z'))+'</td><td><b>'+money(x.amount)+'</b></td><td>'+esc(x.source)+'</td><td style="text-align:right">'+esc(x.note)+'</td><td><button class="mini" data-fe="'+x.id+'">ویرایش</button> <button class="mini" style="background:var(--badink);color:#fff" data-fd="'+x.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted)">موردی نیست.</td></tr>'}
 $('fYear').onchange=drawFin;$('fMonth').onchange=drawFin;
-$('fAmount').oninput=function(){var n=+ND(this.value);$('fPrev').textContent=n?money(n)+' تومان':''};
+$('fAmount').oninput=function(){var v=this.value,pos=this.selectionStart,db=ND(v.slice(0,pos)).length,n=ND(v).replace(/^0+/,''),f=n?money(+n):'';this.value=f;
+  var c=0,np=0;for(;np<f.length&&c<db;np++)if(/[۰-۹]/.test(f[np]))c++;try{this.setSelectionRange(np,np)}catch(e){}$('fPrev').textContent=n?'تومان':''};
 function fReset(){fEdit=null;$('fAmount').value='';$('fNote').value='';$('fPrev').textContent='';$('fTitle').textContent='ثبت واریزی';$('fSave').textContent='ثبت واریزی';$('fCancel').hidden=true}
 $('fCancel').onclick=fReset;
 $('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=jget('fDate'),n=+ND($('fAmount').value);if(!d||!n)return;
@@ -553,18 +692,18 @@ $('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=
   try{if(fEdit)await patch('income','id=eq.'+fEdit,o);else await post('income',o);fReset();await loadFin();toast('ثبت شد')}catch(x){toast('ثبت نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}});
 $('fRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
   if(b.dataset.fd){if(confirm('این واریزی حذف شود؟')){try{await del('income','id=eq.'+b.dataset.fd);loadFin()}catch(x){toast('حذف نشد',1)}}}
-  if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=x.amount;$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent=money(x.amount)+' تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
-function initModules(){jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
+  if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
+function initModules(){jsel('mDate',today());jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
 
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
-  ['week','cal','stu','stats','fin','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
-  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu()}
+  ['week','cal','stu','comm','stats','fin','learn','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm')drawComm();if(t==='learn')loadLearn()}
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
-  jsel('eDate',today());jsel('rDate',today());buildMatrix();
+  jsel('eDate',today());jsel('rDate',today());buildEntry();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
   loadCore();loadPrefsRemote();initModules();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
