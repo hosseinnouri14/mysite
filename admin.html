@@ -71,6 +71,13 @@ summary{cursor:pointer;font-weight:500}
 .lcard{text-align:right;background:var(--surface);border:1px solid var(--line);border-inline-start:5px solid var(--c);border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:4px;align-content:start}.lcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .ug{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin:10px 0}.ug button{border:1px solid var(--line);background:var(--bg);border-radius:8px;min-height:36px;cursor:pointer}.ug button.on{background:var(--okbg);color:var(--okink);border-color:var(--okink);font-weight:700}
 .stks{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:10px}.stk{background:var(--s);color:#2b211d;border-radius:4px 4px 16px 4px;padding:8px;box-shadow:0 3px 8px rgba(0,0,0,.2);display:grid;gap:4px}.stk textarea,.stk input{background:transparent;border:0;color:inherit;min-height:84px;padding:2px;width:100%}.stk input{min-height:0;font-weight:700;border-bottom:1px dashed rgba(0,0,0,.3)}.stk .btns{justify-content:space-between}.stk button{border:0;background:rgba(0,0,0,.12);border-radius:6px;cursor:pointer;color:inherit;padding:0 10px;font-size:13px}
+.grep{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:14px;align-items:start}@media(max-width:860px){.grep{grid-template-columns:1fr}}
+.edbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;background:var(--soft);align-items:center}
+.edbar button,.edbar select{width:auto;padding:1px 10px;border:1px solid var(--line);background:var(--surface);border-radius:7px;cursor:pointer;min-height:30px}.edbar button[aria-pressed=true]{background:var(--ink);color:var(--bg)}.edbar input[type=color]{width:34px;height:30px;padding:0;border:1px solid var(--line);border-radius:7px;background:none}.edbar .grow{flex:1}
+.edit{min-height:360px;border:1px solid var(--line);border-radius:0 0 12px 12px;background:var(--surface);padding:14px 16px;line-height:2;outline:none;overflow-wrap:anywhere}.edit:focus{border-color:var(--accent)}.edit h2{font-size:21px;margin:.5em 0}.edit h3{font-size:18px;margin:.5em 0}.edit blockquote{border-inline-start:4px solid var(--accent);margin:8px 0;padding:2px 12px;color:var(--muted)}.edit a{color:var(--accent)}.edit p{margin:.4em 0}
+#dSrc{min-height:360px;font-family:monospace;border-radius:0 0 12px 12px;line-height:1.6}
+.rli{display:block;width:100%;text-align:right;border:0;border-bottom:1px solid var(--line);background:none;padding:8px 4px;cursor:pointer}.rli small{color:var(--muted);display:block}.rli[aria-current=true]{background:var(--soft)}
+.stat{font-size:12.5px;border-radius:99px;padding:0 10px;color:#fff;font-weight:700;display:inline-block}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -82,7 +89,7 @@ summary{cursor:pointer;font-weight:500}
 <div class="wrap" style="padding-top:12px">
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
@@ -95,8 +102,11 @@ summary{cursor:pointer;font-weight:500}
 <section id="t-stu" hidden>
   <div class="card"><h2>افزودن دانش‌آموز</h2><p class="hint">برای شروع فقط نام و ترم کافی است؛ بقیه اطلاعات را بعداً در «جزئیات» وارد کنید.</p>
     <form id="fAdd" class="bar"><input id="aName" placeholder="نام دانش‌آموز" required style="flex:1 1 180px;width:auto"><select id="aTerm" style="flex:1 1 160px;width:auto"></select><button class="btn" type="submit">افزودن</button></form></div>
-  <div class="bar" style="margin-bottom:10px"><input id="sq" placeholder="جستجوی نام یا ترم" style="max-width:260px"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="sall" style="width:auto"> نمایش غیرفعال‌ها</label><span id="scount" class="hint" style="margin:0"></span></div>
-  <div class="tbl"><table><thead><tr><th>کد</th><th>نام</th><th>ترم</th><th>تماس</th><th>سن</th><th>پایه</th><th>زمان کلاس‌ها</th><th></th></tr></thead><tbody id="stb"></tbody></table></div>
+  <div class="bar" style="margin-bottom:10px"><div class="seg" id="sFilter"></div>
+    <select id="sSort" style="width:auto" aria-label="ترتیب نمایش"><option value="name">ترتیب: نام (الف تا ی)</option><option value="term">ترتیب: ترم</option><option value="code">ترتیب: کد (قدیمی‌ترین)</option><option value="new">ترتیب: جدیدترین</option><option value="ended">ترتیب: تاریخ پایان ترم</option></select>
+    <input id="sq" placeholder="جستجوی نام یا ترم" style="max-width:220px"><span id="scount" class="hint" style="margin:0"></span></div>
+  <div class="card" id="sBulk" hidden style="padding:10px 14px"><div class="bar"><b id="sSel"></b><button class="btn" id="bSms">ارسال پیامک</button><button class="btn ghost" id="bEnd">پایان ترم (غیرفعال)</button><button class="btn ghost" id="bAct">فعال‌سازی مجدد</button><select id="bTerm" style="width:auto" aria-label="ترم جدید"></select><button class="btn ghost" id="bSetTerm">تغییر ترم</button><button class="btn ghost" id="bClear">لغو انتخاب</button></div></div>
+  <div class="tbl"><table style="min-width:900px"><thead><tr><th style="width:36px"><input type="checkbox" id="sAllChk" style="width:auto" aria-label="انتخاب همه"></th><th>کد</th><th>نام</th><th>ترم</th><th>تماس</th><th>والد</th><th>سن</th><th>پایه</th><th>زمان کلاس‌ها</th><th>وضعیت</th><th></th></tr></thead><tbody id="stb"></tbody></table></div>
 </section>
 
 <section id="t-stats" hidden>
@@ -147,7 +157,10 @@ summary{cursor:pointer;font-weight:500}
       <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان}</p>
       <label>تاریخ در پیام<div class="jsel" id="mDate"></div></label>
       <div class="btns" style="align-self:end"><button class="btn" id="smsSave" type="button">ذخیره قالب</button><button class="btn ghost" id="smsReset" type="button">بازگرداندن پیش‌فرض</button></div></div></div>
-  <input id="mq" placeholder="جستجوی دانش‌آموز" style="max-width:260px;margin-bottom:10px"><div id="mlist"></div>
+  <div class="bar" style="margin-bottom:10px"><input id="mq" placeholder="جستجوی دانش‌آموز" style="max-width:220px"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="mAll" style="width:auto"> انتخاب همه</label><button class="btn" id="mBulk">ارسال گروهی به انتخاب‌شده‌ها</button><span id="mSel" class="hint" style="margin:0"></span></div>
+  <div id="mlist"></div>
+  <details class="card" style="margin-top:16px"><summary>راه‌اندازی ارسال خودکار با پنل پیامکی</summary><p class="hint" style="margin-top:8px">برای اینکه «ارسال گروهی» مستقیم از پنل انجام شود، تابع <b>send-sms</b> را در Supabase بسازید و اطلاعات پنل پیامکی (کاوه‌نگار، ملی‌پیامک یا هر پنل دیگر) را در Secrets بگذارید. مراحل کامل در فایل <b>sms-setup.md</b> است. تا آن موقع می‌توانید شماره‌ها و متن‌ها را کپی یا به‌صورت CSV بگیرید و در وب‌سایت پنل پیامکی بارگذاری کنید.</p></details>
+  <div class="card" style="margin-top:16px"><h2>تاریخچه پیامک‌های ارسال‌شده از پنل</h2><div class="tbl"><table><thead><tr><th style="text-align:right">زمان</th><th style="text-align:right">گیرنده</th><th>وضعیت</th><th style="text-align:right">متن</th></tr></thead><tbody id="smsLog"></tbody></table></div></div>
 </section>
 
 <section id="t-learn" hidden>
@@ -156,6 +169,26 @@ summary{cursor:pointer;font-weight:500}
   <div class="kpis" id="lKpi"></div>
   <div class="card"><h2>واحدهای تمام‌شده در ۶ ماه اخیر</h2><div class="chart" id="lChart"></div></div>
   <div class="lcards" id="lList"></div>
+</section>
+
+<section id="t-rep" hidden>
+  <div id="repwarn" class="warnbox" hidden>جدول گزارش روزانه ساخته نشده است. فایل <b>supabase-admin4.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="margin-bottom:8px"><div class="jsel" id="dDate"></div><button class="btn ghost" id="dPrev">روز قبل</button><button class="btn ghost" id="dNext">روز بعد</button><button class="btn ghost" id="dToday">امروز</button></div>
+  <div class="grep">
+    <div class="card" style="padding:14px"><div class="bar" style="justify-content:space-between;margin-bottom:8px"><h2 id="dLabel" style="margin:0"></h2><span id="dState" class="hint" style="margin:0" role="status"></span></div>
+      <div class="edbar" id="dBar"><select id="dBlk" aria-label="قالب بند"><option value="p">پاراگراف</option><option value="h2">عنوان ۲</option><option value="h3">عنوان ۳</option><option value="blockquote">نقل‌قول</option></select>
+        <button type="button" data-c="bold" title="درشت"><b>B</b></button><button type="button" data-c="italic" title="کج"><i>I</i></button><button type="button" data-c="underline" title="زیرخط"><u>U</u></button><button type="button" data-c="strikeThrough" title="خط‌خورده"><s>S</s></button>
+        <button type="button" data-c="insertUnorderedList">• فهرست</button><button type="button" data-c="insertOrderedList">۱. فهرست</button>
+        <button type="button" data-c="justifyRight">راست</button><button type="button" data-c="justifyCenter">وسط</button><button type="button" data-c="justifyLeft">چپ</button>
+        <button type="button" data-c="link">لینک</button><button type="button" data-c="unlink">حذف لینک</button><input type="color" id="dClr" value="#c0392b" title="رنگ متن" aria-label="رنگ متن"><button type="button" data-c="removeFormat">پاک‌کردن قالب</button>
+        <button type="button" data-c="undo" title="برگردان">↶</button><button type="button" data-c="redo" title="جلو">↷</button><span class="grow"></span>
+        <button type="button" id="dTabV" aria-pressed="true">بصری</button><button type="button" id="dTabT" aria-pressed="false">متن</button></div>
+      <div id="dEd" class="edit" contenteditable="true" dir="rtl" role="textbox" aria-multiline="true" aria-label="متن گزارش روزانه" spellcheck="false"></div>
+      <textarea id="dSrc" dir="ltr" hidden aria-label="کد HTML گزارش"></textarea>
+      <div class="bar" style="margin-top:10px;justify-content:space-between"><div class="btns"><button class="btn" id="dSave" type="button">ذخیره</button><button class="btn ghost" id="dSum" type="button">درج خلاصه این روز (کلاس‌ها و برنامه‌ها)</button></div><span id="dCount" class="hint" style="margin:0"></span></div>
+      <p class="hint" style="margin:6px 0 0">متن به‌صورت خودکار ذخیره می‌شود.</p></div>
+    <div class="card" style="padding:14px"><h2 style="font-size:17px">گزارش‌های ثبت‌شده</h2><input id="dq" placeholder="جستجو در گزارش‌ها" style="margin-bottom:6px"><div id="dList" style="max-height:60vh;overflow:auto"></div></div>
+  </div>
 </section>
 
 <section id="t-notes" hidden>
@@ -197,6 +230,16 @@ summary{cursor:pointer;font-weight:500}
     <div class="ug" id="lUnits"></div>
     <div class="bar" style="justify-content:space-between"><b>یادداشت‌های چسبان (نکات مهم)</b><button class="btn" id="lStkAdd" type="button">+ یادداشت</button></div>
     <div class="stks" id="lNotes"></div></div></dialog>
+
+<dialog id="dlgSms" style="width:min(780px,96vw)"><h2 style="margin-top:0">ارسال پیامک گروهی</h2>
+  <div class="fg"><label>قالب پیام<select id="bTpl"><option value="start">شروع دوره</option><option value="next">رفتن به دوره بعد</option><option value="absent">غیبت در جلسه</option><option value="custom">متن دلخواه</option></select></label>
+  <label>ارسال به<select id="bTo"><option value="pf">شماره والد (در نبود آن، شماره دانش‌آموز)</option><option value="p">فقط شماره والد</option><option value="s">فقط شماره دانش‌آموز</option></select></label>
+  <label class="w">متن پیام<textarea id="bText" style="min-height:100px"></textarea></label>
+  <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان} — تاریخ پیام از تب «ارتباط با فراگیران» گرفته می‌شود.</p></div>
+  <p id="bInfo" class="hint" style="margin-top:10px"></p>
+  <div class="tbl" style="max-height:34vh;overflow:auto"><table style="min-width:560px"><thead><tr><th style="text-align:right">دانش‌آموز</th><th>شماره</th><th style="text-align:right">پیام</th><th>وضعیت</th></tr></thead><tbody id="bRows"></tbody></table></div>
+  <div class="btns" style="margin-top:12px"><button class="btn" id="bSend">ارسال از طریق پنل پیامکی</button><button class="btn ghost" id="bCopy">کپی شماره‌ها</button><button class="btn ghost" id="bCsv">دانلود CSV</button><button class="btn ghost" type="button" data-close>بستن</button></div>
+  <p id="bRes" role="status" style="margin:8px 0 0;font-weight:700"></p><div id="bErr" class="warnbox" style="margin-top:8px" hidden></div></dialog>
 
 <dialog id="dlgNote"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
   <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:220px"></textarea></label>
@@ -340,15 +383,37 @@ $('cDel').onclick=async function(){if(!confirm('این کلاس حذف شود؟'
 document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=function(){b.closest('dialog').close()}});
 
 /* ---------- دانش‌آموزان ---------- */
+var selStu=new Set(),sFil='active',sSortK='name';
+function tIdx(t){var i=TOPICS.indexOf(t);return i<0?99:i}
+function stuList(){var q=$('sq').value.trim(),L=students.filter(function(s){return (sFil==='all'||(sFil==='active')===!!s.active)&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
+  var cmp={name:function(a,b){return a.name.localeCompare(b.name,'fa')},term:function(a,b){return tIdx(a.term)-tIdx(b.term)||a.name.localeCompare(b.name,'fa')},code:function(a,b){return a.id-b.id},new:function(a,b){return b.id-a.id},ended:function(a,b){return String(b.ended_at||'').localeCompare(String(a.ended_at||''))||a.name.localeCompare(b.name,'fa')}}[sSortK];
+  return L.sort(function(a,b){if(sFil==='all'&&!!a.active!==!!b.active)return a.active?-1:1;return cmp(a,b)})}
 function drawStu(){
-  var q=$('sq').value.trim(),all=$('sall').checked,L=students.filter(function(s){return (all||s.active)&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
+  var na=students.filter(function(s){return s.active}).length,ni=students.length-na;
+  $('sFilter').innerHTML=[['active','فعال ('+FD(na)+')'],['inactive','غیرفعال ('+FD(ni)+')'],['all','همه ('+FD(students.length)+')']].map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(sFil===x[0])+'">'+x[1]+'</button>'}).join('');
+  var L=stuList();selStu.forEach(function(id){if(!stu(id))selStu.delete(id)});
   $('scount').textContent=FD(L.length)+' دانش‌آموز';
   $('stb').innerHTML=L.map(function(s){var t=sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' '+tm(c.slot)}).join('، ');
-    return '<tr><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b>'+(s.active?'':' <small>(غیرفعال)</small>')+'</td><td>'+dot(s.term)+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">دانش‌آموزی پیدا نشد.</td></tr>'}
-$('sq').oninput=drawStu;$('sall').onchange=drawStu;
+    return '<tr><td><input type="checkbox" data-sel="'+s.id+'"'+(selStu.has(s.id)?' checked':'')+' style="width:auto" aria-label="انتخاب '+esc(s.name)+'"></td><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b></td><td>'+dot(s.term)+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td dir="ltr" style="text-align:right">'+esc(s.parent_phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td>'+(s.active?'<span class="stat" style="background:var(--okink);color:var(--okbg)">فعال</span>':'<span class="stat" style="background:var(--muted)">پایان ترم'+(s.ended_at?' · '+jlabel(new Date(s.ended_at+'T00:00:00Z')):'')+'</span>')+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button> '+(s.active?'<button class="mini" style="background:var(--muted)" data-end="'+s.id+'">پایان ترم</button>':'<button class="mini" style="background:var(--okink);color:var(--okbg)" data-act="'+s.id+'">فعال‌سازی</button>')+'</td></tr>'}).join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted)">دانش‌آموزی در این فهرست نیست.</td></tr>';
+  $('sAllChk').checked=L.length>0&&L.every(function(s){return selStu.has(s.id)});
+  $('sBulk').hidden=!selStu.size;$('sSel').textContent=FD(selStu.size)+' دانش‌آموز انتخاب شده'}
+$('sq').oninput=drawStu;$('sSort').onchange=function(){sSortK=this.value;drawStu()};
+$('sFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){sFil=b.dataset.f;selStu.clear();if(sFil==='inactive'&&$('sSort').value==='name'){sSortK='ended';$('sSort').value='ended'}drawStu()}});
+$('sAllChk').onchange=function(){var on=this.checked;stuList().forEach(function(s){on?selStu.add(s.id):selStu.delete(s.id)});drawStu()};
+$('bClear').onclick=function(){selStu.clear();drawStu()};
+async function setActive(ids,on){if(!ids.length)return;
+  try{await patch('students','id=in.('+ids.join(',')+')',{active:on,ended_at:on?null:iso(today())});
+    if(!on){var cls=sched.filter(function(c){return ids.indexOf(c.student_id)>-1});
+      if(cls.length&&confirm('کلاس‌های هفتگی این دانش‌آموزان ('+FD(cls.length)+' کلاس) هم از جدول برنامه حذف شود؟'))await del('schedule','student_id=in.('+ids.join(',')+')')}
+    selStu.clear();await loadCore();toast(on?'فعال شد':'به لیست غیرفعال‌ها منتقل شد')}catch(e){toast('انجام نشد؛ آیا supabase-admin4.sql اجرا شده است؟',1)}}
+$('bEnd').onclick=function(){if(confirm('ترم '+FD(selStu.size)+' دانش‌آموز پایان‌یافته ثبت شود؟'))setActive(Array.from(selStu),false)};
+$('bAct').onclick=function(){setActive(Array.from(selStu),true)};
+$('bSetTerm').onclick=async function(){var ids=Array.from(selStu);if(!ids.length)return;try{await patch('students','id=in.('+ids.join(',')+')',{term:$('bTerm').value});selStu.clear();await loadCore();toast('ترم تغییر کرد')}catch(e){toast('انجام نشد',1)}};
+$('bSms').onclick=function(){openBulk()};
 $('fAdd').addEventListener('submit',async function(e){e.preventDefault();
   try{await post('students',{name:$('aName').value.trim(),term:$('aTerm').value||null});$('aName').value='';await loadCore();toast('دانش‌آموز اضافه شد')}catch(x){toast('افزودن ممکن نشد',1)}});
-$('stb').addEventListener('click',function(e){var b=e.target.closest('button[data-s]');if(b)openStu(stu(+b.dataset.s))});
+$('stb').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.s)openStu(stu(+b.dataset.s));else if(b.dataset.end){if(confirm('ترم این دانش‌آموز پایان‌یافته ثبت شود؟'))setActive([+b.dataset.end],false)}else if(b.dataset.act)setActive([+b.dataset.act],true)});
+$('stb').addEventListener('change',function(e){var t=e.target;if(t.dataset.sel){var id=+t.dataset.sel;t.checked?selStu.add(id):selStu.delete(id);drawStu()}});
 function openStu(s){
   $('sId').value=s.id;$('sTitle').textContent='کد '+FD(s.id)+' — '+s.name;$('sName').value=s.name;
   $('sTerm').innerHTML='<option value="">—</option>'+opts(TOPICS.map(function(t){return [t,t]}),s.term);
@@ -358,7 +423,7 @@ function openStu(s){
   $('sTimes').innerHTML=t.length?t.map(function(c){return DAYS[c.day]+' '+rng(c.slot,TYPES[c.class_type][1])+' · '+TYPES[c.class_type][0]}).join('<br>'):'هنوز زمانی تعیین نشده.';
   $('dlgStu').showModal()}
 $('fStu').addEventListener('submit',async function(e){e.preventDefault();
-  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,parent_name:$('sPName').value.trim()||null,parent_phone:$('sPPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked};
+  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,parent_name:$('sPName').value.trim()||null,parent_phone:$('sPPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked,ended_at:$('sActive').checked?null:((stu(+$('sId').value)||{}).ended_at||iso(today()))};
   try{await patch('students','id=eq.'+$('sId').value,o);$('dlgStu').close();await loadCore();toast('ذخیره شد')}catch(x){toast('ذخیره نشد',1)}});
 $('sDel').onclick=async function(){if(!confirm('این دانش‌آموز حذف شود؟ (کلاس‌های او در جدول بدون دانش‌آموز می‌مانند.) برای نگه داشتن سابقه بهتر است او را غیرفعال کنید.'))return;
   try{await del('students','id=eq.'+$('sId').value);$('dlgStu').close();await loadCore();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
@@ -545,17 +610,18 @@ function smsText(k){return (prefs.sms&&prefs.sms[k])||DEFSMS[k]}
 function nextOf(t){var i=TOPICS.indexOf(t);if(i<0||i+1>=TOPICS.length)return '';return TOPICS[i+1].replace(/ ترم .*$/,'')===t.replace(/ ترم .*$/,'')?TOPICS[i+1]:''}
 function phoneN(p){var d=ND(p||'');if(d.indexOf('0098')===0)d=d.slice(4);else if(d.indexOf('98')===0&&d.length>=12)d=d.slice(2);else if(d.charAt(0)==='0')d=d.slice(1);return d?'+98'+d:''}
 function stuTime(s){return sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' ساعت '+tm(c.slot)}).join('، ')||'طبق هماهنگی'}
-function smsFor(s){var dt=jget('mDate')||today(),nx=nextSel[s.id]||nextOf(s.term);
-  return smsText(smsKey).replace(/\{(.+?)\}/g,function(m,k){var v={'والد':s.parent_name||'والدین گرامی','نام':s.name,'ترم':s.term||'','ترم_بعد':nx,'تاریخ':jlabel(dt),'زمان':stuTime(s)}[k];return v===undefined?m:v})}
+function fillSms(tpl,s){var dt=jget('mDate')||today(),nx=nextSel[s.id]||nextOf(s.term);
+  return tpl.replace(/\{(.+?)\}/g,function(m,k){var v={'والد':s.parent_name||'والدین گرامی','نام':s.name,'ترم':s.term||'','ترم_بعد':nx,'تاریخ':jlabel(dt),'زمان':stuTime(s)}[k];return v===undefined?m:v})}
+function smsFor(s){return fillSms(smsText(smsKey),s)}
 function drawComm(){
   document.querySelectorAll('#smsT button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.k===smsKey)});
   var q=$('mq').value.trim(),L=students.filter(function(s){return s.active&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});
   $('mlist').innerHTML=L.map(function(s){var ph=phoneN(s.parent_phone),msg=smsFor(s),needNext=smsKey==='next'&&!(nextSel[s.id]||nextOf(s.term)),ok=ph&&!needNext;
-    return '<div class="msg"><b>'+esc(s.name)+'</b> <small>'+dot(s.term)+esc(s.term)+' · '+(s.parent_phone?esc(s.parent_name||'والد')+' — <span dir="ltr">'+esc(s.parent_phone)+'</span>':'شماره والد ثبت نشده')+'</small>'+
+    return '<div class="msg"><label style="display:inline-flex;gap:8px;align-items:center"><input type="checkbox" data-msel="'+s.id+'"'+(selStu.has(s.id)?' checked':'')+' style="width:auto" aria-label="انتخاب '+esc(s.name)+'"><b>'+esc(s.name)+'</b></label> <small>'+dot(s.term)+esc(s.term)+' · '+(s.parent_phone?esc(s.parent_name||'والد')+' — <span dir="ltr">'+esc(s.parent_phone)+'</span>':'شماره والد ثبت نشده')+'</small>'+
      (smsKey==='next'?'<label style="margin-top:6px;max-width:260px">دوره بعد<select data-nx="'+s.id+'"><option value="">— انتخاب کنید —</option>'+opts(TOPICS.map(function(t){return [t,t]}),nextSel[s.id]||nextOf(s.term))+'</select></label>':'')+
      '<p class="hint" style="margin:8px 0">'+esc(msg)+'</p><div class="btns">'+
      (ok?'<a class="btn" href="sms:'+ph+'?body='+encodeURIComponent(msg)+'">ارسال پیامک</a><a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/'+ph.slice(1)+'?text='+encodeURIComponent(msg)+'">واتساپ</a>':'<button class="btn" disabled>ارسال پیامک</button>')+
-     '<button class="btn ghost" data-cp="'+s.id+'">کپی متن</button>'+(!ph?'<button class="btn ghost" data-sd="'+s.id+'">ثبت شماره والد</button>':'')+(needNext?'<small class="hint">دوره بعد را انتخاب کنید</small>':'')+'</div></div>'}).join('')||'<p class="hint">دانش‌آموز فعالی نیست.</p>'}
+     '<button class="btn ghost" data-cp="'+s.id+'">کپی متن</button>'+(!ph?'<button class="btn ghost" data-sd="'+s.id+'">ثبت شماره والد</button>':'')+(needNext?'<small class="hint">دوره بعد را انتخاب کنید</small>':'')+'</div></div>'}).join('')||'<p class="hint">دانش‌آموز فعالی نیست.</p>';updMSel()}
 $('smsT').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;smsKey=b.dataset.k;$('smsTxt').value=smsText(smsKey);drawComm()});
 $('smsTxt').oninput=function(){prefs.sms=prefs.sms||{};prefs.sms[smsKey]=this.value;drawComm()};
 $('smsSave').onclick=savePrefs;
@@ -566,6 +632,111 @@ $('mlist').addEventListener('click',async function(e){var b=e.target.closest('bu
   if(b.dataset.cp){try{await navigator.clipboard.writeText(smsFor(stu(+b.dataset.cp)));toast('کپی شد')}catch(x){}}
   if(b.dataset.sd)openStu(stu(+b.dataset.sd))});
 $('smsTxt').value=smsText('start');
+
+/* ========== ارسال گروهی پیامک (زیرساخت پنل پیامکی) ========== */
+function updMSel(){$('mSel').textContent=selStu.size?FD(selStu.size)+' نفر انتخاب شده':'';var L=students.filter(function(s){var q=$('mq').value.trim();return s.active&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)});$('mAll').checked=L.length>0&&L.every(function(s){return selStu.has(s.id)})}
+$('mlist').addEventListener('change',function(e){var t=e.target;if(t.dataset.msel){var id=+t.dataset.msel;t.checked?selStu.add(id):selStu.delete(id);updMSel()}});
+$('mAll').onchange=function(){var on=this.checked,q=$('mq').value.trim();students.filter(function(s){return s.active&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)}).forEach(function(s){on?selStu.add(s.id):selStu.delete(s.id)});drawComm()};
+$('mBulk').onclick=function(){if(!selStu.size){toast('اول دانش‌آموزان را انتخاب کنید',1);return}openBulk()};
+function recip(s,m){var a=phoneN(s.parent_phone),b=phoneN(s.phone);return m==='p'?a:m==='s'?b:(a||b)}
+function validPh(p){return /^\+989\d{9}$/.test(p)}
+var bData=[];
+function openBulk(){if(!selStu.size)return;$('bTpl').value=smsKey;$('bText').value=smsText(smsKey);$('bRes').textContent='';$('bErr').hidden=true;buildBulk();$('dlgSms').showModal()}
+$('bTpl').onchange=function(){if(this.value!=='custom')$('bText').value=smsText(this.value);buildBulk()};
+$('bText').oninput=buildBulk;$('bTo').onchange=buildBulk;
+function buildBulk(){var tpl=$('bText').value;
+  bData=Array.from(selStu).map(stu).filter(Boolean).map(function(s){var ph=recip(s,$('bTo').value),txt=fillSms(tpl,s),prob='';
+    if(!ph)prob='شماره ندارد';else if(!validPh(ph))prob='شماره نامعتبر';else if(/\{ترم_بعد\}/.test(tpl)&&!(nextSel[s.id]||nextOf(s.term)))prob='ترم بعد مشخص نیست';else if(/\{[^}]+\}/.test(txt))prob='متغیر ناشناخته';
+    return {s:s,txt:txt,prob:prob,local:validPh(ph)?'0'+ph.slice(3):''}});
+  var ok=bData.filter(function(r){return !r.prob}).length;
+  $('bInfo').textContent=FD(ok)+' پیام آماده ارسال است'+(bData.length-ok?' و '+FD(bData.length-ok)+' مورد مشکل دارد (ارسال نمی‌شود).':'.');
+  $('bRows').innerHTML=bData.map(function(r){return '<tr><td style="text-align:right">'+esc(r.s.name)+'</td><td dir="ltr">'+esc(r.local)+'</td><td style="text-align:right;max-width:280px;overflow-wrap:anywhere">'+esc(r.txt)+'</td><td>'+(r.prob?'<span style="color:var(--badink)">'+r.prob+'</span>':'✓')+'</td></tr>'}).join('');
+  $('bSend').disabled=!ok}
+$('bCopy').onclick=async function(){var n=bData.filter(function(r){return !r.prob}).map(function(r){return r.local});try{await navigator.clipboard.writeText(n.join(','));toast('شماره‌ها کپی شد ('+FD(n.length)+')')}catch(e){}};
+$('bCsv').onclick=function(){var L=['mobile,name,message'];bData.filter(function(r){return !r.prob}).forEach(function(r){L.push([r.local,'"'+r.s.name.replace(/"/g,'""')+'"','"'+r.txt.replace(/"/g,'""')+'"'].join(','))});
+  var u=URL.createObjectURL(new Blob(['\ufeff'+L.join('\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='sms-list.csv';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
+$('bSend').onclick=async function(){var ok=bData.filter(function(r){return !r.prob});if(!ok.length)return;
+  if(!confirm(FD(ok.length)+' پیامک از طریق پنل پیامکی ارسال شود؟'))return;
+  $('bSend').disabled=true;$('bErr').hidden=true;$('bRes').textContent='در حال ارسال…';
+  try{var r=await fetch(C.url+'/functions/v1/send-sms',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({messages:ok.map(function(x){return {to:x.local,text:x.txt}})})});
+    if(r.status===404)throw new Error('nofn');
+    var j=await r.json().catch(function(){return {}});if(!r.ok||j.error)throw new Error(j.error||('http '+r.status));
+    var res=j.results||[],batch=Date.now().toString(36),logs=ok.map(function(x,i){var q=res[i]||{};return {phone:x.local,name:x.s.name,message:x.txt,status:q.ok?'sent':'failed',detail:q.error||q.id||'',batch:batch}});
+    rest('sms_log',{method:'POST',body:JSON.stringify(logs),headers:{Prefer:'return=minimal'}}).catch(function(){});
+    var sent=logs.filter(function(l){return l.status==='sent'}).length;
+    $('bRes').textContent='ارسال شد: '+FD(sent)+' از '+FD(logs.length)+(sent<logs.length?' — '+FD(logs.length-sent)+' ناموفق (جزئیات در تاریخچه)':'');
+    loadSmsLog()}
+  catch(e){$('bRes').textContent='';$('bErr').hidden=false;$('bErr').textContent=e.message==='nofn'?'تابع send-sms هنوز در Supabase ساخته نشده است. مراحل در فایل sms-setup.md است. تا آن موقع از «کپی شماره‌ها» یا «دانلود CSV» استفاده کنید.':'ارسال نشد: '+e.message}
+  $('bSend').disabled=false};
+async function loadSmsLog(){try{var L=await rest('sms_log?select=*&order=id.desc&limit=50');
+  $('smsLog').innerHTML=L.map(function(l){return '<tr><td style="text-align:right;white-space:nowrap">'+new Date(l.created_at).toLocaleString('fa-IR')+'</td><td style="text-align:right">'+esc(l.name)+' <small dir="ltr">'+esc(l.phone)+'</small></td><td>'+(l.status==='sent'?'<span class="stat" style="background:var(--okink);color:var(--okbg)">ارسال شد</span>':'<span class="stat" style="background:var(--badink)" title="'+esc(l.detail)+'">ناموفق</span>')+'</td><td style="text-align:right;overflow-wrap:anywhere">'+esc((l.message||'').slice(0,90))+'</td></tr>'}).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--muted)">هنوز پیامکی از پنل ارسال نشده است.</td></tr>'}catch(e){}}
+
+/* ========== گزارش روزانه (ویرایشگر) ========== */
+var OKT={P:1,BR:1,B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,DEL:1,UL:1,OL:1,LI:1,H2:1,H3:1,H4:1,BLOCKQUOTE:1,A:1,SPAN:1,FONT:1,DIV:1,HR:1,CODE:1,PRE:1};
+function cleanHTML(h){var d=new DOMParser().parseFromString('<body>'+h+'</body>','text/html');
+  function walk(n){var out=document.createDocumentFragment();
+    n.childNodes.forEach(function(c){
+      if(c.nodeType===3){out.appendChild(document.createTextNode(c.nodeValue))}
+      else if(c.nodeType===1){var t=c.tagName;
+        if(!OKT[t]){if(/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|LINK|META)$/.test(t))return;out.appendChild(walk(c));return}
+        var e=document.createElement(t.toLowerCase());
+        if(t==='A'){var hr=c.getAttribute('href')||'';if(/^(https?:|mailto:|tel:)/i.test(hr)){e.setAttribute('href',hr);e.setAttribute('target','_blank');e.setAttribute('rel','noopener')}}
+        if(t==='FONT'&&/^#?[0-9a-f]{3,8}$/i.test(c.getAttribute('color')||''))e.setAttribute('color',c.getAttribute('color'));
+        var keep=[];(c.getAttribute('style')||'').split(';').forEach(function(p){var m=p.split(':');if(m.length===2){var k=m[0].trim().toLowerCase(),v=m[1].trim();
+          if((k==='color'||k==='background-color')&&/^(#[0-9a-f]{3,8}|rgb\([\d,\s]+\)|[a-z]+)$/i.test(v))keep.push(k+':'+v);
+          if(k==='text-align'&&/^(right|left|center|justify)$/.test(v))keep.push(k+':'+v)}});
+        if(keep.length)e.setAttribute('style',keep.join(';'));
+        e.appendChild(walk(c));out.appendChild(e)}});
+    return out}
+  var w=document.createElement('div');w.appendChild(walk(d.body));return w.innerHTML}
+var rDirty=false,rTimer=null,rMode='v',rSaved=null,rRange=null,rRecent=[];
+function rDay(){return jget('dDate')}
+function rHTML(){return rMode==='t'?cleanHTML($('dSrc').value):cleanHTML($('dEd').innerHTML)}
+function rEmpty(h){return !h.replace(/<(?!img)[^>]+>/g,'').replace(/&nbsp;/g,' ').trim()}
+function rCount(){var t=(rMode==='t'?$('dSrc').value.replace(/<[^>]+>/g,' '):($('dEd').innerText||$('dEd').textContent||'')).trim(),n=t?t.split(/\s+/).length:0;$('dCount').textContent=FD(n)+' کلمه'}
+function rState(m){$('dState').textContent=m}
+function onEdInput(){rDirty=true;rState('ذخیره نشده…');rCount();clearTimeout(rTimer);rTimer=setTimeout(saveReport,1500)}
+async function saveReport(){clearTimeout(rTimer);var d=rDay();if(!d||!rDirty)return;var day=iso(d),h=rHTML();rState('در حال ذخیره…');
+  try{if(rEmpty(h))await del('daily_reports','day=eq.'+day);
+    else await rest('daily_reports',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({day:day,content:h,updated_at:new Date().toISOString()})});
+    if(iso(rDay())===day){rDirty=false;rState('ذخیره شد ✓ '+new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}))}loadRecent()}
+  catch(e){rState('ذخیره نشد!');$('repwarn').hidden=e.message==='auth'}}
+async function flushReport(){if(rDirty)await saveReport()}
+async function loadReport(){var d=rDay();if(!d)return;await flushReport();d=rDay();
+  $('dLabel').textContent=DAYS[wd(d)]+' '+jlabel(d)+(iso(d)===iso(today())?' (امروز)':'');rState('');
+  try{var r=await rest('daily_reports?select=content&day=eq.'+iso(d));var h=r&&r[0]?cleanHTML(r[0].content):'';$('dEd').innerHTML=h;$('dSrc').value=h;$('repwarn').hidden=true}
+  catch(e){if(e.message!=='auth')$('repwarn').hidden=false}
+  rDirty=false;rCount();loadRecent()}
+async function loadRecent(){try{rRecent=await rest('daily_reports?select=day,content&order=day.desc&limit=200');drawRecent()}catch(e){}}
+function drawRecent(){var q=$('dq').value.trim(),cur=iso(rDay()||today());
+  $('dList').innerHTML=rRecent.filter(function(r){return !q||r.content.replace(/<[^>]+>/g,' ').indexOf(q)>-1}).map(function(r){var dd=new Date(r.day+'T00:00:00Z');
+    return '<button class="rli" data-d="'+r.day+'"'+(r.day===cur?' aria-current="true"':'')+'><b>'+DAYS[wd(dd)]+' '+jlabel(dd)+'</b><small>'+esc(r.content.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,70))+'</small></button>'}).join('')||'<p class="hint">گزارشی ثبت نشده است.</p>'}
+$('dq').oninput=drawRecent;
+$('dList').addEventListener('click',function(e){var b=e.target.closest('button[data-d]');if(b){jset('dDate',new Date(b.dataset.d+'T00:00:00Z'));loadReport()}});
+$('dDate').addEventListener('change',loadReport);
+$('dPrev').onclick=function(){jset('dDate',addd(rDay(),-1));loadReport()};$('dNext').onclick=function(){jset('dDate',addd(rDay(),1));loadReport()};$('dToday').onclick=function(){jset('dDate',today());loadReport()};
+$('dEd').addEventListener('input',onEdInput);$('dSrc').addEventListener('input',onEdInput);
+$('dEd').addEventListener('paste',function(e){e.preventDefault();var t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
+function saveSel(){var s=window.getSelection();if(s&&s.rangeCount&&$('dEd').contains(s.anchorNode))rRange=s.getRangeAt(0).cloneRange()}
+function restSel(){$('dEd').focus();if(rRange){var s=window.getSelection();s.removeAllRanges();s.addRange(rRange)}}
+['mouseup','keyup','focusout'].forEach(function(ev){$('dEd').addEventListener(ev,saveSel)});
+$('dBar').addEventListener('mousedown',function(e){if(e.target.closest('button'))e.preventDefault()});
+$('dBar').addEventListener('click',function(e){var b=e.target.closest('button[data-c]');if(!b||rMode==='t')return;restSel();var c=b.dataset.c;
+  if(c==='link'){var u=prompt('آدرس لینک (https://…)');if(u)document.execCommand('createLink',false,u)}else document.execCommand(c,false,null);onEdInput()});
+$('dBlk').onchange=function(){if(rMode==='t')return;restSel();document.execCommand('formatBlock',false,this.value);onEdInput()};
+$('dClr').oninput=function(){if(rMode==='t')return;restSel();document.execCommand('foreColor',false,this.value);onEdInput()};
+function rTab(m){if(m===rMode)return;if(m==='t'){$('dSrc').value=cleanHTML($('dEd').innerHTML);$('dEd').hidden=true;$('dSrc').hidden=false}else{$('dEd').innerHTML=cleanHTML($('dSrc').value);$('dSrc').hidden=true;$('dEd').hidden=false}
+  rMode=m;$('dTabV').setAttribute('aria-pressed',m==='v');$('dTabT').setAttribute('aria-pressed',m==='t');rCount()}
+$('dTabV').onclick=function(){rTab('v')};$('dTabT').onclick=function(){rTab('t')};
+$('dSave').onclick=function(){rDirty=true;saveReport()};
+$('dSum').onclick=async function(){var d=rDay();if(!d)return;var w=wd(d),cl=sched.filter(function(c){return c.day===w}),tk=[];
+  try{tk=await rest('tasks?select=*&day=eq.'+iso(d)+'&order=slot.asc')}catch(e){}
+  var h='';if(cl.length)h+='<h3>کلاس‌ها</h3><ul>'+cl.map(function(c){var s=stu(c.student_id);return '<li>'+tm(c.slot)+' — '+esc(s?s.name:TYPES[c.class_type][0])+(c.topic?' ('+esc(c.topic)+')':'')+' — '+TYPES[c.class_type][0]+'</li>'}).join('')+'</ul>';
+  if(tk.length)h+='<h3>برنامه‌های شخصی</h3><ul>'+tk.map(function(t){return '<li>'+(t.done?'✅ ':'⬜ ')+esc(t.title)+(t.tag?' ('+esc(t.tag)+')':'')+'</li>'}).join('')+'</ul>';
+  if(!h){toast('برای این روز کلاس یا برنامه‌ای ثبت نشده');return}
+  if(rMode==='t'){$('dSrc').value+=h}else $('dEd').innerHTML+=h;onEdInput()};
+window.addEventListener('beforeunload',function(e){if(rDirty){e.preventDefault();e.returnValue=''}});
+try{document.execCommand('defaultParagraphSeparator',false,'p')}catch(e){}
 
 /* ========== مسیر یادگیری ========== */
 var LK={book:['کتاب','فصل','#8a4fd8'],course:['دوره آموزشی','قسمت','#2b7de0'],podcast:['پادکست','قسمت','#e07b2b'],other:['سایر','بخش','#6b7a80']},STK=['#fff3a3','#ffd1dc','#c9ecff','#d4f5c9'];
@@ -693,13 +864,13 @@ $('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=
 $('fRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
   if(b.dataset.fd){if(confirm('این واریزی حذف شود؟')){try{await del('income','id=eq.'+b.dataset.fd);loadFin()}catch(x){toast('حذف نشد',1)}}}
   if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
-function initModules(){jsel('mDate',today());jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
+function initModules(){jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
 
 /* ---------- تب‌ها و شروع ---------- */
-function showTab(t){sessionStorage.setItem('tab',t);
+function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
-  ['week','cal','stu','comm','stats','fin','learn','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
-  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm')drawComm();if(t==='learn')loadLearn()}
+  ['week','cal','rep','stu','comm','stats','fin','learn','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='rep')loadReport();if(t==='learn')loadLearn()}
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
