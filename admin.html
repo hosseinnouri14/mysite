@@ -81,6 +81,8 @@ summary{cursor:pointer;font-weight:500}
 @media(min-width:900px){.tabs{flex-wrap:wrap;overflow:visible}}
 .note.done{opacity:.6}.note.over{border-color:var(--badink)}.due{font-size:13.5px;color:var(--muted)}.due.bad{color:var(--badink);font-weight:700}.ntags{display:flex;flex-wrap:wrap;gap:4px}
 .ntg{border:1px solid var(--c);color:var(--c);background:transparent;border-radius:99px;padding:0 12px;cursor:pointer;font-size:13.5px}.ntg.on{background:var(--c);color:#fff}.tagb{color:#fff;background:var(--c);border-radius:99px;padding:0 9px;font-size:12px}
+.avatar{width:40px;height:40px;border-radius:50%;border:2px solid var(--accent);padding:0;overflow:hidden;background:var(--soft);cursor:pointer;font-weight:700;color:var(--accent);flex:none;display:grid;place-items:center}.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.avprev{width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:block;margin:10px auto}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -88,7 +90,7 @@ summary{cursor:pointer;font-weight:500}
   <button class="btn" type="submit">ورود</button><p id="lerr" role="alert" style="margin:0;color:var(--badink)"></p></form>
 
 <div id="app" hidden>
-<header class="top"><div class="wrap"><h1>پنل مدیریت</h1><div class="btns"><button class="btn ghost" id="openSet">⚙ تنظیمات</button><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
+<header class="top"><div class="wrap"><div class="brand"><button type="button" class="avatar" id="avBtn" aria-label="تصویر پروفایل (برای تغییر بزنید)"><img id="avImg" alt="" hidden><span id="avInit">ح</span></button><h1>پنل مدیریت</h1></div><div class="btns"><button class="btn ghost" id="openSet">⚙ تنظیمات</button><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
 <div class="wrap" style="padding-top:12px">
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
@@ -243,8 +245,14 @@ summary{cursor:pointer;font-weight:500}
   <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان} — تاریخ پیام از تب «ارتباط با فراگیران» گرفته می‌شود.</p></div>
   <p id="bInfo" class="hint" style="margin-top:10px"></p>
   <div class="tbl" style="max-height:34vh;overflow:auto"><table style="min-width:560px"><thead><tr><th style="text-align:right">دانش‌آموز</th><th>شماره</th><th style="text-align:right">پیام</th><th>وضعیت</th></tr></thead><tbody id="bRows"></tbody></table></div>
-  <div class="btns" style="margin-top:12px"><button class="btn" id="bSend">ارسال از طریق پنل پیامکی</button><button class="btn ghost" id="bCopy">کپی شماره‌ها</button><button class="btn ghost" id="bCsv">دانلود CSV</button><button class="btn ghost" type="button" data-close>بستن</button></div>
+  <div class="btns" style="margin-top:12px"><button class="btn" id="bSend">ارسال از طریق پنل پیامکی</button><button class="btn ghost" id="bCopy">کپی شماره‌ها</button><button class="btn ghost" id="bCsv">دانلود CSV</button><button class="btn ghost" id="bTg">ارسال به تلگرام من</button><button class="btn ghost" type="button" data-close>بستن</button></div>
   <p id="bRes" role="status" style="margin:8px 0 0;font-weight:700"></p><div id="bErr" class="warnbox" style="margin-top:8px" hidden></div></dialog>
+
+<dialog id="dlgAvatar" style="width:min(420px,94vw)"><h2 style="margin-top:0">تصویر پروفایل</h2>
+  <img id="avPrev" class="avprev" alt="پیش‌نمایش" hidden>
+  <label>انتخاب تصویر از دستگاه<input type="file" id="avFile" accept="image/*"></label>
+  <p class="hint" style="margin:6px 0">تصویر به‌صورت مربع و کوچک ذخیره می‌شود.</p><p id="avMsg" role="status" style="margin:0;color:var(--badink)"></p>
+  <div class="btns" style="margin-top:12px"><button class="btn" id="avSave" type="button">ذخیره</button><button class="btn red" id="avDel" type="button">حذف تصویر</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
 <dialog id="dlgNote" style="width:min(640px,94vw)"><form id="fNote2"><h2 style="margin-top:0">یادداشت</h2><input type="hidden" id="nId">
   <div class="fg"><label class="w">عنوان<input id="nTitle"></label><label class="w">متن<textarea id="nBody" style="min-height:150px"></textarea></label>
@@ -262,6 +270,10 @@ summary{cursor:pointer;font-weight:500}
   <label>فونت برنامه<select id="pFont"></select></label>
   <label>اندازه متن<select id="pSize"><option value="14">کوچک</option><option value="15.5">معمولی</option><option value="17">بزرگ</option><option value="19">خیلی بزرگ</option></select></label>
   <label class="clr w" style="display:flex"><input type="color" id="pAccent"><span>رنگ اصلی برنامه</span><button class="mini" id="pAccentReset" type="button">پیش‌فرض</button></label></div>
+  <h3 style="margin:14px 0 4px;font-size:16px">فونت دلخواه شما</h3>
+  <p class="hint" style="margin:0 0 6px">فایل فونت را آپلود کنید تا فونت همه بخش‌های پنل عوض شود. بهتر است فرمت woff2 باشد (کم‌حجم‌تر). حداکثر ۱٫۵ مگابایت.</p>
+  <div class="fg"><label>فونت معمولی (woff2, woff, ttf, otf)<input type="file" id="pFontFile" accept=".woff2,.woff,.ttf,.otf"></label><label>فونت درشت (اختیاری)<input type="file" id="pFontBold" accept=".woff2,.woff,.ttf,.otf"></label>
+  <div class="btns w"><button class="btn" id="pFontUp" type="button">آپلود و استفاده</button><button class="btn red" id="pFontDel" type="button">حذف فونت آپلودشده</button><span id="pFontMsg" class="hint" style="margin:0" role="status"></span></div></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ ترم‌ها (رنگ کادر کلاس)</h3><div class="fg" id="pTopics"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ نوع کلاس (برچسب کلاس)</h3><div class="fg" id="pTypes"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های برنامه‌ریزی روزانه</h3><div id="pTags" style="display:grid;gap:8px"></div><button class="mini" id="pTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
@@ -525,17 +537,17 @@ function tcol(t){return (prefs.topics&&prefs.topics[t])||DEFTOPIC[t]||'#6b7a80'}
 function ycol(k){return (prefs.types&&prefs.types[k])||DEFTYPE[k]}
 function dot(t){return t?'<span class="dotc" style="background:'+tcol(t)+'"></span>':''}
 function inkFor(h){var n=parseInt(h.slice(1),16);return (0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))>150?'#10201e':'#ffffff'}
-function loadFont(f){if(f==='Vazirmatn'||f==='Tahoma'||document.getElementById('fnt-'+f))return;var l=document.createElement('link');l.id='fnt-'+f;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+f.replace(/ /g,'+')+':wght@400;500;700&display=swap';document.head.appendChild(l)}
+function loadFont(f){if(f==='Vazirmatn'||f==='Tahoma'||f==='PanelCustom'||document.getElementById('fnt-'+f))return;var l=document.createElement('link');l.id='fnt-'+f;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+f.replace(/ /g,'+')+':wght@400;500;700&display=swap';document.head.appendChild(l)}
 function applyPrefs(){var r=document.documentElement;
   if(prefs.theme==='light'||prefs.theme==='dark')r.dataset.theme=prefs.theme;else delete r.dataset.theme;
-  loadFont(prefs.font);r.style.setProperty('--font','"'+prefs.font+'"');r.style.setProperty('--fs',prefs.size+'px');
+  var ff=prefs.font==='PanelCustom'&&!CF?'Vazirmatn':prefs.font;loadFont(ff);r.style.setProperty('--font','"'+ff+'"'+(ff==='Vazirmatn'?'':',"Vazirmatn"'));r.style.setProperty('--fs',prefs.size+'px');
   if(prefs.accent){r.style.setProperty('--accent',prefs.accent);r.style.setProperty('--accent-ink',inkFor(prefs.accent))}else{r.style.removeProperty('--accent');r.style.removeProperty('--accent-ink')}
   Object.keys(TYPES).forEach(function(k){r.style.setProperty('--ty-'+k,ycol(k))})}
 applyPrefs();
 function redrawColors(){drawWeek();if(!$('t-cal').hidden)drawCal();if(!$('t-stu').hidden)drawStu()}
 function drawLegend(){$('legend').innerHTML='<span>ترم‌ها:</span>'+TOPICS.map(function(t){return '<span>'+dot(t)+t+'</span>'}).join('')+'<span style="margin-inline-start:8px">نوع کلاس:</span>'+Object.keys(TYPES).map(function(k){return '<span class="badge" style="background:var(--ty-'+k+')">'+TYPES[k][0]+'</span>'}).join('')}
 function openSet(){
-  $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS,prefs.font);$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
+  $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS.concat(CF?[['PanelCustom','فونت آپلودشده: '+CF.name]]:[]),prefs.font);$('pFontMsg').textContent='';$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
   $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
   $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
   drawTagSet();drawNTagSet();$('dlgSet').showModal()}
@@ -633,7 +645,7 @@ function drawComm(){
      (smsKey==='next'?'<label style="margin-top:6px;max-width:260px">دوره بعد<select data-nx="'+s.id+'"><option value="">— انتخاب کنید —</option>'+opts(TOPICS.map(function(t){return [t,t]}),nextSel[s.id]||nextOf(s.term))+'</select></label>':'')+
      '<p class="hint" style="margin:8px 0">'+esc(msg)+'</p><div class="btns">'+
      (ok?'<a class="btn" href="sms:'+ph+'?body='+encodeURIComponent(msg)+'">ارسال پیامک</a><a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/'+ph.slice(1)+'?text='+encodeURIComponent(msg)+'">واتساپ</a>':'<button class="btn" disabled>ارسال پیامک</button>')+
-     '<button class="btn ghost" data-cp="'+s.id+'">کپی متن</button>'+(!ph?'<button class="btn ghost" data-sd="'+s.id+'">ثبت شماره والد</button>':'')+(needNext?'<small class="hint">دوره بعد را انتخاب کنید</small>':'')+'</div></div>'}).join('')||'<p class="hint">دانش‌آموز فعالی نیست.</p>';updMSel()}
+     '<button class="btn ghost" data-cp="'+s.id+'">کپی متن</button><button class="btn ghost" data-tgm="'+s.id+'">ارسال به تلگرام من</button>'+(!ph?'<button class="btn ghost" data-sd="'+s.id+'">ثبت شماره والد</button>':'')+(needNext?'<small class="hint">دوره بعد را انتخاب کنید</small>':'')+'</div></div>'}).join('')||'<p class="hint">دانش‌آموز فعالی نیست.</p>';updMSel()}
 $('smsT').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;smsKey=b.dataset.k;$('smsTxt').value=smsText(smsKey);drawComm()});
 $('smsTxt').oninput=function(){prefs.sms=prefs.sms||{};prefs.sms[smsKey]=this.value;drawComm()};
 $('smsSave').onclick=savePrefs;
@@ -946,6 +958,69 @@ $('fRows').addEventListener('click',async function(e){var b=e.target.closest('bu
   if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
 function initModules(){jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
 
+/* ========== پروفایل، فونت دلخواه، تلگرام ========== */
+var CF=null,AV='',newAv=null;
+try{AV=localStorage.getItem('avatar')||''}catch(e){}
+function drawAvatar(){var i=$('avImg');if(AV){i.src=AV;i.hidden=false;$('avInit').hidden=true}else{i.hidden=true;$('avInit').hidden=false}}
+async function loadAvatar(){try{var r=await rest('settings?select=value&key=eq.avatar');if(r&&r[0]&&r[0].value&&r[0].value.img){AV=r[0].value.img;try{localStorage.setItem('avatar',AV)}catch(e){}}drawAvatar()}catch(e){}}
+$('avBtn').onclick=function(){newAv=null;$('avFile').value='';$('avMsg').textContent='';$('avPrev').hidden=!AV;if(AV)$('avPrev').src=AV;$('dlgAvatar').showModal()};
+$('avFile').onchange=function(){var f=this.files[0];if(!f)return;
+  if(!/^image\//.test(f.type)){$('avMsg').textContent='فایل باید تصویر باشد.';return}
+  var fr=new FileReader();fr.onload=function(){var im=new Image();
+    im.onload=function(){var m=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=256;var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,256);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,256,256);
+      newAv=c.toDataURL('image/jpeg',.85);$('avPrev').src=newAv;$('avPrev').hidden=false;$('avMsg').textContent=''};
+    im.onerror=function(){$('avMsg').textContent='این تصویر خوانده نشد.'};im.src=fr.result};
+  fr.onerror=function(){$('avMsg').textContent='فایل خوانده نشد.'};fr.readAsDataURL(f)};
+$('avSave').onclick=async function(){if(!newAv){$('avMsg').textContent='اول یک تصویر انتخاب کنید.';return}
+  AV=newAv;try{localStorage.setItem('avatar',AV)}catch(e){}drawAvatar();
+  try{await rest('settings',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key:'avatar',value:{img:AV}})});toast('تصویر پروفایل ذخیره شد')}catch(e){toast('روی همین دستگاه ذخیره شد؛ همگام‌سازی نشد',1)}
+  $('dlgAvatar').close()};
+$('avDel').onclick=async function(){AV='';try{localStorage.removeItem('avatar')}catch(e){}drawAvatar();try{await del('settings','key=eq.avatar')}catch(e){}$('dlgAvatar').close();toast('تصویر حذف شد')};
+drawAvatar();
+
+/* فونت: ذخیره در settings (همگام) + IndexedDB (کش سریع) */
+function b64ToBuf(b){var s=atob(b),a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a.buffer}
+function bufToB64(buf){var a=new Uint8Array(buf),s='',n=32768;for(var i=0;i<a.length;i+=n)s+=String.fromCharCode.apply(null,a.subarray(i,i+n));return btoa(s)}
+function idb(mode,fn){return new Promise(function(res,rej){try{var r=indexedDB.open('panel',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv')};r.onerror=function(){rej(r.error)};
+  r.onsuccess=function(){var tx=r.result.transaction('kv',mode),q=fn(tx.objectStore('kv'));tx.oncomplete=function(){res(q&&q.result)};tx.onerror=function(){rej(tx.error)}}}catch(e){rej(e)}})}
+function idbGet(k){return idb('readonly',function(s){return s.get(k)})}function idbSet(k,v){return idb('readwrite',function(s){return s.put(v,k)})}function idbDel(k){return idb('readwrite',function(s){return s.delete(k)})}
+function clearCF(){try{var L=[];document.fonts.forEach(function(f){if(f.family==='PanelCustom'||f.family==='"PanelCustom"')L.push(f)});L.forEach(function(f){document.fonts.delete(f)})}catch(e){}CF=null}
+async function useFont(rec){if(!rec||!rec.files||!window.FontFace)return false;
+  try{clearCF();for(var i=0;i<rec.files.length;i++){var f=rec.files[i],ff=new FontFace('PanelCustom',b64ToBuf(f.b64),{weight:String(f.w)});await ff.load();document.fonts.add(ff)}CF=rec;applyPrefs();return true}catch(e){clearCF();applyPrefs();return false}}
+async function loadFontRemote(){
+  try{var m=await rest('settings?select=v:value->>v&key=eq.font'),rv=m&&m[0]&&m[0].v;if(!rv||(CF&&CF.v===rv))return;
+    var r=await rest('settings?select=value&key=eq.font');if(r&&r[0]&&await useFont(r[0].value)){try{await idbSet('font',r[0].value)}catch(e){}if(!$('dlgSet').open)return;$('pFont').innerHTML=opts(FONTS.concat([['PanelCustom','فونت آپلودشده: '+CF.name]]),prefs.font)}}catch(e){}}
+try{idbGet('font').then(function(rec){if(rec)useFont(rec)}).catch(function(){})}catch(e){}
+$('pFontUp').onclick=async function(){var f1=$('pFontFile').files[0],f2=$('pFontBold').files[0],m=$('pFontMsg');
+  if(!f1){m.textContent='فایل فونت معمولی را انتخاب کنید.';return}
+  var all=[[400,f1]].concat(f2?[[700,f2]]:[]),tot=0;
+  for(var i=0;i<all.length;i++){if(!/\.(woff2?|ttf|otf)$/i.test(all[i][1].name)){m.textContent='فرمت فونت باید woff2، woff، ttf یا otf باشد.';return}tot+=all[i][1].size}
+  if(tot>1.5*1024*1024){m.textContent='حجم فونت‌ها زیاد است (حداکثر ۱٫۵ مگابایت). نسخه woff2 کم‌حجم‌تر است.';return}
+  m.textContent='در حال بارگذاری…';
+  try{var files=[];for(var j=0;j<all.length;j++){var ext=all[j][1].name.split('.').pop().toLowerCase();files.push({w:all[j][0],mime:'font/'+ext,b64:bufToB64(await all[j][1].arrayBuffer())})}
+    var rec={name:f1.name.replace(/\.[^.]+$/,''),v:Date.now().toString(36),files:files};
+    if(!(await useFont(rec))){m.textContent='این فایل به‌عنوان فونت خوانده نشد.';return}
+    prefs.font='PanelCustom';applyPrefs();try{await idbSet('font',rec)}catch(e){}
+    var synced=true;try{await rest('settings',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key:'font',value:rec})})}catch(e){synced=false}
+    await savePrefs();$('pFont').innerHTML=opts(FONTS.concat([['PanelCustom','فونت آپلودشده: '+CF.name]]),prefs.font);
+    m.textContent=synced?'فونت فعال شد ✓':'روی این دستگاه فعال شد ولی همگام‌سازی نشد (احتمالاً حجم زیاد است).'}
+  catch(e){m.textContent='آپلود نشد: '+e.message}};
+$('pFontDel').onclick=async function(){if(!CF){$('pFontMsg').textContent='فونتی آپلود نشده است.';return}
+  clearCF();if(prefs.font==='PanelCustom')prefs.font='Vazirmatn';applyPrefs();try{await idbDel('font')}catch(e){}try{await del('settings','key=eq.font')}catch(e){}await savePrefs();
+  $('pFont').innerHTML=opts(FONTS,prefs.font);$('pFontMsg').textContent='فونت آپلودشده حذف شد.'};
+
+/* ارسال پیام‌های آماده به ربات تلگرام خودم */
+function tgItem(s,txt,ph){var loc=validPh(ph)?'0'+ph.slice(3):'';return {text:'👤 '+s.name+(s.term?' — '+s.term:'')+'\n📱 '+(loc||'شماره ندارد')+'\n\n'+txt,wa:loc?'https://wa.me/'+ph.slice(1)+'?text='+encodeURIComponent(txt):''}}
+async function sendTg(items){if(!items.length)return;
+  try{var r=await fetch(C.url+'/functions/v1/send-reminders',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({messages:items})});
+    if(r.status===404)throw new Error('nofn');var j=await r.json().catch(function(){return {}});if(!r.ok||j.error)throw new Error(j.error||('http '+r.status));
+    if(j.failed&&!j.sent)throw new Error((j.errors||[])[0]||'ارسال نشد');
+    toast(FD(j.sent)+' پیام به تلگرام شما رفت'+(j.failed?' ('+FD(j.failed)+' ناموفق)':''))}
+  catch(e){toast(e.message==='nofn'?'تابع send-reminders هنوز ساخته یا به‌روز نشده است (فایل reminders-setup.md)':'ارسال به تلگرام نشد: '+e.message,1)}}
+$('mlist').addEventListener('click',function(e){var b=e.target.closest('button[data-tgm]');if(!b)return;var s=stu(+b.dataset.tgm);if(s)sendTg([tgItem(s,smsFor(s),recip(s,'pf'))])});
+$('bTg').onclick=async function(){var L=bData.filter(function(r){return r.txt}).map(function(r){var it=tgItem(r.s,r.txt,recip(r.s,$('bTo').value));if(r.prob)it.text='⚠️ '+r.prob+'\n'+it.text;return it});
+  if(!L.length)return;if(L.length>60)toast('فقط ۶۰ پیام اول فرستاده می‌شود',1);$('bTg').disabled=true;await sendTg(L.slice(0,60));$('bTg').disabled=false};
+
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
@@ -956,7 +1031,7 @@ function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
   jsel('eDate',today());jsel('rDate',today());buildEntry();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
-  loadCore();loadPrefsRemote();initModules();loadNotes();showTab(sessionStorage.getItem('tab')||'week')}
+  loadCore();loadPrefsRemote();initModules();loadNotes();loadFontRemote();loadAvatar();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
 else if(tok)enter();
 </script></body></html>
