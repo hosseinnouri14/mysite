@@ -84,6 +84,8 @@ summary{cursor:pointer;font-weight:500}
 .avatar{width:40px;height:40px;border-radius:50%;border:2px solid var(--accent);padding:0;overflow:hidden;background:var(--soft);cursor:pointer;font-weight:700;color:var(--accent);flex:none;display:grid;place-items:center}.avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}.avprev{width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);display:block;margin:10px auto}
 .fxd{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 14%,var(--surface)) 0 10px,color-mix(in srgb,var(--c) 24%,var(--surface)) 10px 20px)}.cls.mk{outline:2px dashed var(--c);outline-offset:-3px}.cls select{width:auto;min-height:30px;padding:0 8px}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.gimg{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0;cursor:pointer;overflow:hidden;display:grid;align-content:start}.gimg img{width:100%;height:90px;object-fit:cover;display:block}.gimg span{font-size:12px;padding:2px 6px;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ug button.has{position:relative}.ug button.has::after{content:"📷";position:absolute;top:-5px;inset-inline-end:-3px;font-size:11px}#imgBig{max-width:100%;max-height:68vh;display:block;margin:0 auto;border-radius:8px}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -93,9 +95,11 @@ summary{cursor:pointer;font-weight:500}
 <div id="app" hidden>
 <header class="top"><div class="wrap"><div class="brand"><button type="button" class="avatar" id="avBtn" aria-label="تصویر پروفایل (برای تغییر بزنید)"><img id="avImg" alt="" hidden><span id="avInit">ح</span></button><h1>پنل مدیریت</h1></div><div class="btns"><button class="btn ghost" id="openSet">⚙ تنظیمات</button><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
 <div class="wrap" style="padding-top:12px">
+<div id="bdBanner" class="warnbox" style="background:var(--okbg);color:var(--okink)" hidden></div>
+<div id="artBanner" class="warnbox" hidden></div>
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت‌ها</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت‌ها</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
@@ -109,13 +113,14 @@ summary{cursor:pointer;font-weight:500}
 </section>
 
 <section id="t-stu" hidden>
+  <div class="card" id="bdCard" hidden><h2 style="font-size:17px;margin:0 0 6px">🎂 تولدهای ۳۰ روز آینده</h2><div id="bdList"></div></div>
   <div class="card"><h2>افزودن دانش‌آموز</h2><p class="hint">برای شروع فقط نام و ترم کافی است؛ بقیه اطلاعات را بعداً در «جزئیات» وارد کنید.</p>
     <form id="fAdd" class="bar"><input id="aName" placeholder="نام دانش‌آموز" required style="flex:1 1 180px;width:auto"><select id="aTerm" style="flex:1 1 160px;width:auto"></select><button class="btn" type="submit">افزودن</button></form></div>
   <div class="bar" style="margin-bottom:10px"><div class="seg" id="sFilter"></div>
     <select id="sSort" style="width:auto" aria-label="ترتیب نمایش"><option value="name">ترتیب: نام (الف تا ی)</option><option value="term">ترتیب: ترم</option><option value="code">ترتیب: کد (قدیمی‌ترین)</option><option value="new">ترتیب: جدیدترین</option><option value="ended">ترتیب: تاریخ پایان ترم</option></select>
     <input id="sq" placeholder="جستجوی نام یا ترم" style="max-width:220px"><span id="scount" class="hint" style="margin:0"></span></div>
   <div class="card" id="sBulk" hidden style="padding:10px 14px"><div class="bar"><b id="sSel"></b><button class="btn" id="bSms">ارسال پیامک</button><button class="btn ghost" id="bEnd">پایان ترم (غیرفعال)</button><button class="btn ghost" id="bAct">فعال‌سازی مجدد</button><select id="bTerm" style="width:auto" aria-label="ترم جدید"></select><button class="btn ghost" id="bSetTerm">تغییر ترم</button><button class="btn ghost" id="bClear">لغو انتخاب</button></div></div>
-  <div class="tbl"><table style="min-width:900px"><thead><tr><th style="width:36px"><input type="checkbox" id="sAllChk" style="width:auto" aria-label="انتخاب همه"></th><th>کد</th><th>نام</th><th>ترم</th><th>تماس</th><th>والد</th><th>سن</th><th>پایه</th><th>زمان کلاس‌ها</th><th>وضعیت</th><th></th></tr></thead><tbody id="stb"></tbody></table></div>
+  <div class="tbl"><table style="min-width:1100px"><thead><tr><th style="width:36px"><input type="checkbox" id="sAllChk" style="width:auto" aria-label="انتخاب همه"></th><th>کد</th><th>نام</th><th>ترم</th><th>تماس</th><th>والد</th><th>سن</th><th>کلاس / غیبت</th><th>همراهی</th><th>پایه</th><th>زمان کلاس‌ها</th><th>وضعیت</th><th></th></tr></thead><tbody id="stb"></tbody></table></div>
 </section>
 
 <section id="t-abs" hidden>
@@ -173,7 +178,7 @@ summary{cursor:pointer;font-weight:500}
 
 <section id="t-comm" hidden>
   <div class="card"><h2>پیامک به والدین</h2><p class="hint">قالب را انتخاب کنید و برای هر دانش‌آموز روی «پیامک» بزنید؛ پیام آماده در برنامه پیامک گوشی باز می‌شود و فقط «ارسال» را می‌زنید. (ارسال خودکار بدون باز شدن برنامه پیامک نیاز به سرویس پیامکی دارد.)</p>
-    <div class="seg" id="smsT"><button data-k="start">شروع دوره</button><button data-k="next">رفتن به دوره بعد</button><button data-k="absent">غیبت در جلسه</button></div>
+    <div class="seg" id="smsT"><button data-k="start">شروع دوره</button><button data-k="next">رفتن به دوره بعد</button><button data-k="absent">غیبت در جلسه</button><button data-k="birthday">تبریک تولد</button></div>
     <div class="fg" style="margin-top:10px"><label class="w">متن قالب<textarea id="smsTxt" style="min-height:110px"></textarea></label>
       <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان}</p>
       <label>تاریخ در پیام<div class="jsel" id="mDate"></div></label>
@@ -210,6 +215,14 @@ summary{cursor:pointer;font-weight:500}
       <p class="hint" style="margin:6px 0 0">متن به‌صورت خودکار ذخیره می‌شود.</p></div>
     <div class="card" style="padding:14px"><h2 style="font-size:17px">گزارش‌های ثبت‌شده</h2><input id="dq" placeholder="جستجو در گزارش‌ها" style="margin-bottom:6px"><div id="dList" style="max-height:60vh;overflow:auto"></div></div>
   </div>
+</section>
+
+<section id="t-art" hidden>
+  <div id="warn8" class="warnbox" hidden>جدول مقالات ساخته نشده است. فایل <b>supabase-admin8.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="margin-bottom:10px;justify-content:space-between"><div class="bar"><input id="arQ" placeholder="جستجوی عنوان یا کلمه کلیدی" style="max-width:240px"><select id="arSort" style="width:auto" aria-label="مرتب‌سازی"><option value="due">مرتب‌سازی: نزدیک‌ترین موعد</option><option value="new">مرتب‌سازی: جدیدترین</option><option value="status">مرتب‌سازی: وضعیت</option></select></div><button class="btn" id="addArt">+ مقاله جدید</button></div>
+  <div class="seg" id="arFilter" style="margin-bottom:10px"></div>
+  <div class="kpis" id="arKpi"></div>
+  <div class="lcards" id="arList"></div>
 </section>
 
 <section id="t-notes" hidden>
@@ -251,11 +264,14 @@ summary{cursor:pointer;font-weight:500}
     <div class="pb big"><i id="lBar" style="width:0"></i></div><p id="lPct" style="margin:6px 0"></p>
     <div class="btns"><button class="btn ghost" type="button" id="lAll">همه انجام شد</button><button class="btn ghost" type="button" id="lNone">پاک کردن پیشرفت</button></div>
     <div class="ug" id="lUnits"></div>
+    <div style="margin:14px 0"><div class="bar" style="justify-content:space-between"><b>تصاویر مهم این مسیر</b><select id="lImgFilter" style="width:auto" aria-label="فیلتر تصاویر"></select></div>
+      <div class="bar" style="margin:8px 0"><select id="lImgUnit" style="width:auto" aria-label="مربوط به کدام بخش"></select><input id="lImgCap" placeholder="توضیح کوتاه (اختیاری)" style="flex:1 1 160px;width:auto"><input type="file" id="lImgFile" accept="image/*" multiple style="max-width:260px"><button class="btn" id="lImgUp" type="button">آپلود تصویر</button></div>
+      <p id="lImgMsg" role="status" class="hint" style="margin:0 0 6px"></p><div class="gal" id="lGallery"></div></div>
     <div class="bar" style="justify-content:space-between"><b>یادداشت‌های چسبان (نکات مهم)</b><button class="btn" id="lStkAdd" type="button">+ یادداشت</button></div>
     <div class="stks" id="lNotes"></div></div></dialog>
 
 <dialog id="dlgSms" style="width:min(780px,96vw)"><h2 style="margin-top:0">ارسال پیامک گروهی</h2>
-  <div class="fg"><label>قالب پیام<select id="bTpl"><option value="start">شروع دوره</option><option value="next">رفتن به دوره بعد</option><option value="absent">غیبت در جلسه</option><option value="custom">متن دلخواه</option></select></label>
+  <div class="fg"><label>قالب پیام<select id="bTpl"><option value="start">شروع دوره</option><option value="next">رفتن به دوره بعد</option><option value="absent">غیبت در جلسه</option><option value="birthday">تبریک تولد</option><option value="custom">متن دلخواه</option></select></label>
   <label>ارسال به<select id="bTo"><option value="pf">شماره والد (در نبود آن، شماره دانش‌آموز)</option><option value="p">فقط شماره والد</option><option value="s">فقط شماره دانش‌آموز</option></select></label>
   <label class="w">متن پیام<textarea id="bText" style="min-height:100px"></textarea></label>
   <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان} — تاریخ پیام از تب «ارتباط با فراگیران» گرفته می‌شود.</p></div>
@@ -286,6 +302,27 @@ summary{cursor:pointer;font-weight:500}
   <div class="btns" style="margin-top:10px"><a class="btn" id="nfSms" href="#">پیامک (از گوشی)</a><a class="btn ghost" id="nfWa" href="#" target="_blank" rel="noopener">واتساپ</a><button class="btn ghost" id="nfTg" type="button">تلگرام من</button><button class="btn ghost" id="nfPanel" type="button">ارسال از پنل پیامکی</button></div>
   <div class="btns" style="margin-top:8px"><button class="btn ghost" id="nfCopy" type="button">کپی متن</button><button class="btn ghost" id="nfDone" type="button">اطلاع دادم (ثبت دستی)</button><button class="btn ghost" type="button" data-close>بستن</button></div>
   <p id="nfRes" role="status" style="margin:8px 0 0;font-weight:700"></p></dialog>
+
+<dialog id="dlgArt" style="width:min(760px,96vw)"><form id="fArt"><h2 id="arH" style="margin-top:0">مقاله جدید</h2><input type="hidden" id="arId">
+  <div class="fg"><label class="w">عنوان مقاله<input id="arTitle" required></label>
+  <label>وضعیت<select id="arStatus"></select></label><label>دسته‌بندی<input id="arCat" list="arCatList" placeholder="مثلاً برنامه‌نویسی"><datalist id="arCatList"></datalist></label>
+  <div class="w"><b>موعد تحویل (شمسی)</b><div class="jsel" id="arDue" style="margin-top:4px"></div></div>
+  <label>کلمه کلیدی اصلی (سئو)<input id="arKw"></label><label>کلمات کلیدی فرعی<input id="arKw2" placeholder="با ویرگول جدا کنید"></label>
+  <label>تعداد کلمه هدف<input id="arTarget" inputmode="numeric" placeholder="مثلاً ۲۰۰۰"></label><label>کلمات نوشته‌شده تا الان<input id="arDone" inputmode="numeric"></label>
+  <label class="w">سرفصل‌ها و ساختار مقاله<textarea id="arOutline" style="min-height:90px"></textarea></label>
+  <label class="w">توضیحات سفارش و منابع<textarea id="arBrief" style="min-height:70px"></textarea></label>
+  <label class="w">بازخورد سردبیر<textarea id="arEditor" style="min-height:70px"></textarea></label>
+  <label class="w">لینک مقاله منتشرشده<input id="arUrl" dir="ltr" placeholder="https://blog.faradars.org/…"></label>
+  <div class="w"><b>تاریخ انتشار</b><div class="jsel" id="arPub" style="margin-top:4px"></div></div>
+  <label>حق‌التحریر (تومان)<input id="arFee" dir="ltr" style="text-align:right" inputmode="numeric" placeholder="۱,۲۰۰,۰۰۰"></label>
+  <div><label class="chk" style="margin-top:22px"><input type="checkbox" id="arPaid"> دریافت شد</label></div>
+  <div class="w"><b>تاریخ دریافت</b> <small class="hint">(اگر خالی بماند امروز ثبت می‌شود)</small><div class="jsel" id="arPaidAt" style="margin-top:4px"></div></div>
+  <div class="w"><b>یادآوری موعد تحویل (به تلگرام شما)</b><div id="arRem" class="bar" style="margin-top:4px"></div></div></div>
+  <p id="arErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn ghost" type="button" id="arIcs">افزودن موعد به تقویم گوشی (.ics)</button><button class="btn ghost" type="button" id="arIncome">ثبت حق‌التحریر در بخش مالی</button><button class="btn red" type="button" id="arDel">حذف</button><button class="btn ghost" type="button" data-close>بستن</button></div></form></dialog>
+
+<dialog id="dlgImg" style="width:min(760px,96vw)"><img id="imgBig" alt=""><p id="imgCap" style="margin:8px 0;text-align:center"></p>
+  <div class="btns" style="justify-content:center"><a class="btn ghost" id="imgDl" download="learning-image.jpg" href="#">دانلود</a><button class="btn red" id="imgDel" type="button">حذف تصویر</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
 <dialog id="dlgAvatar" style="width:min(420px,94vw)"><h2 style="margin-top:0">تصویر پروفایل</h2>
   <img id="avPrev" class="avprev" alt="پیش‌نمایش" hidden>
@@ -330,6 +367,9 @@ summary{cursor:pointer;font-weight:500}
   <div class="fg"><label>نام<input id="sName" required></label><label>ترم<select id="sTerm"></select></label>
   <label>شماره تماس<input id="sPhone" dir="ltr" inputmode="tel"></label><label>سن<input id="sAge" type="number" min="3" max="99"></label>
   <label>نام والد<input id="sPName"></label><label>شماره موبایل والد<input id="sPPhone" dir="ltr" inputmode="tel" placeholder="09123456789"></label>
+  <div class="w"><b>تاریخ تولد (شمسی)</b><div class="jsel" id="sBirth" style="margin-top:4px"></div></div>
+  <div class="w"><b>تاریخ شروع همراهی</b> <small class="hint">(اگر خالی باشد از تاریخ ثبت دانش‌آموز حساب می‌شود)</small><div class="jsel" id="sStart" style="margin-top:4px"></div></div>
+  <div class="w" id="sStats"></div>
   <label class="w">پایه تحصیلی<input id="sGrade"></label><label class="w">علایق<textarea id="sInt"></textarea></label>
   <label>نقاط قوت<textarea id="sStr"></textarea></label><label>نقاط ضعف<textarea id="sWeak"></textarea></label>
   <label class="w">دغدغه‌ها<textarea id="sCon"></textarea></label><label class="w">وضعیت جلسه قبلی<textarea id="sLast"></textarea></label>
@@ -398,7 +438,7 @@ function stu(id){return students.filter(function(s){return s.id===id})[0]}
 async function loadCore(){
   try{var r=await Promise.all([rest('students?select=*&order=id.asc'),rest('schedule?select=*&order=day.asc,slot.asc')]);students=r[0];sched=r[1];$('warn').hidden=true}
   catch(e){if(e.message!=='auth')$('warn').hidden=false}
-  await loadFixed();await loadMks();drawWeek();drawStu()}
+  await loadFixed();await loadMks();await loadStuStats();drawWeek();drawStu();bdCheck()}
 
 /* ---------- برنامه هفتگی ---------- */
 function cnt(d){return sched.filter(function(c){return c.day===d}).length}
@@ -477,7 +517,7 @@ function drawStu(){
   var L=stuList();selStu.forEach(function(id){if(!stu(id))selStu.delete(id)});
   $('scount').textContent=FD(L.length)+' دانش‌آموز';
   $('stb').innerHTML=L.map(function(s){var t=sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' '+tm(c.slot)}).join('، ');
-    return '<tr><td><input type="checkbox" data-sel="'+s.id+'"'+(selStu.has(s.id)?' checked':'')+' style="width:auto" aria-label="انتخاب '+esc(s.name)+'"></td><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b></td><td>'+dot(s.term)+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td dir="ltr" style="text-align:right">'+esc(s.parent_phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td>'+(s.active?'<span class="stat" style="background:var(--okink);color:var(--okbg)">فعال</span>':'<span class="stat" style="background:var(--muted)">پایان ترم'+(s.ended_at?' · '+jlabel(new Date(s.ended_at+'T00:00:00Z')):'')+'</span>')+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button> '+(s.active?'<button class="mini" style="background:var(--muted)" data-end="'+s.id+'">پایان ترم</button>':'<button class="mini" style="background:var(--okink);color:var(--okbg)" data-act="'+s.id+'">فعال‌سازی</button>')+'</td></tr>'}).join('')||'<tr><td colspan="11" style="text-align:center;color:var(--muted)">دانش‌آموزی در این فهرست نیست.</td></tr>';
+    return '<tr><td><input type="checkbox" data-sel="'+s.id+'"'+(selStu.has(s.id)?' checked':'')+' style="width:auto" aria-label="انتخاب '+esc(s.name)+'"></td><td>'+FD(s.id)+'</td><td><b>'+esc(s.name)+'</b>'+bdMark(s)+'</td><td>'+dot(s.term)+esc(s.term)+'</td><td dir="ltr" style="text-align:right">'+esc(s.phone)+'</td><td dir="ltr" style="text-align:right">'+esc(s.parent_phone)+'</td><td>'+(s.age?FD(s.age):'')+'</td><td title="کلاس برگزارشده / غیبت">'+ssCell(s)+'</td><td>'+esc(assocText(s))+'</td><td>'+esc(s.grade)+'</td><td>'+esc(t)+'</td><td>'+(s.active?'<span class="stat" style="background:var(--okink);color:var(--okbg)">فعال</span>':'<span class="stat" style="background:var(--muted)">پایان ترم'+(s.ended_at?' · '+jlabel(new Date(s.ended_at+'T00:00:00Z')):'')+'</span>')+'</td><td><button class="mini" data-s="'+s.id+'">جزئیات</button> '+(s.active?'<button class="mini" style="background:var(--muted)" data-end="'+s.id+'">پایان ترم</button>':'<button class="mini" style="background:var(--okink);color:var(--okbg)" data-act="'+s.id+'">فعال‌سازی</button>')+'</td></tr>'}).join('')||'<tr><td colspan="13" style="text-align:center;color:var(--muted)">دانش‌آموزی در این فهرست نیست.</td></tr>';
   $('sAllChk').checked=L.length>0&&L.every(function(s){return selStu.has(s.id)});
   $('sBulk').hidden=!selStu.size;$('sSel').textContent=FD(selStu.size)+' دانش‌آموز انتخاب شده'}
 $('sq').oninput=drawStu;$('sSort').onchange=function(){sSortK=this.value;drawStu()};
@@ -504,9 +544,9 @@ function openStu(s){
   $('sAge').value=s.age||'';$('sActive').checked=s.active;
   var t=sched.filter(function(c){return c.student_id===s.id});
   $('sTimes').innerHTML=t.length?t.map(function(c){return DAYS[c.day]+' '+rng(c.slot,TYPES[c.class_type][1])+' · '+TYPES[c.class_type][0]}).join('<br>'):'هنوز زمانی تعیین نشده.';
-  $('dlgStu').showModal()}
+  fillStuExtra(s);$('dlgStu').showModal()}
 $('fStu').addEventListener('submit',async function(e){e.preventDefault();
-  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,parent_name:$('sPName').value.trim()||null,parent_phone:$('sPPhone').value.trim()||null,age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked,ended_at:$('sActive').checked?null:((stu(+$('sId').value)||{}).ended_at||iso(today()))};
+  var o={name:$('sName').value.trim(),term:$('sTerm').value||null,phone:$('sPhone').value.trim()||null,parent_name:$('sPName').value.trim()||null,parent_phone:$('sPPhone').value.trim()||null,birth_date:(function(){var x=jgetOpt('sBirth');return x?iso(x):null})(),start_date:(function(){var x=jgetOpt('sStart');return x?iso(x):null})(),age:$('sAge').value?+$('sAge').value:null,grade:$('sGrade').value.trim()||null,interests:$('sInt').value.trim()||null,strengths:$('sStr').value.trim()||null,weaknesses:$('sWeak').value.trim()||null,concerns:$('sCon').value.trim()||null,last_session:$('sLast').value.trim()||null,active:$('sActive').checked,ended_at:$('sActive').checked?null:((stu(+$('sId').value)||{}).ended_at||iso(today()))};
   try{await patch('students','id=eq.'+$('sId').value,o);$('dlgStu').close();await loadCore();toast('ذخیره شد')}catch(x){toast('ذخیره نشد',1)}});
 $('sDel').onclick=async function(){if(!confirm('این دانش‌آموز حذف شود؟ (کلاس‌های او در جدول بدون دانش‌آموز می‌مانند.) برای نگه داشتن سابقه بهتر است او را غیرفعال کنید.'))return;
   try{await del('students','id=eq.'+$('sId').value);$('dlgStu').close();await loadCore();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
@@ -694,7 +734,7 @@ $('dlgSet').addEventListener('click',function(e){var b=e.target.closest('button'
 
 /* ========== ارتباط با فراگیران (پیامک به والدین) ========== */
 var SMSN={start:'شروع دوره',next:'رفتن به دوره بعد',absent:'غیبت در جلسه'},smsKey='start',nextSel={};
-var DEFSMS={start:'{والد} عزیز، سلام. دوره «{ترم}» {نام} از {تاریخ} شروع می‌شود. زمان کلاس: {زمان}. موفق باشید. حسین نوری',
+var DEFSMS={birthday:'سلام {نام} عزیز 🎂 تولدت مبارک! امیدوارم سالی پر از شادی، موفقیت و یادگیری داشته باشی. حسین نوری',start:'{والد} عزیز، سلام. دوره «{ترم}» {نام} از {تاریخ} شروع می‌شود. زمان کلاس: {زمان}. موفق باشید. حسین نوری',
   next:'{والد} عزیز، سلام. {نام} دوره «{ترم}» را با موفقیت به پایان رساند و از این پس وارد دوره «{ترم_بعد}» می‌شود. زمان کلاس: {زمان}. حسین نوری',
   absent:'{والد} عزیز، سلام. {نام} در جلسه امروز ({تاریخ}) غایب بود. لطفاً در صورت امکان برای جلسه جبرانی هماهنگ فرمایید. حسین نوری'};
 function smsText(k){return (prefs.sms&&prefs.sms[k])||DEFSMS[k]}
@@ -729,7 +769,7 @@ function updMSel(){$('mSel').textContent=selStu.size?FD(selStu.size)+' نفر ا
 $('mlist').addEventListener('change',function(e){var t=e.target;if(t.dataset.msel){var id=+t.dataset.msel;t.checked?selStu.add(id):selStu.delete(id);updMSel()}});
 $('mAll').onchange=function(){var on=this.checked,q=$('mq').value.trim();students.filter(function(s){return s.active&&(!q||(s.name+' '+(s.term||'')).indexOf(q)>-1)}).forEach(function(s){on?selStu.add(s.id):selStu.delete(s.id)});drawComm()};
 $('mBulk').onclick=function(){if(!selStu.size){toast('اول دانش‌آموزان را انتخاب کنید',1);return}openBulk()};
-function recip(s,m){var a=phoneN(s.parent_phone),b=phoneN(s.phone);return m==='p'?a:m==='s'?b:(a||b)}
+function recip(s,m){var a=phoneN(s.parent_phone),b=phoneN(s.phone);return m==='p'?a:m==='s'?b:m==='sp'?(b||a):(a||b)}
 function validPh(p){return /^\+989\d{9}$/.test(p)}
 var bData=[];
 function openBulk(){if(!selStu.size)return;$('bTpl').value=smsKey;$('bText').value=smsText(smsKey);$('bRes').textContent='';$('bErr').hidden=true;buildBulk();$('dlgSms').showModal()}
@@ -850,11 +890,11 @@ $('lList').addEventListener('click',function(e){var b=e.target.closest('button[d
 $('addLearn').onclick=function(){openLearn()};
 function openLearn(l){l=l||{id:'',kind:'book',title:'',author:'',unit:'فصل',total:10};
   $('lKind').innerHTML=opts(Object.keys(LK).map(function(k){return [k,LK[k][0]]}),l.kind);$('lId').value=l.id||'';$('lTitle').value=l.title;$('lAuthor').value=l.author||'';$('lUnit').value=l.unit;$('lTotal').value=l.total;
-  $('lDel').hidden=!l.id;$('lBody').hidden=!l.id;$('lTitleH').textContent=l.id?l.title:'مسیر یادگیری جدید';if(l.id)drawLDetail();$('dlgLearn').showModal()}
+  $('lDel').hidden=!l.id;$('lBody').hidden=!l.id;$('lTitleH').textContent=l.id?l.title:'مسیر یادگیری جدید';if(l.id){drawLDetail();loadLImgs(l.id)}$('dlgLearn').showModal()}
 $('lKind').onchange=function(){if(!$('lId').value)$('lUnit').value=LK[this.value][1]};
 function drawLDetail(){var l=lget($('lId').value);if(!l)return;var p=lpct(l),h='';
   $('lBar').style.width=p+'%';$('lBar').parentElement.style.setProperty('--c',LK[l.kind][2]);$('lPct').textContent=FD(lcnt(l))+' از '+FD(l.total)+' '+l.unit+' — '+FD(p)+'٪';
-  for(var i=1;i<=l.total;i++)h+='<button type="button" data-u="'+i+'" class="'+((l.progress||{})[i]?'on':'')+'" aria-pressed="'+!!(l.progress||{})[i]+'" aria-label="'+esc(l.unit)+' '+i+'">'+FD(i)+'</button>';
+  for(var i=1;i<=l.total;i++)h+='<button type="button" data-u="'+i+'" class="'+((l.progress||{})[i]?'on':'')+(lImgs.some(function(x){return x.unit===i})?' has':'')+'" aria-pressed="'+!!(l.progress||{})[i]+'" aria-label="'+esc(l.unit)+' '+i+'">'+FD(i)+'</button>';
   $('lUnits').innerHTML=h;
   $('lNotes').innerHTML=lnotes.filter(function(n){return String(n.learning_id)===String(l.id)}).map(function(n){return '<div class="stk" style="--s:'+(n.color||STK[0])+'"><input data-sref="'+n.id+'" value="'+esc(n.ref)+'" placeholder="مربوط به… (مثلاً '+esc(l.unit)+' ۳)"><textarea data-sbody="'+n.id+'" placeholder="نکته مهم…">'+esc(n.body)+'</textarea><div class="btns"><button type="button" data-scol="'+n.id+'">رنگ</button><button type="button" data-sdel="'+n.id+'">حذف</button></div></div>'}).join('')}
 async function saveProg(l){try{await patch('learning','id=eq.'+l.id,{progress:l.progress})}catch(e){toast('ذخیره نشد',1)}drawLDetail();drawLearn()}
@@ -1152,7 +1192,7 @@ $('dayAll').onclick=function(){document.querySelectorAll('#dayBox select').forEa
 $('daySave').onclick=async function(){var d=jget('eDate');if(!d||!dayItems.length)return;var day=iso(d),sel={};
   document.querySelectorAll('#dayBox select[data-ref]').forEach(function(x){sel[x.dataset.ref]=x.value});
   try{await del('class_log','day=eq.'+day);
-    await rest('class_log',{method:'POST',body:JSON.stringify(dayItems.map(function(i){return {day:day,ref:i.ref,status:sel[i.ref]||'held'}})),headers:{Prefer:'return=minimal'}});
+    await rest('class_log',{method:'POST',body:JSON.stringify(dayItems.map(function(i){return {day:day,ref:i.ref,status:sel[i.ref]||'held',student_id:i.sid||null,class_type:i.type,topic:i.topic||(stu(i.sid)||{}).term||null}})),headers:{Prefer:'return=minimal'}});
     var ab=[],gone=[],tot={},ai={premium:0,economy:0};
     for(var q=0;q<dayItems.length;q++){var i=dayItems[q],st=sel[i.ref]||'held',s=stu(i.sid),tp=i.topic||(s&&s.term)||null;
       if(st==='absent'&&i.sid)ab.push({day:day,ref:i.ref,student_id:i.sid,student_name:s?s.name:null,class_type:i.type,topic:tp,slot:i.slot});else gone.push(i.ref);
@@ -1163,8 +1203,8 @@ $('daySave').onclick=async function(){var d=jget('eDate');if(!d||!dayItems.lengt
     var rows=[];Object.keys(tot).forEach(function(t){rows.push({day:day,topic:'—',class_type:t,count:tot[t]})});['premium','economy'].forEach(function(t){if(ai[t]>0)rows.push({day:day,topic:AIT,class_type:t,count:ai[t]})});
     await del('sessions','day=eq.'+day);if(rows.length)await rest('sessions',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});
     var nb=Object.keys(sel).filter(function(k){return sel[k]==='absent'}).length;
-    toast('ثبت شد و آمار این روز حساب شد'+(nb?' — '+FD(nb)+' غیبت در لیست غیبت‌ها ثبت شد':''));loadEntry();report()}
-  catch(e){toast('ثبت نشد؛ آیا supabase-admin6.sql اجرا شده است؟',1)}};
+    toast('ثبت شد و آمار این روز حساب شد'+(nb?' — '+FD(nb)+' غیبت در لیست غیبت‌ها ثبت شد':''));loadEntry();report();loadStuStats().then(drawStu)}
+  catch(e){toast('ثبت نشد؛ آیا supabase-admin6.sql و supabase-admin7.sql اجرا شده‌اند؟',1)}};
 
 /* ========== غیبت‌ها و اطلاع به والدین ========== */
 var abs=[],amk=[],aFil='all',nfA=null,nfS=null,nfPh='';
@@ -1199,7 +1239,7 @@ $('abRows').addEventListener('click',async function(e){var b=e.target.closest('b
 function openNotify(a){nfA=a;nfS=stu(a.student_id)||{id:0,name:aName(a),term:a.topic,parent_name:'',parent_phone:'',phone:''};nfPh=recip(nfS,'pf');
   $('nfH').textContent='اطلاع غیبت — '+aName(a);$('nfText').value=fillSms(smsText('absent'),nfS,new Date(a.day+'T00:00:00Z'));$('nfRes').textContent='';nfBuild();$('dlgNotify').showModal()}
 function nfBuild(){var ok=validPh(nfPh),msg=$('nfText').value;
-  $('nfInfo').textContent=ok?'گیرنده: '+(nfS.parent_name||'والد')+' — 0'+nfPh.slice(3):'شماره معتبری ثبت نشده؛ شماره والد را در «جزئیات» دانش‌آموز وارد کنید.';
+  $('nfInfo').textContent=ok?'گیرنده: '+(nfPh===phoneN(nfS.phone)?nfS.name:(nfS.parent_name||'والد'))+' — 0'+nfPh.slice(3):'شماره معتبری ثبت نشده؛ شماره والد را در «جزئیات» دانش‌آموز وارد کنید.';
   [['nfSms',ok?'sms:'+nfPh+'?body='+encodeURIComponent(msg):'#'],['nfWa',ok?'https://wa.me/'+nfPh.slice(1)+'?text='+encodeURIComponent(msg):'#']].forEach(function(x){var el=$(x[0]);el.href=x[1];el.style.pointerEvents=ok?'':'none';el.style.opacity=ok?'':'.5'});$('nfPanel').disabled=!ok}
 $('nfText').oninput=nfBuild;
 async function markNotified(){if(!nfA||nfA.notified)return;try{await patch('absences','id=eq.'+nfA.id,{notified:true,notified_at:new Date().toISOString()});nfA.notified=true;drawAbs()}catch(e){}}
@@ -1214,17 +1254,165 @@ $('nfPanel').onclick=async function(){if(!validPh(nfPh)||!confirm('پیامک ا
     if(!q.ok)throw new Error(q.error||'ناموفق');$('nfRes').textContent='ارسال شد ✓';await markNotified()}
   catch(e){$('nfRes').textContent=e.message==='nofn'?'تابع send-sms هنوز ساخته نشده است (فایل sms-setup.md).':'ارسال نشد: '+e.message}};
 
+/* ========== آمار، همراهی و تولد دانش‌آموزان ========== */
+var logs=[],absAll=[],SS={},J2C={};
+async function loadStuStats(){try{logs=await rest('class_log?select=ref,day,status,student_id,class_type&limit=20000')}catch(e){logs=[]}try{absAll=await rest('absences?select=id,student_id,day&limit=5000')}catch(e){absAll=[]}buildSS()}
+function logSid(l){if(l.student_id)return l.student_id;if(l.ref&&l.ref.charAt(0)==='s'){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];return c?c.student_id:null}return null}
+function buildSS(){SS={};function g(id){return SS[id]||(SS[id]={held:0,min:0,abs:0})}
+  logs.forEach(function(l){if(l.status!=='held')return;var sid=logSid(l);if(!sid)return;var t=l.class_type;if(!t){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];t=c&&c.class_type}var o=g(sid);o.held++;o.min+=(t&&TYPES[t]?TYPES[t][1]:2)*30});
+  absAll.forEach(function(a){if(a.student_id)g(a.student_id).abs++})}
+function ssCell(s){var x=SS[s.id]||{held:0,abs:0};return FD(x.held)+' / '+FD(x.abs)}
+function assoc(s){var st=s.start_date||String(s.created_at||'').slice(0,10);if(!st)return null;var a=new Date(st+'T00:00:00Z'),b=s.active?today():(s.ended_at?new Date(s.ended_at+'T00:00:00Z'):today());if(b<a)b=a;
+  var days=Math.round((b-a)/864e5),pa=jp(a),pb=jp(b),m=(pb.year-pa.year)*12+(pb.month-pa.month)-(pb.day<pa.day?1:0);if(m<0)m=0;return {days:days,weeks:Math.floor(days/7),months:m}}
+function assocText(s){var x=assoc(s);if(!x)return '';return x.months>=1?FD(x.months)+' ماه':x.days>=7?FD(x.weeks)+' هفته':FD(x.days)+' روز'}
+function j2gc(y,m,d){var k=y+'-'+m+'-'+d;if(!(k in J2C))J2C[k]=j2g(y,m,d)||j2g(y,m,d-1)||null;return J2C[k]}
+function bdNext(s){if(!s.birth_date)return null;var bp=jp(new Date(s.birth_date+'T00:00:00Z')),t=today(),y=jp(t).year,d=j2gc(y,bp.month,bp.day);
+  if(d&&d<t){y++;d=j2gc(y,bp.month,bp.day)}if(!d)return null;return {date:d,days:Math.round((d-t)/864e5),age:y-bp.year}}
+function bdMark(s){var n=bdNext(s);return n&&n.days===0?' 🎂':''}
+function jselOpt(id,date,y0,y1){var p=date?jp(date):{},o=function(a,b,sel){var h='<option value="">'+a+'</option>';for(var i=b[0];i<=b[1];i++)h+='<option value="'+i+'"'+(i===sel?' selected':'')+'>'+FD(i)+'</option>';return h},yy='<option value="">سال</option>';
+  for(var y=y1;y>=y0;y--)yy+='<option value="'+y+'"'+(y===p.year?' selected':'')+'>'+FD(y)+'</option>';
+  $(id).innerHTML='<select id="'+id+'d" aria-label="روز">'+o('روز',[1,31],p.day)+'</select><select id="'+id+'m" aria-label="ماه"><option value="">ماه</option>'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(i+1===p.month?' selected':'')+'>'+n+'</option>'}).join('')+'</select><select id="'+id+'y" aria-label="سال">'+yy+'</select>'}
+function jgetOpt(id){var y=+$(id+'y').value,m=+$(id+'m').value,d=+$(id+'d').value;if(!y||!m||!d)return null;return j2g(y,m,d)||j2g(y,m,d-1)||j2g(y,m,d-2)}
+function renderSStats(s){var st=SS[s.id]||{held:0,min:0,abs:0},a=assoc(s),n=bdNext(s);
+  $('sStats').innerHTML='<b>آمار این دانش‌آموز</b><div class="kpis" style="margin:6px 0"><div class="kpi"><b>'+FD(st.held)+'</b><span>کلاس برگزارشده</span></div><div class="kpi"><b>'+hrs(st.min)+'</b><span>ساعت تدریس</span></div><div class="kpi"><b>'+FD(st.abs)+'</b><span>غیبت</span></div>'+
+    (a?'<div class="kpi"><b>'+FD(a.days)+'</b><span>روز همراهی</span></div><div class="kpi"><b>'+FD(a.weeks)+'</b><span>هفته</span></div><div class="kpi"><b>'+FD(a.months)+'</b><span>ماه</span></div>':'')+
+    (n?'<div class="kpi"><b>'+FD(n.days===0?n.age:n.age-1)+'</b><span>سال سن'+(n.days===0?' — 🎂 امروز تولد است':' — تولد بعدی '+FD(n.days)+' روز دیگر')+'</span></div>':'')+'</div>'}
+function fillStuExtra(s){var cy=jp(today()).year;
+  jselOpt('sBirth',s.birth_date?new Date(s.birth_date+'T00:00:00Z'):null,cy-35,cy-2);jselOpt('sStart',s.start_date?new Date(s.start_date+'T00:00:00Z'):null,cy-6,cy+1);
+  renderSStats(s);loadStuStats().then(function(){if($('dlgStu').open&&String($('sId').value)===String(s.id))renderSStats(s)})}
+function bdCheck(){var L=students.map(function(s){return {s:s,n:bdNext(s)}}).filter(function(x){return x.n&&x.n.days<=30}).sort(function(a,b){return a.n.days-b.n.days}),td=L.filter(function(x){return x.n.days===0});
+  $('bdBanner').hidden=!td.length;$('bdBanner').innerHTML=td.length?'🎂 امروز تولد: '+td.map(function(x){return '<b>'+esc(x.s.name)+'</b> ('+FD(x.n.age)+' ساله) <button class="mini" data-bd="'+x.s.id+'">پیام تبریک</button>'}).join(' ، '):'';
+  $('bdCard').hidden=!L.length;$('bdList').innerHTML=L.map(function(x){return '<div>'+(x.n.days===0?'🎂 <b>امروز</b>':FD(x.n.days)+' روز دیگر')+' — <b>'+esc(x.s.name)+'</b>'+(x.s.active?'':' <small>(غیرفعال)</small>')+' — '+jlabel(x.n.date)+' ('+FD(x.n.age)+' ساله می‌شود)</div>'}).join('');
+  if(td.length&&window.Notification&&Notification.permission==='granted'){var k='bd-'+iso(today());try{if(!localStorage.getItem(k)){new Notification('🎂 تولد دانش‌آموز',{body:td.map(function(x){return x.s.name}).join('، ')});localStorage.setItem(k,'1')}}catch(e){}}}
+$('bdBanner').addEventListener('click',function(e){var b=e.target.closest('button[data-bd]');if(b)openBirthday(stu(+b.dataset.bd))});
+function openBirthday(s){if(!s)return;nfA=null;nfS=s;nfPh=recip(s,'sp');$('nfH').textContent='تبریک تولد — '+s.name;$('nfText').value=fillSms(smsText('birthday'),s);$('nfRes').textContent='';nfBuild();$('dlgNotify').showModal()}
+
+/* ========== تصاویر مسیر یادگیری ========== */
+var lImgs=[],curImg=null;
+function imgLabel(i,l){return (i.unit?l.unit+' '+FD(i.unit):'کلی')+(i.caption?' — '+i.caption:'')}
+async function loadLImgs(id){lImgs=[];$('lImgMsg').textContent='';
+  try{lImgs=await rest('learning_images?select=id,unit,caption,thumb&learning_id=eq.'+id+'&order=unit.asc.nullsfirst,id.asc')}catch(e){if(e.message!=='auth')$('lImgMsg').textContent='جدول تصاویر ساخته نشده است (supabase-admin7.sql).'}
+  drawLGal();drawLDetail()}
+function drawLGal(){var l=lget($('lId').value);if(!l)return;var cu=$('lImgUnit').value,cf=$('lImgFilter').value,us=[];
+  for(var i=1;i<=l.total;i++)us.push([i,l.unit+' '+FD(i)]);
+  $('lImgUnit').innerHTML='<option value="">کلی (همه بخش‌ها)</option>'+opts(us,cu);
+  var has={};lImgs.forEach(function(x){has[x.unit||0]=1});
+  $('lImgFilter').innerHTML='<option value="all">همه تصاویر ('+FD(lImgs.length)+')</option>'+(has[0]?'<option value="0">کلی</option>':'')+opts(us.filter(function(x){return has[x[0]]}),cf);
+  if(cf&&$('lImgFilter').querySelector('option[value="'+cf+'"]'))$('lImgFilter').value=cf;
+  var f=$('lImgFilter').value,L=lImgs.filter(function(x){return f==='all'||String(x.unit||0)===f});
+  $('lGallery').innerHTML=L.map(function(x){return '<button type="button" class="gimg" data-i="'+x.id+'" aria-label="'+esc(imgLabel(x,l))+'"><img src="'+x.thumb+'" alt=""><span>'+esc(imgLabel(x,l))+'</span></button>'}).join('')||'<p class="hint" style="grid-column:1/-1;margin:0">هنوز تصویری ثبت نشده است.</p>'}
+$('lImgFilter').onchange=drawLGal;
+function loadImgEl(file){return new Promise(function(res,rej){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){res(im)};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+function scaled(im,max,q){var k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)}
+$('lImgUp').onclick=async function(){var id=$('lId').value,files=Array.from($('lImgFile').files||[]).slice(0,8),m=$('lImgMsg');if(!id)return;
+  if(!files.length){m.textContent='اول یک یا چند تصویر را انتخاب کنید.';return}
+  if(lImgs.length+files.length>60){m.textContent='حداکثر ۶۰ تصویر برای هر مسیر.';return}
+  var unit=$('lImgUnit').value?+$('lImgUnit').value:null,cap=$('lImgCap').value.trim()||null,ok=0;$('lImgUp').disabled=true;
+  for(var i=0;i<files.length;i++){m.textContent='در حال آپلود '+FD(i+1)+' از '+FD(files.length)+'…';
+    try{if(!/^image\//.test(files[i].type))continue;var im=await loadImgEl(files[i]),data=scaled(im,1280,.8);if(data.length>700000)data=scaled(im,1000,.65);
+      await rest('learning_images',{method:'POST',body:JSON.stringify({learning_id:+id,unit:unit,caption:cap,thumb:scaled(im,260,.7),data:data}),headers:{Prefer:'return=minimal'}});ok++}catch(e){}}
+  $('lImgUp').disabled=false;$('lImgFile').value='';$('lImgCap').value='';
+  await loadLImgs(id);m.textContent=ok?FD(ok)+' تصویر آپلود شد.':'آپلود نشد؛ آیا supabase-admin7.sql اجرا شده است؟'};
+$('lGallery').addEventListener('click',async function(e){var b=e.target.closest('button[data-i]');if(!b)return;
+  try{var r=await rest('learning_images?select=*&id=eq.'+b.dataset.i);if(!r||!r[0])return;curImg=r[0];var l=lget($('lId').value);
+    $('imgBig').src=r[0].data;$('imgCap').textContent=l?imgLabel(r[0],l):(r[0].caption||'');$('imgDl').href=r[0].data;$('dlgImg').showModal()}catch(x){toast('باز نشد',1)}});
+$('imgDel').onclick=async function(){if(!curImg||!confirm('این تصویر حذف شود؟'))return;try{await del('learning_images','id=eq.'+curImg.id);$('dlgImg').close();await loadLImgs($('lId').value)}catch(x){toast('حذف نشد',1)}};
+
+/* ========== مقالات مجله فرادرس ========== */
+var arts=[],arFil='all',arSortK='due',
+  STS=[['idea','ایده'],['writing','در حال نوشتن'],['submitted','تحویل‌شده'],['revision','نیاز به اصلاح'],['published','منتشر شد']],
+  STC={idea:'#6b7a80',writing:'#2b7de0',submitted:'#8a4fd8',revision:'#e5534b',published:'#1f9461'},
+  ARCAT=['برنامه‌نویسی','شبکه','هوش مصنوعی','وب','پایگاه داده','امنیت','سایر'],
+  AR_OFF=[['d3','۳ روز قبل (۹:۰۰)'],['d1','۱ روز قبل (۹:۰۰)'],['d0','صبح روز تحویل (۸:۰۰)']],
+  AR_NEXT={idea:['writing','شروع نوشتن'],writing:['submitted','تحویل شد'],revision:['submitted','تحویل مجدد'],submitted:['published','منتشر شد']};
+function stLabel(k){return (STS.filter(function(x){return x[0]===k})[0]||[])[1]||k}
+function arOpen(a){return a.status==='idea'||a.status==='writing'||a.status==='revision'}
+function arDays(a){return a.deadline?Math.round((new Date(a.deadline+'T00:00:00Z')-today())/864e5):null}
+function arDueText(a){var n=arDays(a);if(n===null)return 'بدون موعد تحویل';return jlabel(new Date(a.deadline+'T00:00:00Z'))+' — '+(n===0?'امروز':n>0?FD(n)+' روز دیگر':FD(-n)+' روز گذشته')}
+function arPct(a){return a.target_words>0?Math.min(100,Math.round((a.words_done||0)*100/a.target_words)):0}
+async function loadArticles(){
+  try{arts=await rest('articles?select=*&order=id.desc&limit=1000');$('warn8').hidden=true}catch(e){if(e.message!=='auth')$('warn8').hidden=false}
+  drawArts();artCheck()}
+function drawArts(){
+  var q=$('arQ').value.trim(),n={all:arts.length};STS.forEach(function(x){n[x[0]]=arts.filter(function(a){return a.status===x[0]}).length});
+  $('arFilter').innerHTML=[['all','همه']].concat(STS).map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(arFil===x[0])+'">'+x[1]+' ('+FD(n[x[0]]||0)+')</button>'}).join('');
+  var open=arts.filter(arOpen),od=open.filter(function(a){var d=arDays(a);return d!==null&&d<0}).length,wk=open.filter(function(a){var d=arDays(a);return d!==null&&d>=0&&d<=7}).length,
+    unpaid=arts.filter(function(a){return a.fee&&!a.paid&&(a.status==='submitted'||a.status==='published')}).reduce(function(s,a){return s+a.fee},0);
+  $('arKpi').innerHTML='<div class="kpi"><b>'+FD(arts.length)+'</b><span>کل مقالات</span></div><div class="kpi"><b>'+FD(open.length)+'</b><span>در جریان</span></div><div class="kpi"><b style="color:'+(od?'var(--badink)':'inherit')+'">'+FD(od)+'</b><span>موعد گذشته</span></div><div class="kpi"><b>'+FD(wk)+'</b><span>موعد تا ۷ روز آینده</span></div><div class="kpi"><b>'+FD(n.published||0)+'</b><span>منتشر شده</span></div><div class="kpi"><b>'+money(unpaid)+'</b><span>حق‌التحریر دریافت‌نشده (تومان)</span></div>';
+  var L=arts.filter(function(a){return (arFil==='all'||a.status===arFil)&&(!q||((a.title||'')+' '+(a.keyword||'')+' '+(a.keywords2||'')).indexOf(q)>-1)});
+  var so={idea:0,writing:1,revision:2,submitted:3,published:4};
+  if(arSortK==='due')L.sort(function(a,b){var x=arOpen(a)&&a.deadline?new Date(a.deadline).getTime():9e15,y=arOpen(b)&&b.deadline?new Date(b.deadline).getTime():9e15;return x-y||b.id-a.id});
+  else if(arSortK==='status')L.sort(function(a,b){return so[a.status]-so[b.status]||b.id-a.id});
+  $('arList').innerHTML=L.map(function(a){var d=arDays(a),late=arOpen(a)&&d!==null&&d<0,soon=arOpen(a)&&d!==null&&d>=0&&d<=2,nx=AR_NEXT[a.status],p=arPct(a);
+    return '<div class="lcard" data-ar="'+a.id+'" tabindex="0" role="button" style="--c:'+STC[a.status]+'"><span class="badge" style="background:var(--c)">'+stLabel(a.status)+'</span><b>'+esc(a.title)+'</b>'+
+      '<small class="hint" style="margin:0">'+(a.category?esc(a.category)+' · ':'')+(a.keyword?'🔑 '+esc(a.keyword):'')+'</small>'+
+      '<span class="due'+(late?' bad':'')+'"'+(soon?' style="color:var(--badink)"':'')+'>📅 '+arDueText(a)+'</span>'+
+      (a.target_words?'<div class="pb"><i style="width:'+p+'%"></i></div><small>'+FD(a.words_done||0)+' از '+FD(a.target_words)+' کلمه — '+FD(p)+'٪</small>':'')+
+      (a.fee?'<small>حق‌التحریر: '+money(a.fee)+' تومان — '+(a.paid?'دریافت شد ✓':'دریافت نشده')+'</small>':'')+
+      '<div class="btns"><button class="mini" data-ae="'+a.id+'">ویرایش</button>'+(nx?'<button class="mini" style="background:var(--okink);color:var(--okbg)" data-arn="'+a.id+'">'+nx[1]+'</button>':'')+(a.article_url?'<a class="mini" href="'+esc(a.article_url)+'" target="_blank" rel="noopener">لینک مقاله</a>':'')+'</div></div>'}).join('')||'<p class="hint">مقاله‌ای نیست. با «+ مقاله جدید» شروع کنید.</p>'}
+$('arQ').oninput=drawArts;$('arSort').onchange=function(){arSortK=this.value;drawArts()};
+$('arFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){arFil=b.dataset.f;drawArts()}});
+$('addArt').onclick=function(){openArt()};
+function artById(id){return arts.filter(function(a){return String(a.id)===String(id)})[0]}
+$('arList').addEventListener('click',async function(e){
+  var nb=e.target.closest('button[data-arn]');
+  if(nb){var a=artById(nb.dataset.arn),nx=a&&AR_NEXT[a.status];if(!nx)return;var o={status:nx[0],updated_at:new Date().toISOString()};if(nx[0]==='published'&&!a.publish_date)o.publish_date=iso(today());
+    try{await patch('articles','id=eq.'+a.id,o);if(nx[0]!=='writing'){try{await del('reminders','article_id=eq.'+a.id)}catch(x){}}await loadArticles();toast('وضعیت: '+nx[1])}catch(x){toast('انجام نشد',1)}return}
+  if(e.target.closest('a'))return;
+  var c=e.target.closest('[data-ar]');if(c)openArt(artById(c.dataset.ar))});
+$('arList').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.dataset.ar)openArt(artById(e.target.dataset.ar))});
+function moneyIn(el){var v=el.value,pos=el.selectionStart,db=ND(v.slice(0,pos)).length,n=ND(v).replace(/^0+/,''),f=n?money(+n):'';el.value=f;var c=0,np=0;for(;np<f.length&&c<db;np++)if(/[۰-۹]/.test(f[np]))c++;try{el.setSelectionRange(np,np)}catch(x){}}
+$('arFee').oninput=function(){moneyIn(this)};
+function artOffsets(due){var y=due.getUTCFullYear(),m=due.getUTCMonth(),d=due.getUTCDate();return {d3:new Date(y,m,d-3,9,0),d1:new Date(y,m,d-1,9,0),d0:new Date(y,m,d,8,0)}}
+function openArt(a){
+  var cy=jp(today()).year;a=a||{id:'',title:'',status:'idea',category:'',keyword:'',keywords2:'',deadline:null,target_words:'',words_done:0,outline:'',brief:'',editor_note:'',article_url:'',publish_date:null,fee:'',paid:false,paid_at:null,income_id:null};
+  $('arId').value=a.id||'';$('arTitle').value=a.title;$('arStatus').innerHTML=opts(STS,a.status);$('arCat').value=a.category||'';$('arCatList').innerHTML=ARCAT.map(function(x){return '<option value="'+esc(x)+'">'}).join('');
+  $('arKw').value=a.keyword||'';$('arKw2').value=a.keywords2||'';
+  jselOpt('arDue',a.deadline?new Date(a.deadline+'T00:00:00Z'):null,cy-1,cy+2);jselOpt('arPub',a.publish_date?new Date(a.publish_date+'T00:00:00Z'):null,cy-3,cy+1);jselOpt('arPaidAt',a.paid_at?new Date(a.paid_at+'T00:00:00Z'):null,cy-3,cy+1);
+  $('arTarget').value=a.target_words||'';$('arDone').value=a.words_done||0;$('arOutline').value=a.outline||'';$('arBrief').value=a.brief||'';$('arEditor').value=a.editor_note||'';$('arUrl').value=a.article_url||'';
+  $('arFee').value=a.fee?money(a.fee):'';$('arPaid').checked=!!a.paid;
+  var on=new Set(a.id?[]:['d1','d0']);
+  $('arRem').innerHTML=AR_OFF.map(function(o){return '<label class="chk"><input type="checkbox" data-ro="'+o[0]+'"'+(on.has(o[0])?' checked':'')+'> '+o[1]+'</label>'}).join('');
+  if(a.id)rest('reminders?select=label&article_id=eq.'+a.id).then(function(r){var s=new Set(r.map(function(x){return x.label}));document.querySelectorAll('#arRem input').forEach(function(i){i.checked=s.has(i.dataset.ro)})}).catch(function(){});
+  var can=a.id&&a.paid&&a.fee&&!a.income_id;$('arIncome').disabled=!can;$('arIncome').textContent=a.income_id?'در بخش مالی ثبت شده ✓':'ثبت حق‌التحریر در بخش مالی';
+  $('arDel').hidden=!a.id;$('arErr').textContent='';$('arH').textContent=a.id?'ویرایش مقاله':'مقاله جدید';$('dlgArt').showModal()}
+$('fArt').addEventListener('submit',async function(e){e.preventDefault();
+  var id=$('arId').value,due=jgetOpt('arDue'),pub=jgetOpt('arPub'),pa=jgetOpt('arPaidAt'),paid=$('arPaid').checked;
+  var o={title:$('arTitle').value.trim(),status:$('arStatus').value,category:$('arCat').value.trim()||null,keyword:$('arKw').value.trim()||null,keywords2:$('arKw2').value.trim()||null,
+    deadline:due?iso(due):null,target_words:+ND($('arTarget').value)||null,words_done:+ND($('arDone').value)||0,outline:$('arOutline').value||null,brief:$('arBrief').value||null,editor_note:$('arEditor').value||null,
+    article_url:$('arUrl').value.trim()||null,publish_date:pub?iso(pub):null,fee:+ND($('arFee').value)||null,paid:paid,paid_at:paid?(pa?iso(pa):iso(today())):null,updated_at:new Date().toISOString()};
+  if(!o.title){$('arErr').textContent='عنوان را بنویسید.';return}
+  try{var nid;if(id){await patch('articles','id=eq.'+id,o);nid=id}else{var x=await post('articles',o);nid=x[0].id}
+    await del('reminders','article_id=eq.'+nid);var skipped=0;
+    if(due&&(o.status==='idea'||o.status==='writing'||o.status==='revision')){var of=artOffsets(due),all=[];document.querySelectorAll('#arRem input:checked').forEach(function(c){all.push({label:c.dataset.ro,t:of[c.dataset.ro]})});
+      var rows=all.filter(function(f){return f.t.getTime()>Date.now()}).map(function(f){return {article_id:+nid,fire_at:f.t.toISOString(),label:f.label}});skipped=all.length-rows.length;
+      if(rows.length)await rest('reminders',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}})}
+    $('dlgArt').close();await loadArticles();toast(skipped?'ذخیره شد؛ '+FD(skipped)+' یادآوری چون زمانش گذشته بود ثبت نشد':'ذخیره شد')}
+  catch(x){$('arErr').textContent='ذخیره نشد؛ آیا supabase-admin8.sql اجرا شده است؟'}});
+$('arDel').onclick=async function(){if(!confirm('این مقاله حذف شود؟'))return;try{await del('articles','id=eq.'+$('arId').value);$('dlgArt').close();await loadArticles();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
+$('arIncome').onclick=async function(){var a=artById($('arId').value);if(!a||!a.paid||!a.fee||a.income_id)return;
+  try{var r=await post('income',{day:a.paid_at||iso(today()),amount:a.fee,source:'مجله فرادرس',note:'مقاله: '+a.title});await patch('articles','id=eq.'+a.id,{income_id:r[0].id});$('arIncome').disabled=true;$('arIncome').textContent='در بخش مالی ثبت شده ✓';await loadArticles();toast('در بخش مالی ثبت شد')}
+  catch(x){toast('ثبت نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}};
+$('arIcs').onclick=function(){var due=jgetOpt('arDue');if(!due){$('arErr').textContent='اول موعد تحویل را مشخص کنید.';return}
+  var ymd=iso(due).replace(/-/g,''),end=iso(addd(due,1)).replace(/-/g,''),title=($('arTitle').value.trim()||'مقاله')+' (موعد تحویل)';
+  var al={d3:'-P2DT15H',d1:'-PT15H',d0:'PT8H'},L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//panel//FA','BEGIN:VEVENT','UID:article-'+($('arId').value||Date.now())+'@panel','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),'DTSTART;VALUE=DATE:'+ymd,'DTEND;VALUE=DATE:'+end,'SUMMARY:'+icsEsc(title)];
+  document.querySelectorAll('#arRem input:checked').forEach(function(c){L.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc(title),'TRIGGER:'+al[c.dataset.ro],'END:VALARM')});
+  L.push('END:VEVENT','END:VCALENDAR');var u=URL.createObjectURL(new Blob([L.join('\r\n')],{type:'text/calendar;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='article-deadline.ics';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
+function artCheck(){var L=arts.filter(function(a){var d=arDays(a);return arOpen(a)&&d!==null&&d<=3}).sort(function(a,b){return arDays(a)-arDays(b)});
+  $('artBanner').hidden=!L.length;$('artBanner').innerHTML=L.length?'📝 موعد تحویل مقاله: '+L.slice(0,4).map(function(a){var d=arDays(a);return '<b>'+esc(a.title)+'</b> ('+(d<0?FD(-d)+' روز گذشته':d===0?'امروز':FD(d)+' روز دیگر')+') <button class="mini" data-ab="'+a.id+'">باز کردن</button>'}).join(' ، ')+(L.length>4?' و '+FD(L.length-4)+' مورد دیگر':''):''}
+$('artBanner').addEventListener('click',function(e){var b=e.target.closest('button[data-ab]');if(b){showTab('art');openArt(artById(b.dataset.ab))}});
+
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
-  ['week','cal','rep','stu','comm','abs','stats','fin','learn','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
-  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='abs'){abFill();loadAbs()}if(t==='rep')loadReport();if(t==='learn')loadLearn()}
+  ['week','cal','rep','stu','comm','abs','stats','fin','learn','art','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='abs'){abFill();loadAbs()}if(t==='rep')loadReport();if(t==='learn')loadLearn();if(t==='art')loadArticles()}
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
   jsel('eDate',today());jsel('rDate',today());buildEntry();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
-  loadCore();loadPrefsRemote();initModules();loadNotes();loadFontRemote();loadAvatar();showTab(sessionStorage.getItem('tab')||'week')}
+  loadCore();loadPrefsRemote();initModules();loadNotes();loadArticles();loadFontRemote();loadAvatar();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
 else if(tok)enter();
 </script></body></html>
