@@ -100,7 +100,7 @@ summary{cursor:pointer;font-weight:500}
 <div id="artBanner" class="warnbox" hidden></div>
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت‌ها</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="inv" role="tab">سرمایه‌گذاری</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت و کنسلی</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="inv" role="tab">سرمایه‌گذاری</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
@@ -128,21 +128,30 @@ summary{cursor:pointer;font-weight:500}
   <div id="warn6b" class="warnbox" hidden>جدول غیبت‌ها ساخته نشده است. فایل <b>supabase-admin6.sql</b> را در Supabase اجرا کنید.</div>
   <div class="card"><h2>ثبت غیبت</h2><p class="hint">غیبت‌هایی که در «آمار کلاس‌ها > کلاس‌های برنامه این روز» علامت بزنید خودکار اینجا می‌آیند. غیبت‌های دیگر را از این فرم ثبت کنید.</p>
     <form id="fAbs" class="fg"><label>دانش‌آموز<select id="abStu"></select></label><label>تاریخ غیبت<div class="jsel" id="abDate"></div></label><label>نوع کلاس<select id="abType"></select></label><label>ترم / موضوع<select id="abTopic"></select></label><label>نوع غیبت<select id="abKind"><option value="excused">موجه (جبرانی دارد)</option><option value="unexcused">غیرموجه (بدون جبرانی)</option></select></label>
-      <label class="w">توضیح (اختیاری)<input id="abNote" placeholder="مثلاً بیمار بود"></label><div class="btns w"><button class="btn" type="submit">ثبت غیبت</button></div></form></div>
+      <label class="w">توضیح (اختیاری)<input id="abNote" placeholder="مثلاً بیمار بود"></label><label class="chk w"><input type="checkbox" id="abCount" checked> در آمار کلاس‌های برگزارشده آن روز هم حساب شود (چون من حاضر بودم)</label><div class="btns w"><button class="btn" type="submit">ثبت غیبت</button></div></form></div>
   <div class="kpis" id="abKpi"></div>
   <div class="bar" style="margin-bottom:10px"><div class="seg" id="abFilter"></div><input id="abQ" placeholder="جستجوی نام دانش‌آموز" style="max-width:240px"></div>
   <div class="tbl"><table style="min-width:900px"><thead><tr><th style="text-align:right">تاریخ</th><th style="text-align:right">دانش‌آموز</th><th style="text-align:right">کلاس</th><th style="text-align:right">توضیح</th><th>نوع غیبت</th><th>اطلاع به والدین</th><th>کلاس جبرانی</th><th></th></tr></thead><tbody id="abRows"></tbody></table></div>
+
+  <div id="warn11" class="warnbox" style="margin-top:16px" hidden>جدول کنسلی‌ها ساخته نشده است. فایل <b>supabase-admin11.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="card" style="margin-top:16px"><h2>کنسلی کلاس‌ها</h2><p class="hint">کنسلی‌هایی که در «آمار کلاس‌ها > کلاس‌های برنامه این روز» علامت بزنید خودکار اینجا می‌آیند. برای هر کنسلی تاریخ جلسه جبرانی را مشخص می‌کنید. کلاس کنسل‌شده در آمار کلاس‌های برگزارشده حساب نمی‌شود.</p>
+    <form id="fCan" class="fg"><label>دانش‌آموز<select id="cnStu"></select></label><label>تاریخ کلاس کنسل‌شده<div class="jsel" id="cnDate"></div></label><label>نوع کلاس<select id="cnType"></select></label><label>ترم / موضوع<select id="cnTopic"></select></label>
+      <label>کنسلی از طرف<select id="cnBy"><option value="teacher">مربی</option><option value="student">دانش‌آموز</option></select></label><label>توضیح (اختیاری)<input id="cnNote"></label>
+      <div class="btns w"><button class="btn" type="submit">ثبت کنسلی و تعیین جبرانی</button></div></form></div>
+  <div class="kpis" id="cnKpi"></div>
+  <div class="bar" style="margin-bottom:10px"><div class="seg" id="cnFilter"></div></div>
+  <div class="tbl"><table style="min-width:960px"><thead><tr><th style="text-align:right">تاریخ</th><th style="text-align:right">دانش‌آموز</th><th style="text-align:right">کلاس</th><th>کنسلی از طرف</th><th style="text-align:right">توضیح</th><th>اطلاع به والدین</th><th>جلسه جبرانی</th><th></th></tr></thead><tbody id="cnRows"></tbody></table></div>
 </section>
 
 <section id="t-stats" hidden>
   <div class="card"><h2>ثبت کلاس‌های برگزارشده</h2><p class="hint">روز را انتخاب کنید و تعداد کلاس‌های برگزارشده از هر نوع را بنویسید. کلاس‌های هوش مصنوعی زیرمجموعه همان تعداد هستند.</p>
     <div class="bar" style="margin-bottom:10px"><div class="jsel" id="eDate"></div><button class="btn ghost" id="ePrev" type="button">روز قبل</button><button class="btn ghost" id="eNext" type="button">روز بعد</button><button class="btn ghost" id="eToday" type="button">امروز</button><b id="entLabel"></b></div>
     <div class="card" style="background:var(--bg);margin:12px 0"><h3 style="margin:0 0 4px;font-size:16px">کلاس‌های برنامه این روز</h3><p class="hint">برای هر کلاس وضعیت را بزنید و ذخیره کنید؛ آمار این روز و لیست غیبت‌ها خودکار حساب می‌شود (آمار این روز دوباره از روی این لیست ساخته می‌شود).</p>
-    <div class="dl" id="dayBox"></div><div class="btns" id="dayCtl" hidden><button class="btn ghost" id="dayAll" type="button">همه برگزار شد</button><button class="btn" id="daySave" type="button">ذخیره وضعیت و محاسبه آمار</button></div></div>
+    <div class="dl" id="dayBox"></div><p class="hint" id="dayAbs" style="margin:6px 0"></p><div class="btns" id="dayCtl" hidden><button class="btn ghost" id="dayAll" type="button">همه برگزار شد</button><button class="btn" id="daySave" type="button">ذخیره وضعیت و محاسبه آمار</button></div></div>
   <h3 style="margin:14px 0 6px;font-size:16px">یا تعداد را دستی بنویسید</h3><div class="g2" id="entGrid"></div><h3 style="margin:14px 0 6px;font-size:16px">از این تعداد، کلاس‌های هوش مصنوعی</h3><div class="g2" id="entAi"></div>
     <div class="bar" style="margin-top:12px"><button class="btn" id="saveEntry">ذخیره این روز</button><span id="entSum" class="hint" style="margin:0"></span></div></div>
   <div class="card"><h2>گزارش</h2>
-    <div class="bar"><div class="seg" id="per"><button data-p="day">روزانه</button><button data-p="week">هفتگی</button><button data-p="month" aria-pressed="true">ماهانه</button><button data-p="year">سالانه</button></div><div class="jsel" id="rDate"></div><button class="btn ghost" id="csv">دانلود CSV</button></div>
+    <div class="bar"><div class="seg" id="per"><button data-p="day">روزانه</button><button data-p="week">هفتگی</button><button data-p="month" aria-pressed="true">ماهانه</button><button data-p="year">سالانه</button></div><div class="jsel" id="rDate"></div><button class="btn ghost" id="rPrev" type="button">ماه قبل</button><button class="btn ghost" id="rNext" type="button">ماه بعد</button><button class="btn ghost" id="rToday" type="button">امروز</button><button class="btn ghost" id="csv">دانلود CSV</button></div>
     <p class="hint" id="rLabel" style="margin-top:8px"></p><div id="rOut"></div></div>
 </section>
 
@@ -179,7 +188,7 @@ summary{cursor:pointer;font-weight:500}
 
 <section id="t-comm" hidden>
   <div class="card"><h2>پیامک به والدین</h2><p class="hint">قالب را انتخاب کنید و برای هر دانش‌آموز روی «پیامک» بزنید؛ پیام آماده در برنامه پیامک گوشی باز می‌شود و فقط «ارسال» را می‌زنید. (ارسال خودکار بدون باز شدن برنامه پیامک نیاز به سرویس پیامکی دارد.)</p>
-    <div class="seg" id="smsT"><button data-k="start">شروع دوره</button><button data-k="next">رفتن به دوره بعد</button><button data-k="absent">غیبت موجه (با جبرانی)</button><button data-k="absent2">غیبت غیرموجه</button><button data-k="birthday">تبریک تولد</button></div>
+    <div class="seg" id="smsT"><button data-k="start">شروع دوره</button><button data-k="next">رفتن به دوره بعد</button><button data-k="absent">غیبت موجه (با جبرانی)</button><button data-k="absent2">غیبت غیرموجه</button><button data-k="cancel_t">کنسلی از طرف مربی</button><button data-k="cancel_s">کنسلی از طرف دانش‌آموز</button><button data-k="birthday">تبریک تولد</button></div>
     <div class="fg" style="margin-top:10px"><label class="w">متن قالب<textarea id="smsTxt" style="min-height:110px"></textarea></label>
       <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان}</p>
       <label>تاریخ در پیام<div class="jsel" id="mDate"></div></label>
@@ -285,7 +294,7 @@ summary{cursor:pointer;font-weight:500}
     <div class="stks" id="lNotes"></div></div></dialog>
 
 <dialog id="dlgSms" style="width:min(780px,96vw)"><h2 style="margin-top:0">ارسال پیامک گروهی</h2>
-  <div class="fg"><label>قالب پیام<select id="bTpl"><option value="start">شروع دوره</option><option value="next">رفتن به دوره بعد</option><option value="absent">غیبت موجه (با جبرانی)</option><option value="absent2">غیبت غیرموجه</option><option value="birthday">تبریک تولد</option><option value="custom">متن دلخواه</option></select></label>
+  <div class="fg"><label>قالب پیام<select id="bTpl"><option value="start">شروع دوره</option><option value="next">رفتن به دوره بعد</option><option value="absent">غیبت موجه (با جبرانی)</option><option value="absent2">غیبت غیرموجه</option><option value="cancel_t">کنسلی از طرف مربی</option><option value="cancel_s">کنسلی از طرف دانش‌آموز</option><option value="birthday">تبریک تولد</option><option value="custom">متن دلخواه</option></select></label>
   <label>ارسال به<select id="bTo"><option value="pf">شماره والد (در نبود آن، شماره دانش‌آموز)</option><option value="p">فقط شماره والد</option><option value="s">فقط شماره دانش‌آموز</option></select></label>
   <label class="w">متن پیام<textarea id="bText" style="min-height:100px"></textarea></label>
   <p class="hint w" style="margin:0">متغیرها: {والد} {نام} {ترم} {ترم_بعد} {تاریخ} {زمان} — تاریخ پیام از تب «ارتباط با فراگیران» گرفته می‌شود.</p></div>
@@ -304,7 +313,7 @@ summary{cursor:pointer;font-weight:500}
   <p id="xbErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
   <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn red" type="button" id="xbDel">حذف</button><button class="btn ghost" type="button" data-close>انصراف</button></div></form></dialog>
 
-<dialog id="dlgMk"><form id="fMk"><h2 id="mkH" style="margin-top:0">کلاس جبرانی</h2><input type="hidden" id="mkId"><input type="hidden" id="mkAbs">
+<dialog id="dlgMk"><form id="fMk"><h2 id="mkH" style="margin-top:0">کلاس جبرانی</h2><input type="hidden" id="mkId"><input type="hidden" id="mkAbs"><input type="hidden" id="mkCan">
   <div class="fg"><label>دانش‌آموز<select id="mkStu"></select></label><label>ترم / موضوع<select id="mkTopic"></select></label>
   <label>تاریخ<div class="jsel" id="mkDate"></div></label><label>ساعت شروع<select id="mkSlot"></select></label>
   <label>نوع کلاس<select id="mkType"></select></label><label>وضعیت<select id="mkStatus"></select></label><label class="w">یادداشت<textarea id="mkNote"></textarea></label></div>
@@ -391,6 +400,7 @@ summary{cursor:pointer;font-weight:500}
   <label>فونت برنامه<select id="pFont"></select></label>
   <label>اندازه متن<select id="pSize"><option value="14">کوچک</option><option value="15.5">معمولی</option><option value="17">بزرگ</option><option value="19">خیلی بزرگ</option></select></label>
   <label class="clr w" style="display:flex"><input type="color" id="pAccent"><span>رنگ اصلی برنامه</span><button class="mini" id="pAccentReset" type="button">پیش‌فرض</button></label></div>
+  <label class="chk" style="margin:12px 0 0"><input type="checkbox" id="pCountEx"> غیبت موجه هم در آمار کلاس‌های برگزارشده حساب شود (غیبت غیرموجه همیشه حساب می‌شود)</label>
   <h3 style="margin:14px 0 4px;font-size:16px">فونت دلخواه شما</h3>
   <p class="hint" style="margin:0 0 6px">فایل فونت را آپلود کنید تا فونت همه بخش‌های پنل عوض شود. بهتر است فرمت woff2 باشد (کم‌حجم‌تر). حداکثر ۱٫۵ مگابایت.</p>
   <div class="fg"><label>فونت معمولی (woff2, woff, ttf, otf)<input type="file" id="pFontFile" accept=".woff2,.woff,.ttf,.otf"></label><label>فونت درشت (اختیاری)<input type="file" id="pFontBold" accept=".woff2,.woff,.ttf,.otf"></label>
@@ -466,7 +476,7 @@ function wd(d){return (d.getUTCDay()+1)%7}
 function j2g(y,m,d){var s=new Date(Date.UTC(y+621,2,17));for(var i=0;i<380;i++){var x=addd(s,i),p=jp(x);if(p.year===y&&p.month===m&&p.day===d)return x}return null}
 function jlabel(d){var p=jp(d);return FD(p.day)+' '+JM[p.month-1]+' '+FD(p.year)}
 function jsel(id,date){var p=jp(date),r=function(a,b,s){var h='';for(var i=a;i<=b;i++)h+='<option value="'+i+'"'+(i===s?' selected':'')+'>'+FD(i)+'</option>';return h};
-  $(id).innerHTML='<select id="'+id+'d" aria-label="روز">'+r(1,31,p.day)+'</select><select id="'+id+'m" aria-label="ماه">'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(i+1===p.month?' selected':'')+'>'+n+'</option>'}).join('')+'</select><select id="'+id+'y" aria-label="سال">'+r(p.year-4,p.year+1,p.year)+'</select>'}
+  $(id).innerHTML='<select id="'+id+'d" aria-label="روز">'+r(1,31,p.day)+'</select><select id="'+id+'m" aria-label="ماه">'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(i+1===p.month?' selected':'')+'>'+n+'</option>'}).join('')+'</select><select id="'+id+'y" aria-label="سال">'+r(p.year-8,p.year+3,p.year)+'</select>'}
 function jget(id){var y=+$(id+'y').value,m=+$(id+'m').value,d=+$(id+'d').value;return j2g(y,m,d)||j2g(y,m,d-1)||j2g(y,m,d-2)}
 function jset(id,date){var p=jp(date);$(id+'d').value=p.day;$(id+'m').value=p.month;$(id+'y').value=p.year}
 function range(date,per){
@@ -624,9 +634,10 @@ $('saveEntry').onclick=async function(){var d=jget('eDate'),rows=[];if(!d)return
 $('per').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;per=b.dataset.p;document.querySelectorAll('#per button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});report()});
 $('rDate').addEventListener('change',report);
 async function report(){
-  var a=jget('rDate');if(!a)return;var r=range(a,per);
+  var a=jget('rDate');if(!a)return;var r=range(a,per);$('rPrev').textContent=PN[per][0];$('rNext').textContent=PN[per][1];
   $('rLabel').textContent=per==='day'?jlabel(r[0]):'از '+jlabel(r[0])+' تا '+jlabel(r[1]);
   var rows;try{rows=await rest('sessions?select=*&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&order=day.asc&limit=5000')}catch(e){$('rOut').innerHTML='<p class="hint">خواندن آمار ممکن نشد.</p>';return}
+  var cnr=[];try{cnr=await rest('cancellations?select=cancelled_by,day&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&limit=5000')}catch(e){}
   var abr=[];try{abr=await rest('absences?select=kind,day&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&limit=5000')}catch(e){}
   lastRows=rows;var dash={},byT={},ai={premium:0,economy:0},byK={},tot=0,min=0;
   rows.forEach(function(x){if(x.topic==='—')dash[x.day+'|'+x.class_type]=1});
@@ -635,7 +646,7 @@ async function report(){
     if(x.topic==='—'||legacy){var m=x.count*TYPES[t][1]*30;tot+=x.count;min+=m;byT[t]=byT[t]||[0,0];byT[t][0]+=x.count;byT[t][1]+=m;
       var dd=new Date(x.day+'T00:00:00Z'),p=jp(dd),k=per==='year'?JM[p.month-1]:DAYS[wd(dd)]+' '+jlabel(dd);byK[k]=byK[k]||[0,0];byK[k][0]+=x.count;byK[k][1]+=m}});
   var h='<div class="kpis"><div class="kpi"><b>'+FD(tot)+'</b><span>کل کلاس‌ها</span></div><div class="kpi"><b>'+hrs(min)+'</b><span>ساعت تدریس</span></div>'+Object.keys(TYPES).map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD((byT[t]||[0])[0])+'</b><span>'+TYPES[t][0]+'</span></div>'}).join('')+
-    ['premium','economy'].map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD(ai[t]||0)+'</b><span>هوش مصنوعی — '+TYPES[t][0]+'</span></div>'}).join('')+'<div class="kpi"><b>'+FD(abr.filter(function(x){return x.kind!=='unexcused'}).length)+'</b><span>غیبت موجه</span></div><div class="kpi"><b>'+FD(abr.filter(function(x){return x.kind==='unexcused'}).length)+'</b><span>غیبت غیرموجه</span></div></div><p class="hint" style="margin:0 0 8px">جلسه‌هایی که دانش‌آموز غایب بود هم در تعداد کلاس‌ها و ساعت‌ها حساب شده‌اند (چون شما حضور داشتید).</p>';
+    ['premium','economy'].map(function(t){return '<div class="kpi t-'+t+'"><b>'+FD(ai[t]||0)+'</b><span>هوش مصنوعی — '+TYPES[t][0]+'</span></div>'}).join('')+'<div class="kpi"><b>'+FD(abr.filter(function(x){return x.kind!=='unexcused'}).length)+'</b><span>غیبت موجه</span></div><div class="kpi"><b>'+FD(abr.filter(function(x){return x.kind==='unexcused'}).length)+'</b><span>غیبت غیرموجه</span></div><div class="kpi"><b>'+FD(cnr.filter(function(x){return x.cancelled_by!=='student'}).length)+'</b><span>کنسلی از طرف مربی</span></div><div class="kpi"><b>'+FD(cnr.filter(function(x){return x.cancelled_by==='student'}).length)+'</b><span>کنسلی از طرف دانش‌آموز</span></div></div><p class="hint" style="margin:0 0 8px">جلسه‌هایی که دانش‌آموز غایب بود هم در تعداد کلاس‌ها و ساعت‌ها حساب شده‌اند (چون شما حضور داشتید)؛ کلاس‌های کنسل‌شده حساب نمی‌شوند.</p>';
   if(!tot){$('rOut').innerHTML=h+'<p class="hint">در این بازه کلاسی ثبت نشده است.</p>';return}
   h+='<div class="g2"><div><b>به تفکیک نوع کلاس</b><div class="tbl num"><table><thead><tr><th style="text-align:right">نوع</th><th>تعداد</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(TYPES).filter(function(t){return byT[t]}).map(function(t){return '<tr><td style="text-align:right"><span class="badge" style="background:var(--ty-'+t+')">'+TYPES[t][0]+'</span></td><td>'+FD(byT[t][0])+'</td><td>'+hrs(byT[t][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
   if(per!=='day')h+='<div><b>'+(per==='year'?'به تفکیک ماه':'به تفکیک روز')+'</b><div class="tbl num"><table><thead><tr><th style="text-align:right">'+(per==='year'?'ماه':'روز')+'</th><th>کلاس</th><th>ساعت</th></tr></thead><tbody>'+Object.keys(byK).map(function(k){return '<tr><td style="text-align:right">'+k+'</td><td>'+FD(byK[k][0])+'</td><td>'+hrs(byK[k][1])+'</td></tr>'}).join('')+'</tbody></table></div></div>';
@@ -692,7 +703,7 @@ applyPrefs();
 function redrawColors(){drawWeek();if(!$('t-cal').hidden)drawCal();if(!$('t-stu').hidden)drawStu()}
 function drawLegend(){$('legend').innerHTML='<span>ترم‌ها:</span>'+TOPICS.map(function(t){return '<span>'+dot(t)+t+'</span>'}).join('')+'<span style="margin-inline-start:8px">نوع کلاس:</span>'+Object.keys(TYPES).map(function(k){return '<span class="badge" style="background:var(--ty-'+k+')">'+TYPES[k][0]+'</span>'}).join('')+'<span style="margin-inline-start:8px">راهنما:</span><span><span class="dotc" style="background:#6b7a80;opacity:.6"></span>برنامه ثابت شخصی</span><span><span class="dotc" style="outline:2px dashed #6b7a80;outline-offset:-1px"></span>جبرانی (کادر خط‌چین)</span>'}
 function openSet(){
-  $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS.concat(CF?[['PanelCustom','فونت آپلودشده: '+CF.name]]:[]),prefs.font);$('pFontMsg').textContent='';$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
+  $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS.concat(CF?[['PanelCustom','فونت آپلودشده: '+CF.name]]:[]),prefs.font);$('pFontMsg').textContent='';$('pCountEx').checked=prefs.countExcused!==false;$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
   $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
   $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
   drawTagSet();drawNTagSet();$('dlgSet').showModal()}
@@ -780,15 +791,15 @@ $('dlgSet').addEventListener('click',function(e){var b=e.target.closest('button'
 
 /* ========== ارتباط با فراگیران (پیامک به والدین) ========== */
 var SMSN={start:'شروع دوره',next:'رفتن به دوره بعد',absent:'غیبت در جلسه'},smsKey='start',nextSel={};
-var DEFSMS={absent2:'{والد} عزیز، سلام. {نام} در جلسه {تاریخ} غایب بود. این غیبت غیرموجه ثبت شد و جلسه جبرانی برای آن در نظر گرفته نمی‌شود. حسین نوری',birthday:'سلام {نام} عزیز 🎂 تولدت مبارک! امیدوارم سالی پر از شادی، موفقیت و یادگیری داشته باشی. حسین نوری',start:'{والد} عزیز، سلام. دوره «{ترم}» {نام} از {تاریخ} شروع می‌شود. زمان کلاس: {زمان}. موفق باشید. حسین نوری',
+var DEFSMS={cancel_t:'{والد} عزیز، سلام. کلاس {نام} در تاریخ {تاریخ} از طرف مربی لغو شد؛ بابت این اتفاق پوزش می‌خواهم. جلسه جبرانی: {جبرانی}. حسین نوری',cancel_s:'{والد} عزیز، سلام. کلاس {نام} در تاریخ {تاریخ} به درخواست دانش‌آموز لغو شد. جلسه جبرانی: {جبرانی}. حسین نوری',absent2:'{والد} عزیز، سلام. {نام} در جلسه {تاریخ} غایب بود. این غیبت غیرموجه ثبت شد و جلسه جبرانی برای آن در نظر گرفته نمی‌شود. حسین نوری',birthday:'سلام {نام} عزیز 🎂 تولدت مبارک! امیدوارم سالی پر از شادی، موفقیت و یادگیری داشته باشی. حسین نوری',start:'{والد} عزیز، سلام. دوره «{ترم}» {نام} از {تاریخ} شروع می‌شود. زمان کلاس: {زمان}. موفق باشید. حسین نوری',
   next:'{والد} عزیز، سلام. {نام} دوره «{ترم}» را با موفقیت به پایان رساند و از این پس وارد دوره «{ترم_بعد}» می‌شود. زمان کلاس: {زمان}. حسین نوری',
   absent:'{والد} عزیز، سلام. {نام} در جلسه {تاریخ} غایب بود. لطفاً در صورت امکان برای جلسه جبرانی هماهنگ فرمایید. حسین نوری'};
 function smsText(k){return (prefs.sms&&prefs.sms[k])||DEFSMS[k]}
 function nextOf(t){var i=TOPICS.indexOf(t);if(i<0||i+1>=TOPICS.length)return '';return TOPICS[i+1].replace(/ ترم .*$/,'')===t.replace(/ ترم .*$/,'')?TOPICS[i+1]:''}
 function phoneN(p){var d=ND(p||'');if(d.indexOf('0098')===0)d=d.slice(4);else if(d.indexOf('98')===0&&d.length>=12)d=d.slice(2);else if(d.charAt(0)==='0')d=d.slice(1);return d?'+98'+d:''}
 function stuTime(s){return sched.filter(function(c){return c.student_id===s.id}).map(function(c){return DAYS[c.day]+' ساعت '+tm(c.slot)}).join('، ')||'طبق هماهنگی'}
-function fillSms(tpl,s,dd){var dt=dd||jget('mDate')||today(),nx=nextSel[s.id]||nextOf(s.term);
-  return tpl.replace(/\{(.+?)\}/g,function(m,k){var v={'والد':s.parent_name||'والدین گرامی','نام':s.name,'ترم':s.term||'','ترم_بعد':nx,'تاریخ':jlabel(dt),'زمان':stuTime(s)}[k];return v===undefined?m:v})}
+function fillSms(tpl,s,dd,ex){var dt=dd||jget('mDate')||today(),nx=nextSel[s.id]||nextOf(s.term);
+  return tpl.replace(/\{(.+?)\}/g,function(m,k){var v={'والد':s.parent_name||'والدین','نام':s.name,'ترم':s.term||'','ترم_بعد':nx,'تاریخ':jlabel(dt),'زمان':stuTime(s),'جبرانی':(ex&&ex.mk)||'هماهنگ می‌شود'}[k];return v===undefined?m:v})}
 function smsFor(s){return fillSms(smsText(smsKey),s)}
 function drawComm(){
   document.querySelectorAll('#smsT button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.k===smsKey)});
@@ -1109,7 +1120,7 @@ $('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=
 $('fRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
   if(b.dataset.fd){if(confirm('این واریزی حذف شود؟')){try{await del('income','id=eq.'+b.dataset.fd);loadFin()}catch(x){toast('حذف نشد',1)}}}
   if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
-function initModules(){jsel('abDate',today());jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
+function initModules(){jsel('cnDate',today());jsel('abDate',today());jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
 
 /* ========== پروفایل، فونت دلخواه، تلگرام ========== */
 var CF=null,AV='',newAv=null;
@@ -1202,11 +1213,11 @@ function openMk(m,pre){pre=pre||{};
   $('mkStu').innerHTML='<option value="">— بدون دانش‌آموز —</option>'+opts(students.filter(function(x){return x.active||x.id===m.student_id}).map(function(x){return [x.id,'کد '+FD(x.id)+' · '+x.name]}),m.student_id);
   $('mkTopic').innerHTML='<option value="">—</option>'+opts(TOPICS.map(function(t){return [t,t]}),m.topic);
   $('mkStatus').innerHTML=opts([['planned','برنامه‌ریزی‌شده'],['done','انجام شد'],['cancelled','لغو شد']],m.status);
-  $('mkNote').value=m.note||'';$('mkId').value=m.id||'';$('mkAbs').value=m.absence_id||'';$('mkDel').hidden=!m.id;$('mkErr').textContent='';
+  $('mkNote').value=m.note||'';$('mkId').value=m.id||'';$('mkAbs').value=m.absence_id||'';$('mkCan').value=m.cancel_id||'';$('mkDel').hidden=!m.id;$('mkErr').textContent='';
   $('mkH').textContent=m.id?'ویرایش کلاس جبرانی':'کلاس جبرانی';closePick();$('dlgMk').showModal()}
 $('mkStu').onchange=function(){var s=stu(+this.value);if(s&&s.term&&!$('mkTopic').value)$('mkTopic').value=s.term};
 $('fMk').addEventListener('submit',async function(e){e.preventDefault();var d=jget('mkDate'),id=$('mkId').value;if(!d)return;
-  var o={day:iso(d),slot:+$('mkSlot').value,class_type:$('mkType').value,student_id:$('mkStu').value?+$('mkStu').value:null,topic:$('mkTopic').value||null,note:$('mkNote').value.trim()||null,status:$('mkStatus').value,absence_id:$('mkAbs').value?+$('mkAbs').value:null},n=TYPES[o.class_type][1],w=wd(d);
+  var o={day:iso(d),slot:+$('mkSlot').value,class_type:$('mkType').value,student_id:$('mkStu').value?+$('mkStu').value:null,topic:$('mkTopic').value||null,note:$('mkNote').value.trim()||null,status:$('mkStatus').value,absence_id:$('mkAbs').value?+$('mkAbs').value:null,cancel_id:$('mkCan').value?+$('mkCan').value:null},n=TYPES[o.class_type][1],w=wd(d);
   if(o.status!=='cancelled'){
     if(o.slot+n>S1+1){$('mkErr').textContent='پایان کلاس از ساعت ۲۲:۰۰ بیشتر می‌شود.';return}
     if(sched.some(function(c){return c.day===w&&o.slot<c.slot+TYPES[c.class_type][1]&&c.slot<o.slot+n})){$('mkErr').textContent='در آن روز و ساعت کلاس هفتگی دارید.';return}
@@ -1223,7 +1234,7 @@ $('fMk').addEventListener('submit',async function(e){e.preventDefault();var d=jg
 $('mkDel').onclick=async function(){if(!confirm('این کلاس جبرانی حذف شود؟'))return;try{await del('makeups','id=eq.'+$('mkId').value);$('dlgMk').close();await loadMks();drawWeek();if(!$('t-abs').hidden)loadAbs();toast('حذف شد')}catch(x){toast('حذف نشد',1)}};
 
 /* ========== وضعیت کلاس‌های یک روز (در آمار) ========== */
-var dayItems=[],STL=[['held','برگزار شد'],['absent_excused','غیبت موجه (جبرانی دارد)'],['absent_unexcused','غیبت غیرموجه (بدون جبرانی)'],['cancelled','لغو شد']];
+var dayItems=[],STL=[['held','برگزار شد'],['absent_excused','غیبت موجه (جبرانی دارد)'],['absent_unexcused','غیبت غیرموجه (بدون جبرانی)'],['cancel_teacher','کنسل شد — از طرف مربی'],['cancel_student','کنسل شد — از طرف دانش‌آموز']];
 async function loadDay(){var d=jget('eDate');if(!d)return;var w=wd(d),day=iso(d),log={},mk=[];
   try{(await rest('class_log?select=*&day=eq.'+day)).forEach(function(x){log[x.ref]=x.status})}catch(e){}
   try{mk=await rest('makeups?select=*&day=eq.'+day+'&order=slot.asc')}catch(e){}
@@ -1231,36 +1242,41 @@ async function loadDay(){var d=jget('eDate');if(!d)return;var w=wd(d),day=iso(d)
     .concat(mk.filter(function(m){return m.status!=='cancelled'||log['m'+m.id]}).map(function(m){return {ref:'m'+m.id,id:m.id,slot:m.slot,type:m.class_type,sid:m.student_id,topic:m.topic,mk:true}}));
   dayItems.sort(function(a,b){return a.slot-b.slot});
   $('dayBox').innerHTML=dayItems.length?dayItems.map(function(i){var s=stu(i.sid),tp=i.topic||(s&&s.term)||'';
-    return '<div class="row"><div>'+rng(i.slot,TYPES[i.type][1])+'</div><div class="cls'+(i.mk?' mk':'')+'" style="--c:'+(tp?tcol(tp):'#6b7a80')+'"><b>'+esc(s?s.name:TYPES[i.type][0])+(i.mk?' <small>(جبرانی)</small>':'')+'</b><small>'+esc(tp)+'</small><span class="badge" style="background:var(--ty-'+i.type+')">'+TYPES[i.type][0]+'</span><select data-ref="'+i.ref+'" aria-label="وضعیت کلاس">'+opts(STL,(log[i.ref]==='absent'?'absent_excused':log[i.ref])||'held')+'</select></div></div>'}).join('')
+    return '<div class="row"><div>'+rng(i.slot,TYPES[i.type][1])+'</div><div class="cls'+(i.mk?' mk':'')+'" style="--c:'+(tp?tcol(tp):'#6b7a80')+'"><b>'+esc(s?s.name:TYPES[i.type][0])+(i.mk?' <small>(جبرانی)</small>':'')+'</b><small>'+esc(tp)+'</small><span class="badge" style="background:var(--ty-'+i.type+')">'+TYPES[i.type][0]+'</span><select data-ref="'+i.ref+'" aria-label="وضعیت کلاس">'+opts(STL,(log[i.ref]==='absent'?'absent_excused':log[i.ref]==='cancelled'?'cancel_teacher':log[i.ref])||'held')+'</select></div></div>'}).join('')
     :'<p class="hint">برای این روز کلاسی در برنامه هفتگی (یا جبرانی) نیست؛ می‌توانید تعداد را دستی بنویسید.</p>';
-  $('dayCtl').hidden=!dayItems.length}
+  $('dayCtl').hidden=!dayItems.length;dayAbsInfo(day)}
 $('dayAll').onclick=function(){document.querySelectorAll('#dayBox select').forEach(function(x){x.value='held'})};
 $('daySave').onclick=async function(){var d=jget('eDate');if(!d||!dayItems.length)return;var day=iso(d),sel={};
   document.querySelectorAll('#dayBox select[data-ref]').forEach(function(x){sel[x.dataset.ref]=x.value});
   try{await del('class_log','day=eq.'+day);
     await rest('class_log',{method:'POST',body:JSON.stringify(dayItems.map(function(i){return {day:day,ref:i.ref,status:sel[i.ref]||'held',student_id:i.sid||null,class_type:i.type,topic:i.topic||(stu(i.sid)||{}).term||null}})),headers:{Prefer:'return=minimal'}});
-    var ab=[],gone=[],tot={},ai={premium:0,economy:0};
-    for(var q=0;q<dayItems.length;q++){var i=dayItems[q],st=sel[i.ref]||'held',s=stu(i.sid),tp=i.topic||(s&&s.term)||null;
-      var isAbs=st.indexOf('absent')===0;
+    var ab=[],can=[],gone=[],goneC=[],tot={},ai={premium:0,economy:0},qa=cntEx();
+    for(var q=0;q<dayItems.length;q++){var i=dayItems[q],st=sel[i.ref]||'held',s=stu(i.sid),tp=i.topic||(s&&s.term)||null,isAbs=st.indexOf('absent')===0,isCan=st.indexOf('cancel')===0;
       if(isAbs&&i.sid)ab.push({day:day,ref:i.ref,student_id:i.sid,student_name:s?s.name:null,class_type:i.type,topic:tp,slot:i.slot,kind:st==='absent_unexcused'?'unexcused':'excused'});else gone.push(i.ref);
-      if(st==='held'||isAbs){tot[i.type]=(tot[i.type]||0)+1;if(tp===AIT&&ai[i.type]!==undefined)ai[i.type]++}
-      if(i.mk)await patch('makeups','id=eq.'+i.id,{status:st==='held'?'done':st==='cancelled'?'cancelled':'planned'})}
+      if(isCan)can.push({day:day,ref:i.ref,student_id:i.sid||null,student_name:s?s.name:null,class_type:i.type,topic:tp,slot:i.slot,cancelled_by:st==='cancel_student'?'student':'teacher'});else goneC.push(i.ref);
+      if(st==='held'||(isAbs&&(st==='absent_unexcused'||qa))){tot[i.type]=(tot[i.type]||0)+1;if(tp===AIT&&ai[i.type]!==undefined)ai[i.type]++}
+      if(i.mk)await patch('makeups','id=eq.'+i.id,{status:st==='held'?'done':isCan?'cancelled':'planned'})}
     if(ab.length)await rest('absences?on_conflict=day,ref',{method:'POST',body:JSON.stringify(ab),headers:{Prefer:'resolution=merge-duplicates,return=minimal'}});
     if(gone.length)await del('absences','day=eq.'+day+'&ref=in.('+gone.join(',')+')');
+    if(can.length)await rest('cancellations?on_conflict=day,ref',{method:'POST',body:JSON.stringify(can),headers:{Prefer:'resolution=merge-duplicates,return=minimal'}});
+    if(goneC.length)await del('cancellations','day=eq.'+day+'&ref=in.('+goneC.join(',')+')');
     var rows=[];Object.keys(tot).forEach(function(t){rows.push({day:day,topic:'—',class_type:t,count:tot[t]})});['premium','economy'].forEach(function(t){if(ai[t]>0)rows.push({day:day,topic:AIT,class_type:t,count:ai[t]})});
     await del('sessions','day=eq.'+day);if(rows.length)await rest('sessions',{method:'POST',body:JSON.stringify(rows),headers:{Prefer:'return=minimal'}});
     var nb=Object.keys(sel).filter(function(k){return sel[k].indexOf('absent')===0}).length;
-    toast('ثبت شد و آمار این روز حساب شد'+(nb?' — '+FD(nb)+' غیبت در لیست غیبت‌ها ثبت شد':''));loadEntry();report();loadStuStats().then(drawStu)}
-  catch(e){toast('ثبت نشد؛ آیا supabase-admin6.sql، admin7 و admin10 اجرا شده‌اند؟',1)}};
+    toast('ثبت شد و آمار این روز حساب شد'+(nb?' — '+FD(nb)+' غیبت در لیست غیبت‌ها ثبت شد':'')+(can.length?' — '+FD(can.length)+' کنسلی ثبت شد':''));
+    loadEntry();report();loadStuStats().then(drawStu);
+    if(can.length){var cr=await rest('cancellations?select=id,ref,student_id,class_type,topic&day=eq.'+day),mine=cr.filter(function(c){return can.some(function(x){return x.ref===c.ref})});
+      if(mine.length){var have=new Set((await rest('makeups?select=cancel_id&cancel_id=in.('+mine.map(function(c){return c.id}).join(',')+')')).map(function(m){return m.cancel_id}));mkQueue=mine.filter(function(c){return !have.has(c.id)});nextMkQueue()}}}
+  catch(e){toast('ثبت نشد؛ آیا supabase-admin6.sql، admin7، admin10 و admin11 اجرا شده‌اند؟',1)}};
 
 /* ========== غیبت‌ها و اطلاع به والدین ========== */
 var abs=[],amk=[],aFil='all',nfA=null,nfS=null,nfPh='';
 function aName(a){return a.student_name||(stu(a.student_id)||{}).name||'—'}
 function mkOfAbs(a){return amk.filter(function(m){return m.absence_id===a.id&&m.status!=='cancelled'})[0]}
 async function loadAbs(){
-  try{abs=await rest('absences?select=*&order=day.desc,id.desc&limit=1000');amk=await rest('makeups?select=id,absence_id,day,status&absence_id=not.is.null&limit=1000');$('warn6b').hidden=true}
-  catch(e){if(e.message!=='auth')$('warn6b').hidden=false}
-  drawAbs()}
+  try{abs=await rest('absences?select=*&order=day.desc,id.desc&limit=1000');$('warn6b').hidden=true}catch(e){if(e.message!=='auth')$('warn6b').hidden=false}
+  try{amk=await rest('makeups?select=id,absence_id,cancel_id,day,slot,status&or=(absence_id.not.is.null,cancel_id.not.is.null)&limit=1000')}catch(e){try{amk=await rest('makeups?select=id,absence_id,day,slot,status&absence_id=not.is.null&limit=1000')}catch(x){amk=[]}}
+  drawAbs();await loadCan()}
 function drawAbs(){var q=$('abQ').value.trim(),ex=abs.filter(function(a){return a.kind!=='unexcused'}),nn=abs.filter(function(a){return !a.notified}).length,nm=ex.filter(function(a){return !mkOfAbs(a)}).length;
   $('abKpi').innerHTML='<div class="kpi"><b>'+FD(abs.length)+'</b><span>کل غیبت‌ها</span></div><div class="kpi"><b>'+FD(ex.length)+'</b><span>غیبت موجه</span></div><div class="kpi"><b>'+FD(abs.length-ex.length)+'</b><span>غیبت غیرموجه (بدون جبرانی)</span></div><div class="kpi"><b>'+FD(nn)+'</b><span>به والدین اطلاع داده نشده</span></div><div class="kpi"><b>'+FD(nm)+'</b><span>موجه و جبران‌نشده</span></div>';
   $('abFilter').innerHTML=[['all','همه'],['excused','موجه'],['unexcused','غیرموجه'],['notnotified','اطلاع داده نشده'],['nomakeup','موجه و جبران نشده']].map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(aFil===x[0])+'">'+x[1]+'</button>'}).join('');
@@ -1273,25 +1289,26 @@ function drawAbs(){var q=$('abQ').value.trim(),ex=abs.filter(function(a){return 
       '<td style="white-space:nowrap"><button class="mini" data-an="'+a.id+'">اطلاع به والدین</button> '+(un?'':'<button class="mini" style="background:var(--muted)" data-amk="'+a.id+'">'+(m?'ویرایش جبرانی':'کلاس جبرانی')+'</button> ')+'<button class="mini" style="background:var(--badink);color:#fff" data-adel="'+a.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">غیبتی ثبت نشده است.</td></tr>'}
 $('abQ').oninput=drawAbs;
 $('abFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){aFil=b.dataset.f;drawAbs()}});
-function abFill(){$('abStu').innerHTML='<option value="">— دانش‌آموز —</option>'+opts(students.filter(function(s){return s.active}).map(function(s){return [s.id,'کد '+FD(s.id)+' · '+s.name]}),'');
+function abFill(){cnFill();$('abStu').innerHTML='<option value="">— دانش‌آموز —</option>'+opts(students.filter(function(s){return s.active}).map(function(s){return [s.id,'کد '+FD(s.id)+' · '+s.name]}),'');
   $('abType').innerHTML=opts(Object.keys(TYPES).map(function(k){return [k,TYPES[k][0]]}),'economy');$('abTopic').innerHTML='<option value="">ترم/موضوع…</option>'+opts(TOPICS.map(function(t){return [t,t]}),'')}
 $('abStu').onchange=function(){var s=stu(+this.value);if(s&&s.term)$('abTopic').value=s.term};
 $('fAbs').addEventListener('submit',async function(e){e.preventDefault();var s=stu(+$('abStu').value),d=jget('abDate');if(!s||!d){toast('دانش‌آموز را انتخاب کنید',1);return}
-  try{await post('absences',{day:iso(d),student_id:s.id,student_name:s.name,class_type:$('abType').value,topic:$('abTopic').value||s.term||null,reason:$('abNote').value.trim()||null,kind:$('abKind').value});$('abNote').value='';await loadAbs();toast('غیبت ثبت شد')}
-  catch(x){toast('ثبت نشد؛ آیا supabase-admin6.sql اجرا شده است؟',1)}});
+  var cnt=$('abCount').checked,o={day:iso(d),student_id:s.id,student_name:s.name,class_type:$('abType').value,topic:$('abTopic').value||s.term||null,reason:$('abNote').value.trim()||null,kind:$('abKind').value,counted:cnt};
+  try{await post('absences',o);if(cnt)await bumpSessions(o.day,o.class_type,o.topic,1);$('abNote').value='';await loadAbs();loadStuStats().then(drawStu);toast('غیبت ثبت شد'+(cnt?' و در آمار کلاس‌های آن روز اضافه شد':''))}
+  catch(x){toast('ثبت نشد؛ آیا supabase-admin6.sql، admin10 و admin11 اجرا شده‌اند؟',1)}});
 $('abRows').addEventListener('change',async function(e){var t=e.target;if(!t.dataset.ak)return;try{await patch('absences','id=eq.'+t.dataset.ak,{kind:t.value});await loadAbs();loadStuStats().then(drawStu);toast(t.value==='unexcused'?'غیرموجه شد (بدون جبرانی)':'موجه شد')}catch(x){toast('تغییر نکرد؛ آیا supabase-admin10.sql اجرا شده است؟',1)}});
 $('abRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
   var id=b.dataset.an||b.dataset.amk||b.dataset.adel,a=abs.filter(function(x){return String(x.id)===id})[0];if(!a)return;
   if(b.dataset.an)openNotify(a);
   else if(b.dataset.amk){var m=mkOfAbs(a);if(m){var r=await rest('makeups?select=*&id=eq.'+m.id);openMk(r[0])}else openMk(null,{student_id:a.student_id,topic:a.topic||'',class_type:a.class_type||'economy',absence_id:a.id})}
-  else if(b.dataset.adel){if(confirm('این غیبت حذف شود؟'))try{await del('absences','id=eq.'+a.id);await loadAbs()}catch(x){toast('حذف نشد',1)}}});
+  else if(b.dataset.adel){if(confirm('این غیبت حذف شود؟'))try{await del('absences','id=eq.'+a.id);if(a.counted&&!a.ref)await bumpSessions(a.day,a.class_type,a.topic,-1);await loadAbs()}catch(x){toast('حذف نشد',1)}}});
 function openNotify(a){nfA=a;nfS=stu(a.student_id)||{id:0,name:aName(a),term:a.topic,parent_name:'',parent_phone:'',phone:''};nfPh=recip(nfS,'pf');
   $('nfH').textContent='اطلاع غیبت — '+aName(a);$('nfText').value=fillSms(smsText(a.kind==='unexcused'?'absent2':'absent'),nfS,new Date(a.day+'T00:00:00Z'));$('nfRes').textContent='';nfBuild();$('dlgNotify').showModal()}
 function nfBuild(){var ok=validPh(nfPh),msg=$('nfText').value;
   $('nfInfo').textContent=ok?'گیرنده: '+(nfPh===phoneN(nfS.phone)?nfS.name:(nfS.parent_name||'والد'))+' — 0'+nfPh.slice(3):'شماره معتبری ثبت نشده؛ شماره والد را در «جزئیات» دانش‌آموز وارد کنید.';
   [['nfSms',ok?'sms:'+nfPh+'?body='+encodeURIComponent(msg):'#'],['nfWa',ok?'https://wa.me/'+nfPh.slice(1)+'?text='+encodeURIComponent(msg):'#']].forEach(function(x){var el=$(x[0]);el.href=x[1];el.style.pointerEvents=ok?'':'none';el.style.opacity=ok?'':'.5'});$('nfPanel').disabled=!ok}
 $('nfText').oninput=nfBuild;
-async function markNotified(){if(!nfA||nfA.notified)return;try{await patch('absences','id=eq.'+nfA.id,{notified:true,notified_at:new Date().toISOString()});nfA.notified=true;drawAbs()}catch(e){}}
+async function markNotified(){if(!nfA||nfA.notified)return;try{await patch(nfA._t||'absences','id=eq.'+nfA.id,{notified:true,notified_at:new Date().toISOString()});nfA.notified=true;drawAbs();drawCan()}catch(e){}}
 $('nfSms').addEventListener('click',markNotified);$('nfWa').addEventListener('click',markNotified);
 $('nfDone').onclick=async function(){await markNotified();toast('به‌عنوان اطلاع‌داده‌شده ثبت شد')};
 $('nfCopy').onclick=async function(){try{await navigator.clipboard.writeText($('nfText').value);toast('کپی شد')}catch(e){}};
@@ -1306,15 +1323,20 @@ $('nfPanel').onclick=async function(){if(!validPh(nfPh)||!confirm('پیامک ا
 /* ========== آمار، همراهی و تولد دانش‌آموزان ========== */
 var logs=[],absAll=[],SS={},J2C={};
 async function loadStuStats(){try{logs=await rest('class_log?select=ref,day,status,student_id,class_type&limit=20000')}catch(e){logs=[]}
-  try{absAll=await rest('absences?select=id,student_id,day,ref,kind,class_type&limit=5000')}catch(e){try{absAll=await rest('absences?select=id,student_id,day,ref,class_type&limit=5000')}catch(x){absAll=[]}}buildSS()}
+  try{absAll=await rest('absences?select=id,student_id,day,ref,kind,class_type&limit=5000')}catch(e){try{absAll=await rest('absences?select=id,student_id,day,ref,class_type&limit=5000')}catch(x){absAll=[]}}
+  try{cansAll=await rest('cancellations?select=id,student_id,cancelled_by,ref&limit=5000')}catch(e){cansAll=[]}buildSS()}
 function logSid(l){if(l.student_id)return l.student_id;if(l.ref&&l.ref.charAt(0)==='s'){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];return c?c.student_id:null}return null}
-function buildSS(){SS={};function g(id){return SS[id]||(SS[id]={held:0,absE:0,absU:0,min:0})}
+var cansAll=[];
+function buildSS(){SS={};function g(id){return SS[id]||(SS[id]={held:0,absE:0,absU:0,min:0,minE:0,canT:0,canS:0})}
   var kind={};absAll.forEach(function(a){if(a.ref)kind[a.day+'|'+a.ref]=a.kind||'excused'});
-  logs.forEach(function(l){var sid=logSid(l);if(!sid||l.status==='cancelled')return;var t=l.class_type;if(!t){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];t=c&&c.class_type}
-    var o=g(sid),m=(t&&TYPES[t]?TYPES[t][1]:2)*30,st=l.status;
-    if(st==='held')o.held++;else if(st==='absent_unexcused')o.absU++;else if(st==='absent_excused')o.absE++;else if(st==='absent'){if(kind[l.day+'|'+l.ref]==='unexcused')o.absU++;else o.absE++}else return;
-    o.min+=m});
-  absAll.forEach(function(a){if(a.ref||!a.student_id)return;var o=g(a.student_id),m=(a.class_type&&TYPES[a.class_type]?TYPES[a.class_type][1]:2)*30;if(a.kind==='unexcused')o.absU++;else o.absE++;o.min+=m})}
+  logs.forEach(function(l){var sid=logSid(l);if(!sid)return;var st=l.status;
+    if(st==='cancelled'||st==='cancel_teacher'){g(sid).canT++;return}if(st==='cancel_student'){g(sid).canS++;return}
+    var t=l.class_type;if(!t){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];t=c&&c.class_type}
+    var o=g(sid),m=(t&&TYPES[t]?TYPES[t][1]:2)*30;
+    if(st==='held'){o.held++;o.min+=m}else if(st==='absent_unexcused'){o.absU++;o.min+=m}else if(st==='absent_excused'){o.absE++;o.minE+=m}
+    else if(st==='absent'){if(kind[l.day+'|'+l.ref]==='unexcused'){o.absU++;o.min+=m}else{o.absE++;o.minE+=m}}});
+  absAll.forEach(function(a){if(a.ref||!a.student_id)return;var o=g(a.student_id),m=(a.class_type&&TYPES[a.class_type]?TYPES[a.class_type][1]:2)*30;if(a.kind==='unexcused'){o.absU++;o.min+=m}else{o.absE++;o.minE+=m}});
+  cansAll.forEach(function(c){if(c.ref||!c.student_id)return;var o=g(c.student_id);if(c.cancelled_by==='student')o.canS++;else o.canT++})}
 function ssCell(s){var x=SS[s.id]||{held:0,absE:0,absU:0};return FD(x.held)+' / '+FD(x.absE+x.absU)}
 function assoc(s){var st=s.start_date||String(s.created_at||'').slice(0,10);if(!st)return null;var a=new Date(st+'T00:00:00Z'),b=s.active?today():(s.ended_at?new Date(s.ended_at+'T00:00:00Z'):today());if(b<a)b=a;
   var days=Math.round((b-a)/864e5),pa=jp(a),pb=jp(b),m=(pb.year-pa.year)*12+(pb.month-pa.month)-(pb.day<pa.day?1:0);if(m<0)m=0;return {days:days,weeks:Math.floor(days/7),months:m}}
@@ -1327,8 +1349,9 @@ function jselOpt(id,date,y0,y1){var p=date?jp(date):{},o=function(a,b,sel){var h
   for(var y=y1;y>=y0;y--)yy+='<option value="'+y+'"'+(y===p.year?' selected':'')+'>'+FD(y)+'</option>';
   $(id).innerHTML='<select id="'+id+'d" aria-label="روز">'+o('روز',[1,31],p.day)+'</select><select id="'+id+'m" aria-label="ماه"><option value="">ماه</option>'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(i+1===p.month?' selected':'')+'>'+n+'</option>'}).join('')+'</select><select id="'+id+'y" aria-label="سال">'+yy+'</select>'}
 function jgetOpt(id){var y=+$(id+'y').value,m=+$(id+'m').value,d=+$(id+'d').value;if(!y||!m||!d)return null;return j2g(y,m,d)||j2g(y,m,d-1)||j2g(y,m,d-2)}
-function renderSStats(s){var st=SS[s.id]||{held:0,absE:0,absU:0,min:0},a=assoc(s),n=bdNext(s),ab=st.absE+st.absU,sess=st.held+ab,rate=sess?Math.round(st.held*100/sess):null;
-  $('sStats').innerHTML='<b>آمار این دانش‌آموز</b><div class="kpis" style="margin:6px 0"><div class="kpi"><b>'+FD(sess)+'</b><span>جلسه (با حضور من)</span></div><div class="kpi"><b>'+FD(st.held)+'</b><span>حضور دانش‌آموز</span></div><div class="kpi"><b>'+FD(st.absE)+'</b><span>غیبت موجه</span></div><div class="kpi"><b>'+FD(st.absU)+'</b><span>غیبت غیرموجه</span></div><div class="kpi"><b>'+hrs(st.min)+'</b><span>ساعت (غیبت‌ها هم حساب شده)</span></div>'+(rate!==null?'<div class="kpi"><b>'+FD(rate)+'٪</b><span>درصد حضور</span></div>':'')+
+function renderSStats(s){var st=SS[s.id]||{held:0,absE:0,absU:0,min:0,minE:0,canT:0,canS:0},a=assoc(s),n=bdNext(s),cx=cntEx(),ab=st.absE+st.absU,sess=st.held+st.absU+(cx?st.absE:0),mins=st.min+(cx?st.minE:0),rate=(st.held+ab)?Math.round(st.held*100/(st.held+ab)):null;
+  $('sStats').innerHTML='<b>آمار این دانش‌آموز</b><div class="kpis" style="margin:6px 0"><div class="kpi"><b>'+FD(sess)+'</b><span>جلسه (با حضور من)</span></div><div class="kpi"><b>'+FD(st.held)+'</b><span>حضور دانش‌آموز</span></div><div class="kpi"><b>'+FD(st.absE)+'</b><span>غیبت موجه</span></div><div class="kpi"><b>'+FD(st.absU)+'</b><span>غیبت غیرموجه</span></div><div class="kpi"><b>'+hrs(mins)+'</b><span>ساعت'+(cx?' (غیبت‌ها هم حساب شده)':' (غیبت موجه حساب نشده)')+'</span></div>'+(rate!==null?'<div class="kpi"><b>'+FD(rate)+'٪</b><span>درصد حضور</span></div>':'')+
+    '<div class="kpi"><b>'+FD(st.canT)+'</b><span>کنسلی از طرف مربی</span></div><div class="kpi"><b>'+FD(st.canS)+'</b><span>کنسلی از طرف دانش‌آموز</span></div>'+
     (a?'<div class="kpi"><b>'+FD(a.days)+'</b><span>روز همراهی</span></div><div class="kpi"><b>'+FD(a.weeks)+'</b><span>هفته</span></div><div class="kpi"><b>'+FD(a.months)+'</b><span>ماه</span></div>':'')+
     (n?'<div class="kpi"><b>'+FD(n.days===0?n.age:n.age-1)+'</b><span>سال سن'+(n.days===0?' — 🎂 امروز تولد است':' — تولد بعدی '+FD(n.days)+' روز دیگر')+'</span></div>':'')+'</div>'}
 function fillStuExtra(s){var cy=jp(today()).year;
@@ -1618,6 +1641,56 @@ $('invTest').onclick=async function(){var box=$('invTestOut');box.innerHTML='<p 
   await t('تابع prices در Supabase',async function(){var r=await fetch(C.url+'/functions/v1/prices',{method:'POST',headers:{apikey:C.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({items:[{id:0,source:'tgju',symbol:'geram18'}]})});
     if(r.status===404)throw new Error('ساخته نشده است');var j=await r.json();if(!r.ok||j.error)throw new Error(j.error||'خطا');var x=(j.results||[])[0]||{};if(!x.ok)throw new Error('تابع هست ولی TGJU از سرور جواب نداد: '+(x.error||''));return 'طلای ۱۸ عیار ≈ '+money(x.price)+' تومان'});
   out.push('ℹ️ هر منبعی که ❌ شد را می‌توانید با «آدرس دلخواه» یا قیمت دستی جایگزین کنید (راهنما: prices-setup.md).');box.innerHTML=out.map(function(x){return '<p style="margin:4px 0">'+esc(x)+'</p>'}).join('')};
+
+/* ========== کنسلی کلاس‌ها (از طرف مربی یا دانش‌آموز) ========== */
+var cans=[],mkQueue=[];
+function cntEx(){return prefs.countExcused!==false}
+function cName(c){return c.student_name||(stu(c.student_id)||{}).name||'—'}
+function mkOfCan(c){return amk.filter(function(m){return m.cancel_id===c.id&&m.status!=='cancelled'})[0]}
+function mkText(m){var d=new Date(m.day+'T00:00:00Z');return DAYS[wd(d)]+' '+jlabel(d)+(m.slot!=null?' ساعت '+tm(m.slot):'')}
+var cFil='all';
+async function loadCan(){try{cans=await rest('cancellations?select=*&order=day.desc,id.desc&limit=1000');$('warn11').hidden=true}catch(e){cans=[];if(e.message!=='auth')$('warn11').hidden=false}drawCan()}
+function cnFill(){$('cnStu').innerHTML='<option value="">— دانش‌آموز —</option>'+opts(students.filter(function(s){return s.active}).map(function(s){return [s.id,'کد '+FD(s.id)+' · '+s.name]}),'');
+  $('cnType').innerHTML=opts(Object.keys(TYPES).map(function(k){return [k,TYPES[k][0]]}),'economy');$('cnTopic').innerHTML='<option value="">ترم/موضوع…</option>'+opts(TOPICS.map(function(t){return [t,t]}),'')}
+$('cnStu').onchange=function(){var s=stu(+this.value);if(s&&s.term)$('cnTopic').value=s.term};
+function drawCan(){var t=cans.filter(function(c){return c.cancelled_by!=='student'}).length,nm=cans.filter(function(c){return !mkOfCan(c)}).length;
+  $('cnKpi').innerHTML='<div class="kpi"><b>'+FD(cans.length)+'</b><span>کل کنسلی‌ها</span></div><div class="kpi"><b>'+FD(t)+'</b><span>از طرف مربی</span></div><div class="kpi"><b>'+FD(cans.length-t)+'</b><span>از طرف دانش‌آموز</span></div><div class="kpi"><b>'+FD(nm)+'</b><span>جبرانی تعیین نشده</span></div>';
+  $('cnFilter').innerHTML=[['all','همه'],['teacher','از طرف مربی'],['student','از طرف دانش‌آموز'],['nomakeup','جبرانی تعیین نشده']].map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(cFil===x[0])+'">'+x[1]+'</button>'}).join('');
+  var L=cans.filter(function(c){return cFil==='all'||(cFil==='nomakeup'?!mkOfCan(c):c.cancelled_by===cFil)});
+  $('cnRows').innerHTML=L.map(function(c){var dd=new Date(c.day+'T00:00:00Z'),m=mkOfCan(c),st=c.cancelled_by==='student';
+    return '<tr><td style="text-align:right;white-space:nowrap">'+DAYS[wd(dd)]+' '+jlabel(dd)+'</td><td style="text-align:right"><b>'+esc(cName(c))+'</b></td><td style="text-align:right">'+dot(c.topic)+esc(c.topic)+(c.class_type?' · '+TYPES[c.class_type][0]:'')+(c.slot!=null?' · '+tm(c.slot):'')+'</td>'+
+      '<td><span class="stat" style="background:'+(st?'#e07b2b':'#2b7de0')+'">'+(st?'دانش‌آموز':'مربی')+'</span></td><td style="text-align:right">'+esc(c.reason)+'</td>'+
+      '<td>'+(c.notified?'<span class="stat" style="background:var(--okink);color:var(--okbg)">اطلاع داده شد</span>':'<span class="stat" style="background:var(--badink)">اطلاع داده نشده</span>')+'</td>'+
+      '<td>'+(m?'<span class="stat" style="background:var(--okink);color:var(--okbg)">'+esc(mkText(m))+(m.status==='done'?' ✓':'')+'</span>':'<span class="stat" style="background:var(--badink)">تعیین نشده</span>')+'</td>'+
+      '<td style="white-space:nowrap"><button class="mini" data-cmk="'+c.id+'">'+(m?'ویرایش جبرانی':'تعیین جبرانی')+'</button> <button class="mini" style="background:var(--muted)" data-cn="'+c.id+'">اطلاع به والدین</button> <button class="mini" style="background:var(--badink);color:#fff" data-cdel="'+c.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--muted)">کنسلی‌ای ثبت نشده است.</td></tr>'}
+$('cnFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){cFil=b.dataset.f;drawCan()}});
+function nextMkQueue(){var c=mkQueue.shift();if(!c)return;openMk(null,{student_id:c.student_id,topic:c.topic||'',class_type:c.class_type||'economy',cancel_id:c.id});toast('تاریخ جلسه جبرانی کلاس کنسل‌شده را مشخص کنید')}
+$('dlgMk').addEventListener('close',function(){if(mkQueue.length)setTimeout(nextMkQueue,150)});
+$('fCan').addEventListener('submit',async function(e){e.preventDefault();var s=stu(+$('cnStu').value),d=jget('cnDate');if(!s||!d){toast('دانش‌آموز را انتخاب کنید',1);return}
+  var o={day:iso(d),student_id:s.id,student_name:s.name,class_type:$('cnType').value,topic:$('cnTopic').value||s.term||null,cancelled_by:$('cnBy').value,reason:$('cnNote').value.trim()||null};
+  try{var r=await post('cancellations',o);$('cnNote').value='';await loadAbs();loadStuStats().then(drawStu);mkQueue=[{id:r[0].id,student_id:s.id,topic:o.topic,class_type:o.class_type}];nextMkQueue()}
+  catch(x){toast('ثبت نشد؛ آیا supabase-admin11.sql اجرا شده است؟',1)}});
+$('cnRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;var id=b.dataset.cmk||b.dataset.cn||b.dataset.cdel,c=cans.filter(function(x){return String(x.id)===id})[0];if(!c)return;
+  if(b.dataset.cmk){var m=mkOfCan(c);if(m){var r=await rest('makeups?select=*&id=eq.'+m.id);openMk(r[0])}else openMk(null,{student_id:c.student_id,topic:c.topic||'',class_type:c.class_type||'economy',cancel_id:c.id})}
+  else if(b.dataset.cn)openNotifyC(c);
+  else if(b.dataset.cdel){if(confirm('این کنسلی حذف شود؟'))try{await del('cancellations','id=eq.'+c.id);await loadAbs();loadStuStats().then(drawStu)}catch(x){toast('حذف نشد',1)}}});
+function openNotifyC(c){c._t='cancellations';nfA=c;nfS=stu(c.student_id)||{id:0,name:cName(c),term:c.topic,parent_name:'',parent_phone:'',phone:''};nfPh=recip(nfS,'pf');var m=mkOfCan(c);
+  $('nfH').textContent='اطلاع کنسلی کلاس — '+cName(c);$('nfText').value=fillSms(smsText(c.cancelled_by==='student'?'cancel_s':'cancel_t'),nfS,new Date(c.day+'T00:00:00Z'),{mk:m?mkText(m):''});$('nfRes').textContent='';nfBuild();$('dlgNotify').showModal()}
+async function bumpSessions(day,type,topic,delta){if(!type)return;
+  async function one(tp){var r=await rest('sessions?select=*&day=eq.'+day+'&class_type=eq.'+type+'&topic=eq.'+encodeURIComponent(tp)),x=r&&r[0];
+    if(x){var n=x.count+delta;if(n<=0)await del('sessions','id=eq.'+x.id);else await patch('sessions','id=eq.'+x.id,{count:Math.min(n,200)})}
+    else if(delta>0)await rest('sessions',{method:'POST',body:JSON.stringify([{day:day,topic:tp,class_type:type,count:delta}]),headers:{Prefer:'return=minimal'}})}
+  await one('—');if(topic===AIT&&(type==='premium'||type==='economy'))await one(AIT)}
+$('abKind').onchange=function(){$('abCount').checked=this.value==='unexcused'||cntEx()};
+async function dayAbsInfo(day){var a=[],c=[];try{a=await rest('absences?select=kind&day=eq.'+day)}catch(e){}try{c=await rest('cancellations?select=cancelled_by&day=eq.'+day)}catch(e){}
+  var e1=a.filter(function(x){return x.kind!=='unexcused'}).length,u=a.length-e1,ct=c.filter(function(x){return x.cancelled_by!=='student'}).length;
+  $('dayAbs').textContent=(a.length||c.length)?'در این روز: '+(a.length?FD(e1)+' غیبت موجه، '+FD(u)+' غیبت غیرموجه (در آمار حساب شده‌اند)':'')+(c.length?(a.length?' · ':'')+FD(ct)+' کنسلی مربی، '+FD(c.length-ct)+' کنسلی دانش‌آموز (حساب نمی‌شوند)':''):''}
+var PN={day:['روز قبل','روز بعد'],week:['هفته قبل','هفته بعد'],month:['ماه قبل','ماه بعد'],year:['سال قبل','سال بعد']};
+function shiftDate(date,pr,dir){if(pr==='day')return addd(date,dir);if(pr==='week')return addd(date,7*dir);var p=jp(date);
+  if(pr==='month'){var m=p.month+dir,y=p.year;if(m<1){m=12;y--}if(m>12){m=1;y++}return j2g(y,m,p.day)||j2g(y,m,p.day-1)||j2g(y,m,p.day-2)||date}
+  return j2g(p.year+dir,p.month,p.day)||j2g(p.year+dir,p.month,p.day-1)||date}
+$('rPrev').onclick=function(){jset('rDate',shiftDate(jget('rDate')||today(),per,-1));report()};$('rNext').onclick=function(){jset('rDate',shiftDate(jget('rDate')||today(),per,1));report()};$('rToday').onclick=function(){jset('rDate',today());report()};
+$('pCountEx').onchange=function(){prefs.countExcused=this.checked};
 
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
