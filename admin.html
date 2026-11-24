@@ -98,9 +98,10 @@ summary{cursor:pointer;font-weight:500}
 <div class="wrap" style="padding-top:12px">
 <div id="bdBanner" class="warnbox" style="background:var(--okbg);color:var(--okink)" hidden></div>
 <div id="artBanner" class="warnbox" hidden></div>
+<div id="loanBanner" class="warnbox" hidden></div>
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
 <nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت و کنسلی</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="inv" role="tab">سرمایه‌گذاری</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
+  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت و کنسلی</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="loan" role="tab">وام و اقساط</button><button data-t="inv" role="tab">سرمایه‌گذاری</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
 </nav>
 
 <section id="t-week">
@@ -181,6 +182,7 @@ summary{cursor:pointer;font-weight:500}
   <div class="kpis" id="fKpi"></div>
   <div class="card"><h2>عملکرد ماهانه</h2><p class="hint">میلیون تومان؛ سال انتخاب‌شده در برابر سال قبل</p><div class="chart" id="chM"></div></div>
   <div class="card"><h2>عملکرد سالانه</h2><p class="hint">میلیون تومان؛ جمع هر سال</p><div class="chart" id="chY"></div></div>
+  <div class="card"><h2>درآمد ماهانه به تفکیک منبع</h2><p class="hint">میلیون تومان؛ هر رنگ یک منبع است</p><div class="legend" id="chSL"></div><div class="chart" id="chMS"></div></div>
   <div class="card"><h2>به تفکیک منبع</h2><div id="chS"></div></div>
   <div class="card"><h2>فهرست واریزی‌ها</h2><div class="bar" style="margin-bottom:8px"><select id="fMonth" style="width:auto"></select></div>
     <div class="tbl num"><table><thead><tr><th style="text-align:right">تاریخ</th><th>مبلغ (تومان)</th><th>منبع</th><th style="text-align:right">یادداشت</th><th></th></tr></thead><tbody id="fRows"></tbody></table></div></div>
@@ -197,6 +199,13 @@ summary{cursor:pointer;font-weight:500}
   <div id="mlist"></div>
   <details class="card" style="margin-top:16px"><summary>راه‌اندازی ارسال خودکار با پنل پیامکی</summary><p class="hint" style="margin-top:8px">برای اینکه «ارسال گروهی» مستقیم از پنل انجام شود، تابع <b>send-sms</b> را در Supabase بسازید و اطلاعات پنل پیامکی (کاوه‌نگار، ملی‌پیامک یا هر پنل دیگر) را در Secrets بگذارید. مراحل کامل در فایل <b>sms-setup.md</b> است. تا آن موقع می‌توانید شماره‌ها و متن‌ها را کپی یا به‌صورت CSV بگیرید و در وب‌سایت پنل پیامکی بارگذاری کنید.</p></details>
   <div class="card" style="margin-top:16px"><h2>تاریخچه پیامک‌های ارسال‌شده از پنل</h2><div class="tbl"><table><thead><tr><th style="text-align:right">زمان</th><th style="text-align:right">گیرنده</th><th>وضعیت</th><th style="text-align:right">متن</th></tr></thead><tbody id="smsLog"></tbody></table></div></div>
+</section>
+
+<section id="t-loan" hidden>
+  <div id="warn12" class="warnbox" hidden>جدول وام‌ها ساخته نشده است. فایل <b>supabase-admin12.sql</b> را در Supabase اجرا کنید.</div>
+  <div class="bar" style="justify-content:space-between;margin-bottom:10px"><div class="seg" id="loanFilter"></div><button class="btn" id="addLoan">+ وام جدید</button></div>
+  <div class="kpis" id="loanKpi"></div>
+  <div class="lcards" id="loanList"></div>
 </section>
 
 <section id="t-inv" hidden>
@@ -375,6 +384,27 @@ summary{cursor:pointer;font-weight:500}
 
 <dialog id="dlgInvTest" style="width:min(640px,94vw)"><h2 style="margin-top:0">آزمایش منابع قیمت</h2><div id="invTestOut"></div><div class="btns" style="margin-top:12px"><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
+<dialog id="dlgLoan" style="width:min(860px,96vw)"><h2 id="lvH" style="margin-top:0"></h2>
+  <div class="kpis" id="lvKpi" style="margin-top:4px"></div><div class="pb big"><i id="lvBar" style="width:0"></i></div>
+  <div class="card" style="margin-top:12px;background:var(--bg)"><h3 style="margin:0 0 8px;font-size:16px">ثبت پرداخت</h3>
+    <div class="bar"><label>مبلغ (تومان)<input id="lpAmt" dir="ltr" style="text-align:right" inputmode="numeric"></label><label>تاریخ<div class="jsel" id="lpDate"></div></label><label style="flex:1 1 140px">یادداشت<input id="lpNote"></label></div>
+    <div class="btns" style="margin-top:8px"><button class="btn" id="lpAdd" type="button">ثبت پرداخت</button><button class="btn ghost" id="lpNext" type="button">مبلغ قسط بعدی</button></div>
+    <p class="hint" style="margin:6px 0 0">پرداخت‌ها به‌ترتیب روی اولین اقساط پرداخت‌نشده حساب می‌شوند.</p></div>
+  <h3 style="font-size:16px;margin:14px 0 6px">اقساط</h3>
+  <div class="tbl num" style="max-height:34vh;overflow:auto"><table style="min-width:640px"><thead><tr><th>#</th><th style="text-align:right">سررسید</th><th>مبلغ قسط</th><th>پرداخت‌شده</th><th>مانده</th><th>وضعیت</th><th></th></tr></thead><tbody id="lvRows"></tbody></table></div>
+  <h3 style="font-size:16px;margin:14px 0 6px">پرداخت‌های ثبت‌شده</h3>
+  <div class="tbl num" style="max-height:24vh;overflow:auto"><table style="min-width:480px"><thead><tr><th style="text-align:right">تاریخ</th><th>مبلغ</th><th style="text-align:right">یادداشت</th><th></th></tr></thead><tbody id="lvPays"></tbody></table></div>
+  <div class="btns" style="margin-top:12px"><button class="btn ghost" id="lvEdit" type="button">ویرایش وام</button><button class="btn red" id="lvDel" type="button">حذف وام</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
+
+<dialog id="dlgLoanE" style="width:min(640px,94vw)"><form id="fLoanE"><h2 id="leH" style="margin-top:0">وام جدید</h2><input type="hidden" id="leId">
+  <div class="fg"><label>عنوان وام<input id="leTitle" required placeholder="مثلاً وام مسکن، وام خودرو"></label><label>وام‌دهنده (بانک)<input id="leLender"></label>
+  <label>کل مبلغ بازپرداخت (تومان، اصل و سود)<input id="leTotal" dir="ltr" style="text-align:right" inputmode="numeric"></label><label>تعداد اقساط<input id="leCount" inputmode="numeric"></label>
+  <label>مبلغ هر قسط (تومان)<input id="leAmount" dir="ltr" style="text-align:right" inputmode="numeric" placeholder="اگر خالی باشد حساب می‌شود"></label><label>سررسید قسط اول<div class="jsel" id="leFirst"></div></label>
+  <label>مبلغ دریافتی وام (اختیاری)<input id="lePrincipal" dir="ltr" style="text-align:right" inputmode="numeric"></label><label>نرخ سود ٪ (اختیاری)<input id="leRate" inputmode="decimal"></label>
+  <label class="w">یادداشت<input id="leNote"></label><p id="leSum" class="hint w" style="margin:0"></p></div>
+  <p id="leErr" role="alert" style="color:var(--badink);margin:8px 0 0"></p>
+  <div class="btns" style="margin-top:12px"><button class="btn" type="submit">ذخیره</button><button class="btn ghost" type="button" data-close>بستن</button></div></form></dialog>
+
 <dialog id="dlgImg" style="width:min(760px,96vw)"><img id="imgBig" alt=""><p id="imgCap" style="margin:8px 0;text-align:center"></p>
   <div class="btns" style="justify-content:center"><a class="btn ghost" id="imgDl" download="learning-image.jpg" href="#">دانلود</a><button class="btn red" id="imgDel" type="button">حذف تصویر</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
@@ -408,6 +438,7 @@ summary{cursor:pointer;font-weight:500}
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ ترم‌ها (رنگ کادر کلاس)</h3><div class="fg" id="pTopics"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">رنگ نوع کلاس (برچسب کلاس)</h3><div class="fg" id="pTypes"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های برنامه‌ریزی روزانه</h3><div id="pTags" style="display:grid;gap:8px"></div><button class="mini" id="pTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
+  <h3 style="margin:14px 0 4px;font-size:16px">رنگ منابع درآمد (بخش مالی)</h3><div class="fg" id="pSrc"></div>
   <h3 style="margin:14px 0 4px;font-size:16px">تگ‌های یادداشت‌ها</h3><div id="pNTags" style="display:grid;gap:8px"></div><button class="mini" id="pNTagAdd" type="button" style="margin-top:8px">+ تگ جدید</button>
   <div class="btns" style="margin-top:14px"><button class="btn" id="pSave" type="button">ذخیره</button><button class="btn ghost" id="pReset" type="button">بازنشانی همه</button><button class="btn ghost" type="button" data-close>بستن</button></div></dialog>
 
@@ -706,7 +737,7 @@ function openSet(){
   $('pTheme').value=prefs.theme;$('pFont').innerHTML=opts(FONTS.concat(CF?[['PanelCustom','فونت آپلودشده: '+CF.name]]:[]),prefs.font);$('pFontMsg').textContent='';$('pCountEx').checked=prefs.countExcused!==false;$('pSize').value=String(prefs.size);$('pAccent').value=prefs.accent||'#0f6b63';
   $('pTopics').innerHTML=TOPICS.map(function(t,i){return '<label class="clr"><input type="color" data-pt="'+i+'" value="'+tcol(t)+'"><span>'+t+'</span></label>'}).join('');
   $('pTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<label class="clr"><input type="color" data-py="'+k+'" value="'+ycol(k)+'"><span>'+TYPES[k][0]+'</span></label>'}).join('');
-  drawTagSet();drawNTagSet();$('dlgSet').showModal()}
+  drawTagSet();drawNTagSet();drawSrcSet();$('dlgSet').showModal()}
 $('openSet').onclick=openSet;
 $('pTheme').onchange=function(){prefs.theme=this.value;applyPrefs()};
 $('pFont').onchange=function(){prefs.font=this.value;applyPrefs()};
@@ -1100,15 +1131,15 @@ function drawFin(){
   var by={};inc.forEach(function(x){var p=jpi(x.day);by[p.year]=by[p.year]||new Array(12).fill(0);by[p.year][p.month-1]+=x.amount});
   var m=by[cur]||new Array(12).fill(0),prev=by[cur-1]||new Array(12).fill(0),tot=m.reduce(function(a,b){return a+b},0),nz=m.filter(Boolean).length,best=m.indexOf(Math.max.apply(null,m)),cm=jp(today()).month-1;
   $('fKpi').innerHTML='<div class="kpi"><b>'+money(tot)+'</b><span>جمع سال (تومان)</span></div>'+(cur===cy?'<div class="kpi"><b>'+money(m[cm])+'</b><span>ماه جاری ('+JM[cm]+')</span></div>':'')+'<div class="kpi"><b>'+money(nz?tot/nz:0)+'</b><span>میانگین ماهانه</span></div><div class="kpi"><b>'+(tot?JM[best]:'—')+'</b><span>'+(tot?'بهترین ماه: '+money(m[best]):'بهترین ماه')+'</span></div>';
-  $('chM').innerHTML=bars(JM,[{n:FD(cur-1),c:'var(--muted)',v:prev},{n:FD(cur),c:'var(--accent)',v:m}],1e6);
+  $('chM').innerHTML=bars(JM,[{n:FD(cur-1),c:'var(--muted)',v:prev},{n:FD(cur),c:'var(--accent)',v:m}],1e6);drawStackMS(cur);
   var yl=Object.keys(by).map(Number).sort(function(a,b){return a-b}).slice(-8);if(!yl.length)yl=[cy];
   $('chY').innerHTML=bars(yl.map(FD),[{n:'جمع سال',c:'var(--accent)',v:yl.map(function(y){return (by[y]||[]).reduce(function(a,b){return a+b},0)})}],1e6);
   var src={};inc.forEach(function(x){if(jpi(x.day).year===cur){var k=x.source||'سایر';src[k]=(src[k]||0)+x.amount}});
   var sk=Object.keys(src).sort(function(a,b){return src[b]-src[a]}),mx=sk.length?src[sk[0]]:1;
-  $('chS').innerHTML=sk.map(function(k){return '<div class="hb"><span>'+esc(k)+'</span><i style="width:'+Math.max(2,src[k]/mx*100)+'%"></i><span>'+money(src[k])+'</span></div>'}).join('')||'<p class="hint">واریزی‌ای برای این سال ثبت نشده است.</p>';
+  $('chS').innerHTML=sk.map(function(k){return '<div class="hb"><span><span class="dotc" style="background:'+srcColor(k)+'"></span>'+esc(k)+'</span><i style="width:'+Math.max(2,src[k]/mx*100)+'%;background:'+srcColor(k)+'"></i><span>'+money(src[k])+'</span></div>'}).join('')||'<p class="hint">واریزی‌ای برای این سال ثبت نشده است.</p>';
   var fm=+$('fMonth').value||0;$('fMonth').innerHTML='<option value="0">همه ماه‌ها</option>'+JM.map(function(n,i){return '<option value="'+(i+1)+'"'+(fm===i+1?' selected':'')+'>'+n+'</option>'}).join('');
   var L=inc.filter(function(x){var p=jpi(x.day);return p.year===cur&&(!fm||p.month===fm)}).reverse();
-  $('fRows').innerHTML=L.map(function(x){return '<tr><td style="text-align:right">'+jlabel(new Date(x.day+'T00:00:00Z'))+'</td><td><b>'+money(x.amount)+'</b></td><td>'+esc(x.source)+'</td><td style="text-align:right">'+esc(x.note)+'</td><td><button class="mini" data-fe="'+x.id+'">ویرایش</button> <button class="mini" style="background:var(--badink);color:#fff" data-fd="'+x.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted)">موردی نیست.</td></tr>'}
+  $('fRows').innerHTML=L.map(function(x){return '<tr><td style="text-align:right">'+jlabel(new Date(x.day+'T00:00:00Z'))+'</td><td><b>'+money(x.amount)+'</b></td><td><span class="stat" style="background:'+srcColor(x.source||'سایر')+'">'+esc(x.source)+'</span></td><td style="text-align:right">'+esc(x.note)+'</td><td><button class="mini" data-fe="'+x.id+'">ویرایش</button> <button class="mini" style="background:var(--badink);color:#fff" data-fd="'+x.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted)">موردی نیست.</td></tr>'}
 $('fYear').onchange=drawFin;$('fMonth').onchange=drawFin;
 $('fAmount').oninput=function(){var v=this.value,pos=this.selectionStart,db=ND(v.slice(0,pos)).length,n=ND(v).replace(/^0+/,''),f=n?money(+n):'';this.value=f;
   var c=0,np=0;for(;np<f.length&&c<db;np++)if(/[۰-۹]/.test(f[np]))c++;try{this.setSelectionRange(np,np)}catch(e){}$('fPrev').textContent=n?'تومان':''};
@@ -1119,8 +1150,8 @@ $('fForm').addEventListener('submit',async function(e){e.preventDefault();var d=
   try{if(fEdit)await patch('income','id=eq.'+fEdit,o);else await post('income',o);fReset();await loadFin();toast('ثبت شد')}catch(x){toast('ثبت نشد؛ آیا supabase-admin2.sql اجرا شده است؟',1)}});
 $('fRows').addEventListener('click',async function(e){var b=e.target.closest('button');if(!b)return;
   if(b.dataset.fd){if(confirm('این واریزی حذف شود؟')){try{await del('income','id=eq.'+b.dataset.fd);loadFin()}catch(x){toast('حذف نشد',1)}}}
-  if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
-function initModules(){jsel('cnDate',today());jsel('abDate',today());jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));drawLegend()}
+  if(b.dataset.fe){var x=inc.filter(function(i){return String(i.id)===b.dataset.fe})[0];fEdit=x.id;jset('fDate',new Date(x.day+'T00:00:00Z'));$('fAmount').value=money(x.amount);$('fSrc').value=x.source||'سایر';fSrcPaint();$('fNote').value=x.note||'';$('fPrev').textContent='تومان';$('fTitle').textContent='ویرایش واریزی';$('fSave').textContent='ذخیره تغییر';$('fCancel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}});
+function initModules(){jsel('cnDate',today());jsel('abDate',today());jsel('dDate',today());jsel('mDate',today());$('bTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));jsel('cDate',today());jsel('fDate',today());$('fSrc').innerHTML=opts(SRC.map(function(x){return [x,x]}));fSrcPaint();drawLegend()}
 
 /* ========== پروفایل، فونت دلخواه، تلگرام ========== */
 var CF=null,AV='',newAv=null;
@@ -1692,17 +1723,102 @@ function shiftDate(date,pr,dir){if(pr==='day')return addd(date,dir);if(pr==='wee
 $('rPrev').onclick=function(){jset('rDate',shiftDate(jget('rDate')||today(),per,-1));report()};$('rNext').onclick=function(){jset('rDate',shiftDate(jget('rDate')||today(),per,1));report()};$('rToday').onclick=function(){jset('rDate',today());report()};
 $('pCountEx').onchange=function(){prefs.countExcused=this.checked};
 
+/* ========== رنگ منابع درآمد (مالی) ========== */
+var DEFSRC={'یاسان':'#2b7de0','فرادرس':'#e07b2b','کلاس خصوصی':'#1f9461','مجله فرادرس':'#8a4fd8','سایر':'#6b7a80'},SPAL=['#e5534b','#14b8a6','#c79a12','#e255a1','#6366f1','#84cc16'];
+function srcColor(k){if(prefs.srcColors&&prefs.srcColors[k])return prefs.srcColors[k];if(DEFSRC[k])return DEFSRC[k];var h=0;String(k).split('').forEach(function(c){h+=c.charCodeAt(0)});return SPAL[h%SPAL.length]}
+function fSrcPaint(){var e=$('fSrc');e.style.borderInlineStart='6px solid '+srcColor(e.value)}
+$('fSrc').addEventListener('change',fSrcPaint);
+function stackBars(labels,series,unit){var W=720,H=260,pl=40,pr=8,pt=14,pb=30,iw=W-pl-pr,ih=H-pt-pb,n=labels.length,sw=iw/n,tots=labels.map(function(_,i){return series.reduce(function(a,s){return a+s.v[i]},0)}),top=niceMax(Math.max.apply(null,tots.concat([unit]))),bw=Math.min(34,sw*.7);
+  var h='<svg viewBox="0 0 '+W+' '+H+'" role="img" style="width:100%;min-width:560px;height:auto">';
+  for(var i=0;i<=4;i++){var y=pt+ih-ih*i/4;h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--muted)">'+FD(+(top*i/4/unit).toFixed(1))+'</text>'}
+  labels.forEach(function(lb,i){var cx=W-pr-sw*(i+.5),y0=pt+ih;h+='<text x="'+cx+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="var(--muted)">'+lb+'</text>';
+    series.forEach(function(s){var v=s.v[i];if(!v)return;var bh=ih*v/top;y0-=bh;h+='<rect x="'+(cx-bw/2)+'" y="'+y0+'" width="'+bw+'" height="'+Math.max(bh,1)+'" fill="'+s.c+'"><title>'+esc(s.n)+' — '+lb+': '+money(v)+' تومان</title></rect>'})});
+  return h+'</svg>'}
+function drawStackMS(cur){var by={};inc.forEach(function(x){var p=jpi(x.day);if(p.year!==cur)return;var k=x.source||'سایر';(by[k]=by[k]||new Array(12).fill(0))[p.month-1]+=x.amount});
+  var ks=Object.keys(by).sort(function(a,b){var s=function(k){return by[k].reduce(function(x,y){return x+y},0)};return s(b)-s(a)});
+  $('chSL').innerHTML=ks.map(function(k){return '<span><span class="dotc" style="background:'+srcColor(k)+'"></span>'+esc(k)+'</span>'}).join('');
+  $('chMS').innerHTML=ks.length?stackBars(JM,ks.map(function(k){return {n:k,c:srcColor(k),v:by[k]}}),1e6):'<p class="hint">واریزی‌ای برای این سال ثبت نشده است.</p>'}
+function drawSrcSet(){$('pSrc').innerHTML=SRC.map(function(k){return '<label class="clr"><input type="color" data-ps="'+esc(k)+'" value="'+srcColor(k)+'"><span>'+esc(k)+'</span></label>'}).join('')}
+$('dlgSet').addEventListener('input',function(e){var t=e.target;if(t.dataset.ps){prefs.srcColors=prefs.srcColors||{};prefs.srcColors[t.dataset.ps]=t.value;if(!$('t-fin').hidden)drawFin();fSrcPaint()}});
+
+/* ========== مدیریت وام و اقساط ========== */
+var loans=[],lpay=[],loanOpen=null,lnFil='active',LPAL=['#2b7de0','#e07b2b','#1f9461','#8a4fd8','#e255a1','#14b8a6'];
+var J2M={};function j2gm(y,m,d){var k=y+'-'+m+'-'+d;if(!(k in J2M)){var r=null;for(var i=0;i<4&&!r;i++)r=j2g(y,m,d-i);J2M[k]=r}return J2M[k]}
+function loanById(id){return loans.filter(function(l){return String(l.id)===String(id)})[0]}
+function loanTotal(l){return +l.total||(+l.count*+l.amount)}
+function loanSched(l){var n=+l.count,a=+l.amount,tot=loanTotal(l),p=jp(new Date(l.first_due+'T00:00:00Z')),out=[];
+  for(var i=0;i<n;i++){var m0=p.month-1+i,y=p.year+Math.floor(m0/12),m=m0%12+1;out.push({no:i+1,due:j2gm(y,m,p.day),amount:Math.round(i<n-1?a:Math.max(tot-a*(n-1),0))})}return out}
+function loanCalc(l){var sc=loanSched(l),pays=lpay.filter(function(x){return x.loan_id===l.id}).sort(function(a,b){return a.day<b.day?-1:a.day>b.day?1:a.id-b.id}),run=0,cums=[],now=today();
+  pays.forEach(function(p){run+=+p.amount;cums.push({c:run,day:p.day})});
+  var P=run,pool=P,cum=0,paidCnt=0,overdue=0,overCnt=0,next=null;
+  sc.forEach(function(it){cum+=it.amount;var take=Math.min(it.amount,pool);it.paid=take;pool-=take;it.left=it.amount-take;it.full=it.left<=0.5;
+    if(it.full){it.paidAt=(cums.filter(function(x){return x.c>=cum-0.5})[0]||{}).day;paidCnt++}
+    it.state=it.full?'paid':(it.due&&it.due<now?'overdue':(it.paid>0?'partial':'upcoming'));
+    if(!it.full&&it.due&&it.due<now){overdue+=it.left;overCnt++}if(!it.full&&!next)next=it});
+  var tot=loanTotal(l);return {sc:sc,paid:P,remain:Math.max(tot-P,0),total:tot,paidCnt:paidCnt,left:sc.length-paidCnt,next:next,overdue:overdue,overCnt:overCnt,pays:pays,done:P>=tot-0.5,pct:Math.min(100,Math.round(P*100/tot))}}
+function lDueText(d){if(!d)return '—';var n=Math.round((d-today())/864e5);return jlabel(d)+' — '+(n===0?'امروز':n>0?FD(n)+' روز دیگر':FD(-n)+' روز گذشته')}
+async function loadLoans(){
+  try{loans=await rest('loans?select=*&order=id.desc');lpay=await rest('loan_payments?select=*&order=day.asc,id.asc&limit=5000');$('warn12').hidden=true}catch(e){if(e.message!=='auth')$('warn12').hidden=false}
+  drawLoans();loanCheck()}
+function drawLoans(){var C=loans.map(function(l){return {l:l,c:loanCalc(l)}}),act=C.filter(function(x){return !x.c.done});
+  var rem=0,mon=0,od=0,soon=0;act.forEach(function(x){rem+=x.c.remain;mon+=+x.l.amount;od+=x.c.overdue;x.c.sc.forEach(function(it){if(!it.full&&it.due){var n=Math.round((it.due-today())/864e5);if(n>=0&&n<=30)soon+=it.left}})});
+  $('loanKpi').innerHTML='<div class="kpi"><b>'+money(rem)+'</b><span>مانده کل وام‌ها (تومان)</span></div><div class="kpi"><b>'+FD(act.length)+'</b><span>وام فعال</span></div><div class="kpi"><b>'+money(mon)+'</b><span>جمع اقساط ماهانه</span></div><div class="kpi"><b>'+money(soon)+'</b><span>اقساط ۳۰ روز آینده</span></div><div class="kpi"><b style="color:'+(od?'var(--badink)':'inherit')+'">'+money(od)+'</b><span>سررسید گذشته</span></div>';
+  $('loanFilter').innerHTML=[['active','فعال ('+FD(act.length)+')'],['done','تسویه‌شده ('+FD(C.length-act.length)+')'],['all','همه']].map(function(x){return '<button data-f="'+x[0]+'" aria-pressed="'+(lnFil===x[0])+'">'+x[1]+'</button>'}).join('');
+  var L=C.filter(function(x){return lnFil==='all'||(lnFil==='done'?x.c.done:!x.c.done)});
+  $('loanList').innerHTML=L.map(function(x){var l=x.l,c=x.c,col=LPAL[l.id%LPAL.length],nx=c.next;
+    return '<div class="lcard" data-lv="'+l.id+'" tabindex="0" role="button" style="--c:'+col+'"><b>'+esc(l.title)+'</b>'+(l.lender?'<small class="hint" style="margin:0">'+esc(l.lender)+'</small>':'')+
+      '<span style="font-size:22px;font-weight:800">'+money(c.remain)+' <small style="font-size:13px;font-weight:400">تومان مانده</small></span>'+
+      '<div class="pb"><i style="width:'+c.pct+'%"></i></div><small>'+FD(c.paidCnt)+' از '+FD(c.sc.length)+' قسط پرداخت شد — '+FD(c.left)+' قسط مانده — '+FD(c.pct)+'٪</small>'+
+      (c.done?'<span class="badge" style="background:var(--okink);color:var(--okbg)">تسویه شد ✓</span>':(nx?'<span class="due'+(nx.state==='overdue'?' bad':'')+'">قسط بعدی: '+money(nx.left)+' تومان — '+lDueText(nx.due)+'</span>':''))+
+      (c.overCnt?'<small style="color:var(--badink)">'+FD(c.overCnt)+' قسط سررسیدگذشته ('+money(c.overdue)+' تومان)</small>':'')+
+      '<div class="btns"><button class="mini" data-lv="'+l.id+'">جزئیات و ثبت پرداخت</button></div></div>'}).join('')||'<p class="hint">وامی در این فهرست نیست. با «+ وام جدید» شروع کنید.</p>'}
+$('loanFilter').addEventListener('click',function(e){var b=e.target.closest('button');if(b){lnFil=b.dataset.f;drawLoans()}});
+$('loanList').addEventListener('click',function(e){var b=e.target.closest('[data-lv]');if(b)viewLoan(b.dataset.lv)});
+$('loanList').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.dataset.lv)viewLoan(e.target.dataset.lv)});
+function loanCheck(){var L=[];loans.forEach(function(l){var c=loanCalc(l),nx=c.next;if(!c.done&&nx&&nx.due){var n=Math.round((nx.due-today())/864e5);if(n<=3)L.push({l:l,n:n,it:nx})}});L.sort(function(a,b){return a.n-b.n});
+  $('loanBanner').hidden=!L.length;$('loanBanner').innerHTML=L.length?'💳 قسط وام: '+L.slice(0,4).map(function(x){return '<b>'+esc(x.l.title)+'</b> — '+money(x.it.left)+' تومان ('+(x.n<0?FD(-x.n)+' روز گذشته':x.n===0?'امروز':FD(x.n)+' روز دیگر')+') <button class="mini" data-lb="'+x.l.id+'">ثبت پرداخت</button>'}).join(' ، '):''}
+$('loanBanner').addEventListener('click',function(e){var b=e.target.closest('button[data-lb]');if(b){showTab('loan');viewLoan(b.dataset.lb)}});
+function viewLoan(id){var l=loanById(id);if(!l)return;loanOpen=l;var c=loanCalc(l);
+  $('lvH').textContent=l.title+(l.lender?' — '+l.lender:'');
+  $('lvKpi').innerHTML='<div class="kpi"><b>'+money(c.remain)+'</b><span>مانده وام (تومان)</span></div><div class="kpi"><b>'+money(c.paid)+'</b><span>پرداخت‌شده</span></div><div class="kpi"><b>'+FD(c.paidCnt)+' از '+FD(c.sc.length)+'</b><span>قسط پرداخت‌شده</span></div><div class="kpi"><b>'+FD(c.left)+'</b><span>قسط مانده</span></div><div class="kpi"><b>'+money(l.amount)+'</b><span>مبلغ هر قسط</span></div>'+(c.overCnt?'<div class="kpi"><b style="color:var(--badink)">'+money(c.overdue)+'</b><span>سررسید گذشته</span></div>':'');
+  $('lvBar').style.width=c.pct+'%';
+  var stl={paid:['پرداخت شد','var(--okink);color:var(--okbg)'],partial:['نیمه‌پرداخت','#c79a12'],overdue:['سررسید گذشته','var(--badink)'],upcoming:['در انتظار','var(--muted)']};
+  $('lvRows').innerHTML=c.sc.map(function(it){var s=stl[it.state];return '<tr><td>'+FD(it.no)+'</td><td style="text-align:right;white-space:nowrap">'+(it.due?jlabel(it.due):'—')+'</td><td>'+money(it.amount)+'</td><td>'+money(it.paid)+'</td><td>'+money(it.left)+'</td><td><span class="stat" style="background:'+s[1]+'">'+s[0]+'</span>'+(it.paidAt?' <small>'+jlabel(new Date(it.paidAt+'T00:00:00Z'))+'</small>':'')+'</td><td>'+(it.full?'':'<button class="mini" data-pay="'+it.left+'">پرداخت</button>')+'</td></tr>'}).join('');
+  $('lvPays').innerHTML=c.pays.slice().reverse().map(function(p){return '<tr><td style="text-align:right">'+jlabel(new Date(p.day+'T00:00:00Z'))+'</td><td>'+money(p.amount)+'</td><td style="text-align:right">'+esc(p.note)+'</td><td><button class="mini" style="background:var(--badink);color:#fff" data-pd="'+p.id+'">حذف</button></td></tr>'}).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--muted)">پرداختی ثبت نشده است.</td></tr>';
+  jsel('lpDate',today());if(!$('dlgLoan').open){$('lpAmt').value=c.next?money(c.next.left):'';$('lpNote').value=''}$('dlgLoan').showModal()}
+$('lpAmt').oninput=function(){moneyIn(this)};
+$('lvRows').addEventListener('click',function(e){var b=e.target.closest('button[data-pay]');if(b){$('lpAmt').value=money(+b.dataset.pay);$('lpAmt').focus()}});
+$('lpNext').onclick=function(){var c=loanCalc(loanOpen);$('lpAmt').value=c.next?money(c.next.left):''};
+$('lpAdd').onclick=async function(){var l=loanOpen;if(!l)return;var a=NUM($('lpAmt').value),d=jget('lpDate');if(!(a>0)||!d){toast('مبلغ و تاریخ را درست وارد کنید',1);return}
+  var c=loanCalc(l);if(a>c.remain+0.5&&!confirm('مبلغ از مانده وام ('+money(c.remain)+' تومان) بیشتر است. ثبت شود؟'))return;
+  try{await post('loan_payments',{loan_id:l.id,day:iso(d),amount:a,note:$('lpNote').value.trim()||null});$('lpAmt').value='';$('lpNote').value='';await loadLoans();viewLoan(l.id);toast('پرداخت ثبت شد')}catch(e){toast('ثبت نشد؛ آیا supabase-admin12.sql اجرا شده است؟',1)}};
+$('lvPays').addEventListener('click',async function(e){var b=e.target.closest('button[data-pd]');if(!b||!confirm('این پرداخت حذف شود؟'))return;try{await del('loan_payments','id=eq.'+b.dataset.pd);await loadLoans();viewLoan(loanOpen.id)}catch(x){toast('حذف نشد',1)}});
+$('lvDel').onclick=async function(){if(!loanOpen||!confirm('این وام و همه پرداخت‌هایش حذف شود؟'))return;try{await del('loans','id=eq.'+loanOpen.id);$('dlgLoan').close();await loadLoans();toast('حذف شد')}catch(e){toast('حذف نشد',1)}};
+$('lvEdit').onclick=function(){$('dlgLoan').close();openLoanEdit(loanOpen)};
+function openLoanEdit(l){l=l||{id:'',title:'',lender:'',total:'',count:'',amount:'',first_due:null,principal:'',rate:'',note:''};
+  $('leId').value=l.id||'';$('leTitle').value=l.title;$('leLender').value=l.lender||'';$('leTotal').value=l.total?money(l.total):'';$('leCount').value=l.count||'';$('leAmount').value=l.amount?money(l.amount):'';
+  jsel('leFirst',l.first_due?new Date(l.first_due+'T00:00:00Z'):addd(today(),30));$('lePrincipal').value=l.principal?money(l.principal):'';$('leRate').value=l.rate||'';$('leNote').value=l.note||'';$('leErr').textContent='';$('leH').textContent=l.id?'ویرایش وام':'وام جدید';leSum();$('dlgLoanE').showModal()}
+function leSum(){var t=NUM($('leTotal').value),n=NUM($('leCount').value),a=NUM($('leAmount').value);if(!a&&t&&n)a=Math.round(t/n);if(!t&&a&&n)t=a*n;
+  $('leSum').textContent=(t&&n&&a)?'جمع: '+money(t)+' تومان در '+FD(n)+' قسط؛ هر قسط '+money(a)+(n>1?' و قسط آخر '+money(Math.max(t-a*(n-1),0)):''):''}
+['leTotal','leAmount','lePrincipal'].forEach(function(i){$(i).oninput=function(){moneyIn(this);leSum()}});$('leCount').oninput=leSum;
+$('addLoan').onclick=function(){openLoanEdit()};
+$('fLoanE').addEventListener('submit',async function(e){e.preventDefault();var id=$('leId').value,t=NUM($('leTotal').value),n=Math.round(NUM($('leCount').value)),a=NUM($('leAmount').value),d=jget('leFirst');
+  if(!a&&t&&n)a=Math.round(t/n);if(!t&&a&&n)t=a*n;
+  if(!(t>0)||!(n>=1)||!(a>0)||!d){$('leErr').textContent='کل مبلغ بازپرداخت، تعداد اقساط و تاریخ اولین قسط را وارد کنید.';return}
+  var o={title:$('leTitle').value.trim(),lender:$('leLender').value.trim()||null,total:t,count:n,amount:a,first_due:iso(d),principal:NUM($('lePrincipal').value)||null,rate:NUM($('leRate').value)||null,note:$('leNote').value.trim()||null};
+  try{var r;if(id)await patch('loans','id=eq.'+id,o);else r=await post('loans',o);$('dlgLoanE').close();await loadLoans();toast('ذخیره شد');if(!id&&r)viewLoan(r[0].id)}catch(x){$('leErr').textContent='ذخیره نشد؛ آیا supabase-admin12.sql اجرا شده است؟'}});
+
 /* ---------- تب‌ها و شروع ---------- */
 function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
-  ['week','cal','rep','stu','comm','abs','stats','fin','inv','learn','art','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
-  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='inv')loadInv();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='abs'){abFill();loadAbs()}if(t==='rep')loadReport();if(t==='learn')loadLearn();if(t==='art')loadArticles()}
+  ['week','cal','rep','stu','comm','abs','stats','fin','loan','inv','learn','art','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
+  if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='inv')loadInv();if(t==='loan')loadLoans();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='abs'){abFill();loadAbs()}if(t==='rep')loadReport();if(t==='learn')loadLearn();if(t==='art')loadArticles()}
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)showTab(b.dataset.t)});
 function enter(){showApp(true);
   $('aTerm').innerHTML=opts(TOPICS.map(function(t){return [t,t]}));
   jsel('eDate',today());jsel('rDate',today());buildEntry();
   if(window.matchMedia('(max-width:700px)').matches)view=String(wd(today()));
-  loadCore();loadPrefsRemote();initModules();loadNotes();loadArticles();loadFontRemote();loadAvatar();showTab(sessionStorage.getItem('tab')||'week')}
+  loadCore();loadPrefsRemote();initModules();loadNotes();loadArticles();loadLoans();loadFontRemote();loadAvatar();showTab(sessionStorage.getItem('tab')||'week')}
 if(!C||!C.key||C.key.indexOf('PASTE')===0){$('lerr').textContent='فایل config.js هنوز تنظیم نشده است.'}
 else if(tok)enter();
 </script></body></html>
