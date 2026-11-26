@@ -87,6 +87,12 @@ summary{cursor:pointer;font-weight:500}
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.gimg{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0;cursor:pointer;overflow:hidden;display:grid;align-content:start}.gimg img{width:100%;height:90px;object-fit:cover;display:block}.gimg span{font-size:12px;padding:2px 6px;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ug button.has{position:relative}.ug button.has::after{content:"📷";position:absolute;top:-5px;inset-inline-end:-3px;font-size:11px}#imgBig{max-width:100%;max-height:68vh;display:block;margin:0 auto;border-radius:8px}
 .stk2{display:flex;height:22px;border-radius:8px;overflow:hidden;background:var(--line)}.stk2 span{display:block;height:100%}
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}.content{min-width:0}
+.side{position:sticky;top:12px;display:grid;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px}
+.sbtn{display:flex;align-items:center;gap:10px;border:0;background:none;padding:11px 12px;border-radius:10px;cursor:pointer;font-weight:500;text-align:right;color:var(--ink);font-size:15px}
+.sbtn:hover{background:var(--soft)}.sbtn[aria-current=true]{background:var(--accent);color:var(--accent-ink);font-weight:700}.ico{font-size:18px;width:24px;text-align:center;flex:none}
+.crumb{font-size:13px;color:var(--muted);margin:0 0 4px}.crumb:empty{display:none}.tabs[hidden]{display:none}
+@media(max-width:900px){.shell{grid-template-columns:minmax(0,1fr);gap:10px}.side{position:sticky;top:0;z-index:7;display:flex;overflow-x:auto;border-radius:12px;padding:6px;gap:4px}.sbtn{white-space:nowrap;padding:8px 12px}.tabs{top:56px}}
 </style></head><body>
 <form id="login"><h1 style="margin:0">ورود مدیر</h1>
   <label>ایمیل مدیر<input type="email" id="em" required autocomplete="username" dir="ltr"></label>
@@ -95,14 +101,13 @@ summary{cursor:pointer;font-weight:500}
 
 <div id="app" hidden>
 <header class="top"><div class="wrap"><div class="brand"><button type="button" class="avatar" id="avBtn" aria-label="تصویر پروفایل (برای تغییر بزنید)"><img id="avImg" alt="" hidden><span id="avInit">ح</span></button><h1>پنل مدیریت</h1></div><div class="btns"><button class="btn ghost" id="openSet">⚙ تنظیمات</button><a class="btn ghost" href="index.html">مشاهده سایت</a><button class="btn ghost" id="logout">خروج</button></div></div></header>
-<div class="wrap" style="padding-top:12px">
+<div class="wrap shell" style="padding-top:12px"><aside class="side" id="side" aria-label="بخش‌های پنل"></aside><main class="content">
 <div id="bdBanner" class="warnbox" style="background:var(--okbg);color:var(--okink)" hidden></div>
 <div id="artBanner" class="warnbox" hidden></div>
 <div id="loanBanner" class="warnbox" hidden></div>
 <div id="warn" hidden>جدول‌های پنل هنوز ساخته نشده‌اند. فایل <b>supabase-admin.sql</b> را یک‌بار در Supabase (SQL Editor) اجرا کنید.</div>
-<nav class="tabs" id="tabs" role="tablist">
-  <button data-t="week" role="tab">برنامه هفتگی</button><button data-t="cal" role="tab">برنامه‌ریزی روزانه</button><button data-t="rep" role="tab">گزارش روزانه</button><button data-t="stu" role="tab">دانش‌آموزان فعال</button><button data-t="comm" role="tab">ارتباط با فراگیران</button><button data-t="abs" role="tab">غیبت و کنسلی</button><button data-t="stats" role="tab">آمار کلاس‌ها</button><button data-t="fin" role="tab">مالی</button><button data-t="loan" role="tab">وام و اقساط</button><button data-t="inv" role="tab">سرمایه‌گذاری</button><button data-t="learn" role="tab">مسیر یادگیری</button><button data-t="art" role="tab">مقالات فرادرس</button><button data-t="notes" role="tab">یادداشت‌ها</button><button data-t="ai" role="tab">هوش مصنوعی</button><button data-t="site" role="tab">رزرو از سایت</button>
-</nav>
+<div class="crumb" id="crumb"></div>
+<nav class="tabs" id="tabs" role="tablist" aria-label="زیربخش‌ها"></nav>
 
 <section id="t-week">
   <div id="warn6" class="warnbox" hidden>جدول‌های برنامه ثابت و کلاس جبرانی ساخته نشده‌اند. فایل <b>supabase-admin6.sql</b> را در Supabase اجرا کنید.</div>
@@ -276,7 +281,7 @@ summary{cursor:pointer;font-weight:500}
     <div class="btns" style="margin-top:8px"><button class="btn" id="aiSend">ارسال</button><button class="btn ghost" id="aiClear">گفتگوی جدید</button><span id="aiBusy" hidden>در حال دریافت پاسخ…</span></div>
     <div id="aiErr" class="warnbox" style="margin-top:10px" hidden></div></div>
 </section>
-</div></div>
+</main></div></div>
 
 <dialog id="dlgTask"><form id="fTask"><h2 id="tTitleH" style="margin-top:0">کار شخصی</h2><input type="hidden" id="tId">
   <div class="fg"><label class="w">عنوان<input id="tTitle" required placeholder="مثلاً مطالعه"></label>
@@ -670,6 +675,7 @@ async function report(){
   var rows;try{rows=await rest('sessions?select=*&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&order=day.asc&limit=5000')}catch(e){$('rOut').innerHTML='<p class="hint">خواندن آمار ممکن نشد.</p>';return}
   var cnr=[];try{cnr=await rest('cancellations?select=cancelled_by,day&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&limit=5000')}catch(e){}
   var abr=[];try{abr=await rest('absences?select=kind,day&day=gte.'+iso(r[0])+'&day=lte.'+iso(r[1])+'&limit=5000')}catch(e){}
+  abr=abr||[];cnr=cnr||[];
   lastRows=rows;var dash={},byT={},ai={premium:0,economy:0},byK={},tot=0,min=0;
   rows.forEach(function(x){if(x.topic==='—')dash[x.day+'|'+x.class_type]=1});
   rows.forEach(function(x){var t=x.class_type,legacy=x.topic!=='—'&&!dash[x.day+'|'+t];
@@ -1358,7 +1364,7 @@ async function loadStuStats(){try{logs=await rest('class_log?select=ref,day,stat
   try{cansAll=await rest('cancellations?select=id,student_id,cancelled_by,ref&limit=5000')}catch(e){cansAll=[]}buildSS()}
 function logSid(l){if(l.student_id)return l.student_id;if(l.ref&&l.ref.charAt(0)==='s'){var c=sched.filter(function(x){return 's'+x.id===l.ref})[0];return c?c.student_id:null}return null}
 var cansAll=[];
-function buildSS(){SS={};function g(id){return SS[id]||(SS[id]={held:0,absE:0,absU:0,min:0,minE:0,canT:0,canS:0})}
+function buildSS(){SS={};logs=logs||[];absAll=absAll||[];cansAll=cansAll||[];function g(id){return SS[id]||(SS[id]={held:0,absE:0,absU:0,min:0,minE:0,canT:0,canS:0})}
   var kind={};absAll.forEach(function(a){if(a.ref)kind[a.day+'|'+a.ref]=a.kind||'excused'});
   logs.forEach(function(l){var sid=logSid(l);if(!sid)return;var st=l.status;
     if(st==='cancelled'||st==='cancel_teacher'){g(sid).canT++;return}if(st==='cancel_student'){g(sid).canS++;return}
@@ -1680,7 +1686,7 @@ function cName(c){return c.student_name||(stu(c.student_id)||{}).name||'—'}
 function mkOfCan(c){return amk.filter(function(m){return m.cancel_id===c.id&&m.status!=='cancelled'})[0]}
 function mkText(m){var d=new Date(m.day+'T00:00:00Z');return DAYS[wd(d)]+' '+jlabel(d)+(m.slot!=null?' ساعت '+tm(m.slot):'')}
 var cFil='all';
-async function loadCan(){try{cans=await rest('cancellations?select=*&order=day.desc,id.desc&limit=1000');$('warn11').hidden=true}catch(e){cans=[];if(e.message!=='auth')$('warn11').hidden=false}drawCan()}
+async function loadCan(){try{cans=await rest('cancellations?select=*&order=day.desc,id.desc&limit=1000');$('warn11').hidden=true}catch(e){cans=[];if(e.message!=='auth')$('warn11').hidden=false}cans=cans||[];drawCan()}
 function cnFill(){$('cnStu').innerHTML='<option value="">— دانش‌آموز —</option>'+opts(students.filter(function(s){return s.active}).map(function(s){return [s.id,'کد '+FD(s.id)+' · '+s.name]}),'');
   $('cnType').innerHTML=opts(Object.keys(TYPES).map(function(k){return [k,TYPES[k][0]]}),'economy');$('cnTopic').innerHTML='<option value="">ترم/موضوع…</option>'+opts(TOPICS.map(function(t){return [t,t]}),'')}
 $('cnStu').onchange=function(){var s=stu(+this.value);if(s&&s.term)$('cnTopic').value=s.term};
@@ -1714,6 +1720,7 @@ async function bumpSessions(day,type,topic,delta){if(!type)return;
   await one('—');if(topic===AIT&&(type==='premium'||type==='economy'))await one(AIT)}
 $('abKind').onchange=function(){$('abCount').checked=this.value==='unexcused'||cntEx()};
 async function dayAbsInfo(day){var a=[],c=[];try{a=await rest('absences?select=kind&day=eq.'+day)}catch(e){}try{c=await rest('cancellations?select=cancelled_by&day=eq.'+day)}catch(e){}
+  a=a||[];c=c||[];
   var e1=a.filter(function(x){return x.kind!=='unexcused'}).length,u=a.length-e1,ct=c.filter(function(x){return x.cancelled_by!=='student'}).length;
   $('dayAbs').textContent=(a.length||c.length)?'در این روز: '+(a.length?FD(e1)+' غیبت موجه، '+FD(u)+' غیبت غیرموجه (در آمار حساب شده‌اند)':'')+(c.length?(a.length?' · ':'')+FD(ct)+' کنسلی مربی، '+FD(c.length-ct)+' کنسلی دانش‌آموز (حساب نمی‌شوند)':''):''}
 var PN={day:['روز قبل','روز بعد'],week:['هفته قبل','هفته بعد'],month:['ماه قبل','ماه بعد'],year:['سال قبل','سال بعد']};
@@ -1759,7 +1766,7 @@ function loanCalc(l){var sc=loanSched(l),pays=lpay.filter(function(x){return x.l
 function lDueText(d){if(!d)return '—';var n=Math.round((d-today())/864e5);return jlabel(d)+' — '+(n===0?'امروز':n>0?FD(n)+' روز دیگر':FD(-n)+' روز گذشته')}
 async function loadLoans(){
   try{loans=await rest('loans?select=*&order=id.desc');lpay=await rest('loan_payments?select=*&order=day.asc,id.asc&limit=5000');$('warn12').hidden=true}catch(e){if(e.message!=='auth')$('warn12').hidden=false}
-  drawLoans();loanCheck()}
+  loans=loans||[];lpay=lpay||[];drawLoans();loanCheck()}
 function drawLoans(){var C=loans.map(function(l){return {l:l,c:loanCalc(l)}}),act=C.filter(function(x){return !x.c.done});
   var rem=0,mon=0,od=0,soon=0;act.forEach(function(x){rem+=x.c.remain;mon+=+x.l.amount;od+=x.c.overdue;x.c.sc.forEach(function(it){if(!it.full&&it.due){var n=Math.round((it.due-today())/864e5);if(n>=0&&n<=30)soon+=it.left}})});
   $('loanKpi').innerHTML='<div class="kpi"><b>'+money(rem)+'</b><span>مانده کل وام‌ها (تومان)</span></div><div class="kpi"><b>'+FD(act.length)+'</b><span>وام فعال</span></div><div class="kpi"><b>'+money(mon)+'</b><span>جمع اقساط ماهانه</span></div><div class="kpi"><b>'+money(soon)+'</b><span>اقساط ۳۰ روز آینده</span></div><div class="kpi"><b style="color:'+(od?'var(--badink)':'inherit')+'">'+money(od)+'</b><span>سررسید گذشته</span></div>';
@@ -1808,8 +1815,26 @@ $('fLoanE').addEventListener('submit',async function(e){e.preventDefault();var i
   var o={title:$('leTitle').value.trim(),lender:$('leLender').value.trim()||null,total:t,count:n,amount:a,first_due:iso(d),principal:NUM($('lePrincipal').value)||null,rate:NUM($('leRate').value)||null,note:$('leNote').value.trim()||null};
   try{var r;if(id)await patch('loans','id=eq.'+id,o);else r=await post('loans',o);$('dlgLoanE').close();await loadLoans();toast('ذخیره شد');if(!id&&r)viewLoan(r[0].id)}catch(x){$('leErr').textContent='ذخیره نشد؛ آیا supabase-admin12.sql اجرا شده است؟'}});
 
+/* ========== سایدبار و تب‌های هر بخش ========== */
+var GROUPS=[
+  {id:'plan',n:'برنامه‌ریزی',i:'📅',tabs:['week','cal','rep','site','notes']},
+  {id:'acad',n:'آکادمی یاسان',i:'🎓',tabs:['stu','comm','abs','stats']},
+  {id:'money',n:'مالی',i:'💰',tabs:['fin','loan','inv']},
+  {id:'learn',n:'مسیر یادگیری',i:'📚',tabs:['learn']},
+  {id:'art',n:'مجله فرادرس',i:'📝',tabs:['art']},
+  {id:'ai',n:'هوش مصنوعی',i:'🤖',tabs:['ai']}];
+var TL={week:'برنامه هفتگی',cal:'برنامه روزانه',rep:'گزارش روزانه',site:'رزرو از سایت',notes:'یادداشت‌ها',stu:'دانش‌آموزان فعال',comm:'ارتباط با فراگیران',abs:'غیبت و کنسلی',stats:'آمار کلاس‌ها',fin:'مالی',loan:'وام و قسط',inv:'سرمایه‌گذاری',learn:'مسیر یادگیری',art:'مجله فرادرس',ai:'هوش مصنوعی'};
+function groupOf(t){return GROUPS.filter(function(g){return g.tabs.indexOf(t)>-1})[0]||GROUPS[0]}
+function renderNav(t){var g=groupOf(t);try{localStorage.setItem('grp-'+g.id,t)}catch(e){}
+  $('side').innerHTML=GROUPS.map(function(x){return '<button type="button" class="sbtn" data-g="'+x.id+'" aria-current="'+(x===g)+'"><span class="ico" aria-hidden="true">'+x.i+'</span><span>'+x.n+'</span></button>'}).join('');
+  $('tabs').innerHTML=g.tabs.length>1?g.tabs.map(function(k){return '<button data-t="'+k+'" role="tab">'+TL[k]+'</button>'}).join(''):'';
+  $('tabs').hidden=g.tabs.length<2;$('crumb').textContent=g.tabs.length>1?g.n:''}
+$('side').addEventListener('click',function(e){var b=e.target.closest('button[data-g]');if(!b)return;
+  var g=GROUPS.filter(function(x){return x.id===b.dataset.g})[0],last='';try{last=localStorage.getItem('grp-'+g.id)||''}catch(x){}
+  showTab(g.tabs.indexOf(last)>-1?last:g.tabs[0])});
+
 /* ---------- تب‌ها و شروع ---------- */
-function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);
+function showTab(t){if(sessionStorage.getItem('tab')==='rep'&&t!=='rep')flushReport();sessionStorage.setItem('tab',t);renderNav(t);
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===t)});
   ['week','cal','rep','stu','comm','abs','stats','fin','loan','inv','learn','art','notes','ai','site'].forEach(function(x){$('t-'+x).hidden=x!==t});
   if(t==='stats'){loadEntry();report()}if(t==='site'&&!siteLoaded)loadSite();if(t==='cal')loadCal();if(t==='fin')loadFin();if(t==='inv')loadInv();if(t==='loan')loadLoans();if(t==='notes')loadNotes();if(t==='ai')fillAiStu();if(t==='comm'){drawComm();loadSmsLog()}if(t==='abs'){abFill();loadAbs()}if(t==='rep')loadReport();if(t==='learn')loadLearn();if(t==='art')loadArticles()}
